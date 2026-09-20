@@ -18,8 +18,6 @@ interface PageProps {
 
 
 
-
-
 export default async function BusinessPage({
 
   params
@@ -33,11 +31,8 @@ export default async function BusinessPage({
 
 
   const profile =
-
     await getBusinessPublicProfile(
-
       Number(id)
-
     );
 
 
@@ -46,64 +41,46 @@ export default async function BusinessPage({
 
   return (
 
-
-
-    <main className="min-h-screen bg-gray-50 p-8">
-
+    <main className="min-h-screen bg-zinc-950 p-8">
 
 
       <div className="mx-auto max-w-4xl space-y-8">
 
 
 
-
-
         {/* Business Header */}
 
+        <section className="rounded-xl bg-zinc-900 p-6 shadow border border-zinc-800">
 
 
-        <section className="rounded-xl bg-white p-6 shadow">
-
-
-
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-white">
 
             {profile.business.name}
 
           </h1>
 
 
-
-
-          <p className="mt-3 text-gray-600">
+          <p className="mt-3 text-zinc-400">
 
             {profile.business.description}
 
           </p>
 
 
-
-
           {
-
             profile.business.phone && (
 
-              <p className="mt-2 text-gray-500">
+              <p className="mt-2 text-zinc-500">
 
                 {profile.business.phone}
 
               </p>
 
             )
-
           }
 
 
-
         </section>
-
-
-
 
 
 
@@ -112,12 +89,10 @@ export default async function BusinessPage({
         {/* Reputation */}
 
 
-
-        <section className="rounded-xl bg-white p-6 shadow">
-
+        <section className="rounded-xl bg-zinc-900 p-6 shadow border border-zinc-800">
 
 
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-white">
 
             اعتبار کسب‌وکار
 
@@ -125,76 +100,53 @@ export default async function BusinessPage({
 
 
 
-
-
           <div className="mt-5 flex gap-10">
-
-
-
 
 
             <div>
 
-
-
-              <div className="text-3xl font-bold text-gray-900">
+              <div className="text-3xl font-bold text-white">
 
                 ⭐ {profile.reputation.average_rating}
 
               </div>
 
 
-
-              <p className="text-gray-500">
+              <p className="text-zinc-400">
 
                 امتیاز میانگین
 
               </p>
 
 
-
             </div>
-
-
-
 
 
 
 
             <div>
 
-
-
-              <div className="text-3xl font-bold text-gray-900">
+              <div className="text-3xl font-bold text-white">
 
                 {profile.reputation.total_reviews}
 
               </div>
 
 
-
-              <p className="text-gray-500">
+              <p className="text-zinc-400">
 
                 تعداد نظرات
 
               </p>
 
 
-
             </div>
-
-
-
 
 
           </div>
 
 
-
         </section>
-
-
-
 
 
 
@@ -204,12 +156,10 @@ export default async function BusinessPage({
         {/* Customer Experience */}
 
 
-
-        <section className="rounded-xl bg-white p-6 shadow">
-
+        <section className="rounded-xl bg-zinc-900 p-6 shadow border border-zinc-800">
 
 
-          <h2 className="mb-4 text-xl font-bold text-gray-900">
+          <h2 className="mb-4 text-xl font-bold text-white">
 
             {profile.customer_experience.title}
 
@@ -217,18 +167,13 @@ export default async function BusinessPage({
 
 
 
-
-
           <div className="flex flex-wrap gap-6">
 
 
-
             {
-
               profile.customer_experience.items.map(
 
                 (item, index) => (
-
 
                   <CustomerExperienceCard
 
@@ -238,7 +183,6 @@ export default async function BusinessPage({
 
                   />
 
-
                 )
 
               )
@@ -246,9 +190,7 @@ export default async function BusinessPage({
             }
 
 
-
           </div>
-
 
 
         </section>
@@ -256,17 +198,10 @@ export default async function BusinessPage({
 
 
 
-
-
-
       </div>
 
 
-
-
-
     </main>
-
 
 
   );

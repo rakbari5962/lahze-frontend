@@ -40,14 +40,14 @@ export default function CustomerExperienceCard({
         <div>
 
 
-          <h3 className="text-sm font-medium text-gray-900">
+          <h3 className="text-sm font-medium text-white">
 
             {item.title}
 
           </h3>
 
 
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-zinc-400">
 
             تجربه {item.total_mentions} مشتری
 
@@ -73,7 +73,7 @@ export default function CustomerExperienceCard({
 
           {/* Positive Percentage */}
 
-          <span className="text-xs whitespace-nowrap text-green-600">
+          <span className="text-xs whitespace-nowrap text-green-400">
 
             {item.positive_percentage}%
 
@@ -87,7 +87,7 @@ export default function CustomerExperienceCard({
 
           <div
 
-            className="flex-1 h-2 overflow-hidden rounded-full bg-gray-200 flex"
+            className="flex-1 h-2 overflow-hidden rounded-full bg-zinc-700 flex"
 
           >
 
@@ -137,7 +137,7 @@ export default function CustomerExperienceCard({
 
           {/* Negative Percentage */}
 
-          <span className="text-xs whitespace-nowrap text-red-500">
+          <span className="text-xs whitespace-nowrap text-red-400">
 
             {item.negative_percentage}%
 
