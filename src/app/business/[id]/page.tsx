@@ -1,10 +1,18 @@
-import CustomerExperienceCard
+import BookingButton 
+from "@/components/booking/BookingButton";
+
+import CustomerExperienceCard 
 from "@/components/customer-experience/CustomerExperienceCard";
 
 
 import {
   getBusinessPublicProfile
 } from "@/services/business.service";
+
+
+import {
+  getBusinessOpportunities
+} from "@/services/opportunity.service";
 
 
 
@@ -25,14 +33,24 @@ export default async function BusinessPage({
 }: PageProps) {
 
 
-
   const { id } = await params;
+
+
+
+  const businessId = Number(id);
 
 
 
   const profile =
     await getBusinessPublicProfile(
-      Number(id)
+      businessId
+    );
+
+
+
+  const opportunities =
+    await getBusinessOpportunities(
+      businessId
     );
 
 
@@ -67,6 +85,7 @@ export default async function BusinessPage({
           </p>
 
 
+
           {
             profile.business.phone && (
 
@@ -86,8 +105,8 @@ export default async function BusinessPage({
 
 
 
-        {/* Reputation */}
 
+        {/* Reputation */}
 
         <section className="rounded-xl bg-zinc-900 p-6 shadow border border-zinc-800">
 
@@ -167,6 +186,7 @@ export default async function BusinessPage({
 
 
 
+
           <div className="flex flex-wrap gap-6">
 
 
@@ -186,7 +206,6 @@ export default async function BusinessPage({
                 )
 
               )
-
             }
 
 
@@ -198,6 +217,229 @@ export default async function BusinessPage({
 
 
 
+
+
+
+
+        {/* Opportunities */}
+
+
+        <section className="rounded-xl bg-zinc-900 p-6 shadow border border-zinc-800">
+
+
+          <h2 className="mb-4 text-xl font-bold text-white">
+
+            فرصت‌های رزرو
+
+          </h2>
+
+
+
+
+          {
+            opportunities.length === 0 ? (
+
+              <p className="text-zinc-400">
+
+                در حال حاضر فرصت فعالی وجود ندارد.
+
+              </p>
+
+
+            ) : (
+
+
+              <div className="space-y-5">
+
+
+                {
+                  opportunities.map(
+
+                    (item) => (
+
+
+                      <div
+
+					  key={item.id}
+
+					  className={`rounded-lg border border-zinc-700 p-5 ${
+						item.reserved_count >= item.capacity
+						  ? "opacity-60"
+						  : ""
+					  }`}
+
+                      >
+
+
+                        <div className="flex justify-between">
+
+
+                          <div>
+
+
+                            <h3 className="text-lg font-bold text-white">
+
+                              فرصت ویژه رزرو
+
+                            </h3>
+
+
+
+                            <p className="mt-3 text-zinc-400">
+
+                              قیمت اصلی:
+
+                              {" "}
+
+                              {item.original_price.toLocaleString()}
+
+                              {" "}
+
+                              تومان
+
+                            </p>
+
+
+
+                            <p className="mt-2 text-green-400 font-bold">
+
+                              قیمت نهایی:
+
+                              {" "}
+
+                              {item.final_price.toLocaleString()}
+
+                              {" "}
+
+                              تومان
+
+                            </p>
+
+
+
+                            <p className="mt-2 text-zinc-400">
+
+                              تخفیف:
+
+                              {" "}
+
+                              {item.discount_percent}٪
+
+                            </p>
+
+
+
+                            <p className="mt-2 text-zinc-400">
+
+							  ظرفیت:
+							  {" "}
+							  {item.reserved_count}
+							  /
+							  {item.capacity}
+
+							</p>
+
+
+
+                            <p className="mt-2 text-zinc-400">
+
+                              شروع:
+
+                              {" "}
+
+                              {new Date(
+                                item.start_time
+                              ).toLocaleString(
+                                "fa-IR"
+                              )}
+
+                            </p>
+
+
+                          </div>
+
+
+
+                          <div>
+
+							  {
+								item.reserved_count >= item.capacity ? (
+
+								  <span className="rounded bg-zinc-700 px-3 py-1 text-sm text-zinc-300">
+
+									ظرفیت تکمیل شده
+
+								  </span>
+
+								) : (
+
+								  <span className="rounded bg-green-900 px-3 py-1 text-sm text-green-300">
+
+									فعال
+
+								  </span>
+
+								)
+							  }
+
+							</div>
+
+
+                        </div>
+
+
+
+
+                        {
+						  item.reserved_count >= item.capacity ? (
+
+							<button
+
+							  disabled
+
+							  className="mt-5 w-full rounded-lg bg-zinc-700 px-5 py-2 text-zinc-400 cursor-not-allowed"
+
+							>
+
+							  ظرفیت تکمیل شده
+
+							</button>
+
+						  ) : (
+
+							<BookingButton
+
+							  opportunityId={item.id}
+
+							/>
+
+						  )
+						}
+
+
+
+                      </div>
+
+
+                    )
+
+                  )
+                }
+
+
+              </div>
+
+
+            )
+          }
+
+
+        </section>
+
+
+
+
+
       </div>
 
 
@@ -205,5 +447,6 @@ export default async function BusinessPage({
 
 
   );
+
 
 }
