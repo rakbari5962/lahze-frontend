@@ -64,7 +64,6 @@ export async function apiGet<T>(
 
 
 
-
 export async function apiPost<T>(
 
   endpoint: string,
@@ -125,6 +124,76 @@ export async function apiPost<T>(
   }
 
 
+
+
+
+  return response.json();
+
+}
+
+
+
+
+
+
+
+
+
+export async function apiPatch<T>(
+
+  endpoint: string,
+
+  body: unknown
+
+): Promise<T> {
+
+
+  const response = await fetch(
+
+    `${API_BASE_URL}${endpoint}`,
+
+    {
+
+      method: "PATCH",
+
+      headers: {
+
+        "Content-Type": "application/json"
+
+      },
+
+      body: JSON.stringify(body)
+
+    }
+
+  );
+
+
+
+  if (!response.ok) {
+
+
+    const errorText = await response.text();
+
+
+    console.log(
+
+      "API ERROR:",
+
+      errorText
+
+    );
+
+
+
+    throw new Error(
+
+      `API Error: ${response.status} - ${errorText}`
+
+    );
+
+
+  }
 
 
 

@@ -13,7 +13,8 @@ import {
 
 
 import {
-  saveToken
+  saveToken,
+  saveUserId
 } from "@/lib/auth";
 
 
@@ -38,10 +39,35 @@ export default function LoginPage() {
 
 
 
+  function saveLoginData(
+    result: {
+      session_token?: string;
+      user_id: number;
+    }
+  ) {
+
+    if (result.session_token) {
+
+      saveToken(
+        result.session_token
+      );
+
+
+      saveUserId(
+        result.user_id
+      );
+
+    }
+
+  }
+
+
+
+
+
 
 
   async function handleRequestOtp() {
-
 
     try {
 
@@ -49,9 +75,7 @@ export default function LoginPage() {
 
 
       await requestOtp(
-
         phone
-
       );
 
 
@@ -65,7 +89,6 @@ export default function LoginPage() {
     }
 
   }
-
 
 
 
@@ -96,6 +119,14 @@ export default function LoginPage() {
 
 
 
+      saveLoginData(
+        result
+      );
+
+
+
+
+
       if (
 
         result.requires_city_selection
@@ -103,35 +134,13 @@ export default function LoginPage() {
       ) {
 
 
-
-        if (
-
-          result.session_token
-
-        ) {
-
-
-          saveToken(
-
-            result.session_token
-
-          );
-
-
-        }
-
-
-
-
         window.location.href =
 
           `/select-city?user_id=${result.user_id}`;
 
 
-
         return;
 
-
       }
 
 
@@ -140,26 +149,9 @@ export default function LoginPage() {
 
 
 
-      if (
-
-        result.session_token
-
-      ) {
+      window.location.href = "/";
 
 
-
-        saveToken(
-
-          result.session_token
-
-        );
-
-
-
-        window.location.href = "/";
-
-
-      }
 
 
 
@@ -203,8 +195,6 @@ export default function LoginPage() {
 
 
         {
-
-
           step === "phone" ? (
 
 
@@ -253,13 +243,11 @@ export default function LoginPage() {
 
                 {
 
-
                   loading
 
                     ? "در حال ارسال..."
 
                     : "دریافت کد"
-
 
                 }
 
@@ -269,6 +257,7 @@ export default function LoginPage() {
 
 
             </>
+
 
 
           ) : (
@@ -321,13 +310,11 @@ export default function LoginPage() {
 
                 {
 
-
                   loading
 
                     ? "در حال بررسی..."
 
                     : "تایید کد"
-
 
                 }
 
@@ -340,10 +327,12 @@ export default function LoginPage() {
             </>
 
 
+
           )
 
-
         }
+
+
 
 
 
