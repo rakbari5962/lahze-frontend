@@ -1,8 +1,20 @@
+import {
+  Clock,
+  Award,
+  Users
+} from "lucide-react";
+
+
+
 interface CustomerExperienceItem {
 
   title: string;
 
   total_mentions: number;
+
+  positive_mentions: number;
+
+  negative_mentions: number;
 
   positive_percentage: number;
 
@@ -27,122 +39,192 @@ export default function CustomerExperienceCard({
 }: Props) {
 
 
+
+  const getIcon = () => {
+
+
+    if (item.title.includes("زمان")) {
+
+      return <Clock size={68} strokeWidth={2} />;
+
+    }
+
+
+    if (item.title.includes("برخورد")) {
+
+      return <Users size={68} strokeWidth={2} />;
+
+    }
+
+
+    return <Award size={68} strokeWidth={2} />;
+
+
+  };
+
+
+
+
+  const isPositive =
+    item.positive_percentage >= 50;
+
+
+
+
   return (
 
-    <div className="py-2 min-w-[220px]">
+
+    <div
+
+      className={`
+        rounded-2xl
+        p-6
+        border
+        shadow-sm
+
+        ${
+          isPositive
+          ?
+          "bg-emerald-50 border-emerald-200"
+          :
+          "bg-red-50 border-red-200"
+        }
+
+      `}
+
+    >
 
 
-      <div className="flex flex-col gap-2">
+
+      {/* Top */}
+
+      <div
+
+        className="
+          flex
+          items-start
+          justify-between
+        "
+
+      >
 
 
-        {/* Title */}
 
-        <div>
+        {/* Icon */}
 
+        <div
 
-          <h3 className="text-sm font-medium text-white">
+          className="
+            w-22
+            h-22
+            rounded-full
+            bg-white/70
+            flex
+            items-center
+            justify-center
+            text-emerald-700
+          "
 
-            {item.title}
+        >
 
-          </h3>
-
-
-          <p className="mt-1 text-xs text-zinc-400">
-
-            تجربه {item.total_mentions} مشتری
-
-          </p>
-
+          {getIcon()}
 
         </div>
 
 
 
 
-
-        {/* Sentiment */}
+        {/* Customer count */}
 
         <div
 
-          dir="ltr"
-
-          className="flex items-center gap-2 w-full"
+          className="
+            text-sm
+            text-zinc-600
+          "
 
         >
 
+          بر اساس تجربه {item.total_mentions} مشتری
 
-          {/* Positive Percentage */}
-
-          <span className="text-xs whitespace-nowrap text-green-400">
-
-            {item.positive_percentage}%
-
-          </span>
+        </div>
 
 
 
-
-
-          {/* Sentiment Bar */}
-
-          <div
-
-            className="flex-1 h-2 overflow-hidden rounded-full bg-zinc-700 flex"
-
-          >
-
-
-            {item.positive_percentage > 0 && (
-
-              <div
-
-                className="bg-green-500 h-full"
-
-                style={{
-
-                  width: `${item.positive_percentage}%`
-
-                }}
-
-              />
-
-            )}
+      </div>
 
 
 
 
 
-            {item.negative_percentage > 0 && (
 
-              <div
+      {/* Center */}
 
-                className="bg-red-500 h-full"
+      <div
 
-                style={{
+        className="
+          text-center
+          mt-5
+        "
 
-                  width: `${item.negative_percentage}%`
-
-                }}
-
-              />
-
-            )}
-
-
-          </div>
+      >
 
 
 
+        <h3
+
+          className="
+            text-3xl
+            font-bold
+            text-zinc-900
+          "
+
+        >
+
+          {item.title}
+
+        </h3>
 
 
-          {/* Negative Percentage */}
 
-          <span className="text-xs whitespace-nowrap text-red-400">
 
-            {item.negative_percentage}%
+        <div
 
-          </span>
+          className={`
+            mt-3
+            text-4xl
+            font-bold
 
+            ${
+              isPositive
+              ?
+              "text-emerald-700"
+              :
+              "text-red-600"
+            }
+
+          `}
+
+        >
+
+          {item.positive_percentage}%
+
+        </div>
+
+
+
+
+        <div
+
+          className="
+            text-sm
+            text-zinc-500
+            mt-1
+          "
+
+        >
+
+          رضایت مشتریان
 
         </div>
 
@@ -150,8 +232,105 @@ export default function CustomerExperienceCard({
       </div>
 
 
+
+
+
+
+      {/* Bar */}
+
+      <div
+
+        dir="ltr"
+
+        className="
+          mt-6
+          h-3
+          rounded-full
+          overflow-hidden
+          bg-zinc-200
+          flex
+        "
+
+      >
+
+
+        <div
+
+          className="bg-green-500"
+
+          style={{
+
+            width:
+            `${item.positive_percentage}%`
+
+          }}
+
+        />
+
+
+
+        <div
+
+          className="bg-red-400"
+
+          style={{
+
+            width:
+            `${item.negative_percentage}%`
+
+          }}
+
+        />
+
+
+
+      </div>
+
+
+
+
+
+
+      {/* Bottom */}
+
+      <div
+
+        className="
+          mt-5
+          flex
+          justify-between
+          text-sm
+        "
+
+      >
+
+
+        <span className="text-green-700">
+
+          ✓ {item.positive_mentions} مثبت
+
+        </span>
+
+
+
+
+        <span className="text-red-600">
+
+          × {item.negative_mentions} منفی
+
+        </span>
+
+
+
+      </div>
+
+
+
+
     </div>
 
+
   );
+
 
 }

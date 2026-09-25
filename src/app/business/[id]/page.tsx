@@ -6,7 +6,8 @@ from "@/components/customer-experience/CustomerExperienceCard";
 
 
 import {
-  getBusinessPublicProfile
+  getBusinessPublicProfile,
+  getBusinessReviewSummary
 } from "@/services/business.service";
 
 
@@ -43,6 +44,16 @@ export default async function BusinessPage({
 
   const profile =
     await getBusinessPublicProfile(
+      businessId
+    );
+
+  console.log(
+    "PROFILE:",
+    JSON.stringify(profile, null, 2)
+  );
+
+  const reviewSummary =
+    await getBusinessReviewSummary(
       businessId
     );
 
@@ -168,6 +179,67 @@ export default async function BusinessPage({
         </section>
 
 
+                
+        {/* Review Insight */}
+
+        <section className="rounded-xl bg-zinc-900 p-6 shadow border border-zinc-800">
+
+
+          <h2 className="text-xl font-bold text-white mb-5">
+            تحلیل تجربه مشتریان
+          </h2>
+
+
+          {
+            reviewSummary.weaknesses.length === 0 ? (
+
+              <p className="text-zinc-400">
+                مشکل مهمی از نظرات مشتریان شناسایی نشده است.
+              </p>
+
+            ) : (
+
+              <div className="space-y-4">
+
+                {
+                  reviewSummary.weaknesses.map(
+                    (item, index) => (
+
+                      <div
+                        key={index}
+                        className="rounded-lg border border-red-900 bg-red-950/30 p-4"
+                      >
+
+                        <h3 className="text-lg font-bold text-red-400">
+                          نیاز به بهبود: {item.label}
+                        </h3>
+
+
+                        <p className="mt-2 text-zinc-300">
+                          {item.total_mentions} تجربه مشتری بررسی شده
+                        </p>
+
+
+                        <p className="mt-1 text-zinc-400">
+                          {item.negative_percentage}٪ بازخورد منفی
+                        </p>
+
+
+                      </div>
+
+                    )
+                  )
+                }
+
+              </div>
+
+            )
+          }
+
+
+        </section>
+
+
 
 
 
@@ -187,8 +259,7 @@ export default async function BusinessPage({
 
 
 
-          <div className="flex flex-wrap gap-6">
-
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
             {
               profile.customer_experience.items.map(
