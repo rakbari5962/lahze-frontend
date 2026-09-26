@@ -7,13 +7,16 @@ from "@/components/customer-experience/CustomerExperienceCard";
 
 import {
   getBusinessPublicProfile,
-  getBusinessReviewSummary
+  getBusinessReviewSummary,
+  getCustomerInsights
 } from "@/services/business.service";
 
 
 import {
   getBusinessOpportunities
 } from "@/services/opportunity.service";
+
+
 
 
 
@@ -57,6 +60,11 @@ export default async function BusinessPage({
       businessId
     );
 
+
+    const customerInsights =
+    await getCustomerInsights(
+      businessId
+    );
 
 
   const opportunities =
@@ -250,37 +258,51 @@ export default async function BusinessPage({
         <section className="rounded-xl bg-zinc-900 p-6 shadow border border-zinc-800">
 
 
-          <h2 className="mb-4 text-xl font-bold text-white">
+        <h2 className="mb-4 text-xl font-bold text-white">
 
-            {profile.customer_experience.title}
+          تجربه مشتریان
 
-          </h2>
-
-
+        </h2>
 
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
-            {
-              profile.customer_experience.items.map(
-
-                (item, index) => (
-
-                  <CustomerExperienceCard
-
-                    key={index}
-
-                    item={item}
-
-                  />
-
-                )
-
-              )
-            }
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
 
-          </div>
+        {
+          customerInsights.attributes.map(
+
+            (item) => (
+
+              <CustomerExperienceCard
+
+                key={item.attribute_id}
+
+                item={{
+
+                  title: item.label,
+
+                  total_mentions: item.total_mentions,
+
+                  positive_mentions: item.positive_mentions,
+
+                  negative_mentions: item.negative_mentions,
+
+                  positive_percentage: item.positive_percentage,
+
+                  negative_percentage: item.negative_percentage
+
+                }}
+
+              />
+
+            )
+
+          )
+        }
+
+
+        </div>
 
 
         </section>

@@ -3,7 +3,8 @@ import { apiGet } from "./api";
 
 import type {
   BusinessPublicProfile,
-  BusinessReviewSummary
+  BusinessReviewSummary,
+  CustomerInsightsResponse
 } from "@/types/business";
 
 
@@ -32,6 +33,18 @@ export async function getBusinessReviewSummary(
 
   return apiGet<BusinessReviewSummary>(
     `/businesses/${businessId}/review-summary`
+  );
+
+}
+
+
+export async function getCustomerInsights(
+  businessId: number
+): Promise<CustomerInsightsResponse> {
+
+
+  return apiGet<CustomerInsightsResponse>(
+    `/businesses/${businessId}/customer-insights`
   );
 
 }

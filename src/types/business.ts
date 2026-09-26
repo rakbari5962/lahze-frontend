@@ -19,7 +19,7 @@ export interface BusinessPublicProfile {
 
     total_reviews: number;
 
-    average_rating?: string;
+    average_rating?: string | null;
 
     customer_sentiment: {
 
@@ -49,7 +49,6 @@ export interface BusinessPublicProfile {
 
 
 
-
 export interface CustomerExperienceItem {
 
   title: string;
@@ -65,6 +64,51 @@ export interface CustomerExperienceItem {
   negative_percentage: number;
 
   confidence?: string;
+
+}
+
+
+
+
+
+// API:
+// GET /businesses/{business_id}/customer-insights
+
+export interface CustomerInsightAttribute {
+
+  attribute_id: number;
+
+  key: string;
+
+  label: string;
+
+  total_mentions: number;
+
+  positive_mentions: number;
+
+  negative_mentions: number;
+
+  positive_percentage: number;
+
+  negative_percentage: number;
+
+}
+
+
+
+
+
+export interface CustomerInsightsResponse {
+
+  business_id: number;
+
+  summary: {
+
+    total_attributes: number;
+
+  };
+
+  attributes: CustomerInsightAttribute[];
 
 }
 
@@ -94,6 +138,7 @@ export interface BusinessReviewSummary {
   }[];
 
 
+
   weaknesses: {
 
     topic: string;
@@ -111,6 +156,7 @@ export interface BusinessReviewSummary {
   }[];
 
 
+
   themes: {
 
     name: string;
@@ -122,6 +168,7 @@ export interface BusinessReviewSummary {
   }[];
 
 
+
   customer_sentiment: {
 
     positive: number;
@@ -131,6 +178,7 @@ export interface BusinessReviewSummary {
     negative: number;
 
   };
+
 
 
   attribute_summary?: Record<string, any>;

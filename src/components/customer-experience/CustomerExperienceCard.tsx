@@ -172,18 +172,42 @@ export default function CustomerExperienceCard({
 
 
         <h3
+		  className={`
+			inline-flex
+			items-center
+			justify-center
+			px-6
+			py-3
+			rounded-xl
 
-          className="
-            text-3xl
-            font-bold
-            text-zinc-900
-          "
+			border
 
-        >
+			text-xl
+			font-black
 
-          {item.title}
+			transition-all
 
-        </h3>
+			${
+			  isPositive
+				? `
+				  bg-emerald-100
+				  border-emerald-200
+				  text-emerald-700
+
+				  shadow-[inset_2px_2px_5px_rgba(6,78,59,0.15),inset_-2px_-2px_5px_rgba(255,255,255,0.8),0_4px_10px_rgba(16,185,129,0.15)]
+				`
+				: `
+				  bg-red-100
+				  border-red-200
+				  text-red-700
+
+				  shadow-[inset_2px_2px_5px_rgba(127,29,29,0.15),inset_-2px_-2px_5px_rgba(255,255,255,0.8),0_4px_10px_rgba(239,68,68,0.15)]
+				`
+			}
+		  `}
+		>
+		  {item.title}
+		</h3>
 
 
 
