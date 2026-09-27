@@ -6,6 +6,8 @@ import {
   useState
 } from "react";
 
+import { useRouter } from "next/navigation";
+
 
 import {
   getToken
@@ -24,9 +26,9 @@ import {
 } from "@/lib/date";
 
 
-
 export default function ProfilePage() {
 
+  const router = useRouter();
 
   const [user, setUser] = useState<CurrentUser | null>(null);
 
@@ -38,17 +40,19 @@ export default function ProfilePage() {
 
   const [form, setForm] = useState({
 
-    first_name: "",
-    last_name: "",
-    secondary_phone: "",
-    national_id: "",
-    gender: "",
-    birth_date: "",
-    education: "",
-    job_title: "",
-    bio: "",
-    iban: "",
-    email: ""
+  phone_number: "",
+
+  first_name: "",
+  last_name: "",
+  secondary_phone: "",
+  national_id: "",
+  gender: "",
+  birth_date: "",
+  education: "",
+  job_title: "",
+  bio: "",
+  iban: "",
+  email: ""
 
   });
 
@@ -75,60 +79,48 @@ export default function ProfilePage() {
       }
 
 
-
       try {
 
-
-        const data = await getCurrentUser(token);
-
-
-        setUser(data);
+  const data = await getCurrentUser(token);
+  console.log("FULL USER RESPONSE:", data);
 
 
+  setForm({
 
-        setForm({
+  phone_number: data.phone_number ?? "",
 
-          first_name: data.first_name ?? "",
-          last_name: data.last_name ?? "",
-          secondary_phone: data.secondary_phone ?? "",
-          national_id: data.national_id ?? "",
-          gender: data.gender ?? "",
-          birth_date: toJalali(
-            data.birth_date
-          ),
-          education: data.education ?? "",
-          job_title: data.job_title ?? "",
-          bio: data.bio ?? "",
-          iban: data.iban ?? "",
-          email: data.email ?? ""
+  first_name: data.first_name ?? "",
+  last_name: data.last_name ?? "",
+  secondary_phone: data.secondary_phone ?? "",
+  national_id: data.national_id ?? "",
+  gender: data.gender ?? "",
+  birth_date: toJalali(data.birth_date),
+  education: data.education ?? "",
+  job_title: data.job_title ?? "",
+  bio: data.bio ?? "",
+  iban: data.iban ?? "",
+  email: data.email ?? ""
 
-        });
-
+  });
 
 
-      } catch (error) {
+} catch (error) {
+
+  console.log(error);
+
+} finally {
+
+  console.log("LOAD FINISHED");
+  setLoading(false);
+
+}
+
+}
 
 
-        console.log(error);
+loadProfile();
 
-
-      } finally {
-
-
-        setLoading(false);
-
-      }
-
-
-    }
-
-
-
-    loadProfile();
-
-
-  }, []);
-
+}, []);
 
 
   function formatIban(value: string) {
@@ -211,7 +203,29 @@ export default function ProfilePage() {
 
       setSaving(true);
 
+      console.log("SAVE DATA:", {
+        ...form
+      });
 
+
+      console.log("FORM BEFORE SAVE:", form);
+      console.log("JOB TITLE BEFORE SAVE:", form.job_title);
+      const payload = {
+        ...form,
+
+        iban:
+          form.iban
+            ? form.iban.startsWith("IR")
+              ? form.iban
+              : "IR" + form.iban
+            : null,
+
+        birth_date: toGregorian(form.birth_date),
+      };
+
+
+      console.log("FINAL PAYLOAD:", payload);
+      console.log("JOB TITLE IN PAYLOAD:", payload.job_title);
 
       const updated = await updateUserProfile(
         token,
@@ -220,12 +234,12 @@ export default function ProfilePage() {
 
           iban:
             form.iban
-              ? "IR" + form.iban
-              : "",
+              ? form.iban.startsWith("IR")
+                ? form.iban
+                : "IR" + form.iban
+              : null,
 
-          birth_date: toGregorian(
-            form.birth_date
-          )
+          birth_date: toGregorian(form.birth_date),
         }
       );
 
@@ -238,6 +252,8 @@ export default function ProfilePage() {
       alert(
         "پروفایل با موفقیت ذخیره شد"
       );
+
+      router.push("/profile");
 
 
 
@@ -416,7 +432,7 @@ export default function ProfilePage() {
             <input
 
               value={
-                user?.phone_number ?? ""
+                form.phone_number
               }
 
               disabled
@@ -607,7 +623,6 @@ export default function ProfilePage() {
 
             {
               [
-
                 ["first_name","نام"],
                 ["last_name","نام خانوادگی"],
                 ["secondary_phone","شماره موبایل دوم"],
@@ -618,7 +633,6 @@ export default function ProfilePage() {
                 ["email","ایمیل"]
 
               ].map(([key,label]) => (
-
 
                 <div key={key}>
 
@@ -640,72 +654,172 @@ export default function ProfilePage() {
 
 
 
+                  {
+                    key === "gender" ? (
 
-                  <input
+                      <select
 
+                        value={form.gender}
 
-                    type="text"
-
-
-                    placeholder={
-                      key === "birth_date"
-                        ? "مثال: 1375/10/20"
-                        : ""
-                    }
-
-
-
-                    value={
-                      (form as any)[key]
-                    }
+                        onChange={(e)=>
+                          handleChange(
+                            "gender",
+                            e.target.value
+                          )
+                        }
 
 
+                        className="
+                          w-full
+                          rounded-xl
+                          bg-zinc-800
+                          border
+                          border-zinc-700
+                          p-4
+                          outline-none
+                          transition
+                          focus:border-blue-500
+                          focus:ring-2
+                          focus:ring-blue-500/20
+                        "
 
-                    onChange={(e)=>
+                      >
 
-                      handleChange(
-                        key,
-                        e.target.value
-                      )
-
-                    }
-
-
-
-                    className="
-                      w-full
-                      rounded-xl
-                      bg-zinc-800
-                      border
-                      border-zinc-700
-                      p-4
-                      outline-none
-                      transition
-                      focus:border-blue-500
-                      focus:ring-2
-                      focus:ring-blue-500/20
-                    "
+                        <option value="">
+                          انتخاب کنید
+                        </option>
 
 
-                  />
+                        <option value="مرد">
+                          مرد
+                        </option>
+
+
+                        <option value="زن">
+                          زن
+                        </option>
+
+
+                      </select>
+
+
+                    ) : (
+
+                      <div className="relative">
+
+                        {key === "secondary_phone" && (
+                          <div
+                            className="
+                              absolute
+                              left-0
+                              top-0
+                              h-full
+                              w-16
+                              flex
+                              items-center
+                              justify-center
+                              text-amber-400
+                              text-lg
+                              font-bold
+                              tracking-wide
+                              border-r
+                              border-zinc-700
+                              select-none
+                            "
+                            
+                          >
+                            09
+                          </div>
+                          )}
+
+
+                          <input
+
+                            type="text"
+
+                            dir="ltr"
+
+                            value={
+                              key === "secondary_phone"
+                                ? (form.secondary_phone?.replace(/^09/, "") ?? "")
+                                : (form as any)[key]
+                            }
+
+
+                            placeholder={
+                              key === "secondary_phone"
+                                ? "xxxxxxxxx"
+                                : key === "birth_date"
+                                  ? "مثال: 1365/04/26"
+                                  : ""
+                            }
+
+
+                            maxLength={
+                              key === "secondary_phone"
+                                ? 9
+                                : undefined
+                            }
+
+
+                            onChange={(e)=>{
+
+                              if(key === "secondary_phone"){
+
+                                const value = e.target.value
+                                  .replace(/\D/g,"")
+                                  .slice(0,9);
+
+
+                                handleChange(
+                                  "secondary_phone",
+                                  value ? "09" + value : ""
+                                );
+
+
+                              } else {
+
+                                handleChange(
+                                  key,
+                                  e.target.value
+                                );
+
+                              }
+
+                            }}
+
+
+                            className="
+                              w-full
+                              rounded-xl
+                              bg-zinc-800
+                              border
+                              border-zinc-700
+                              p-4
+                              pl-20
+                              outline-none
+                              transition
+                              focus:border-blue-500
+                              focus:ring-2
+                              focus:ring-blue-500/20
+                            "
+
+                          />
+
+                        </div>
+
+
+                    )
+                  }
 
 
                 </div>
-
 
               ))
 
             }
 
-
           </div>
-
-
-
-
-
-
-
 
 
           <div className="mt-5">
@@ -731,10 +845,7 @@ export default function ProfilePage() {
             <textarea
 
 
-              value={
-                form.bio
-              }
-
+              value={form.bio}
 
 
               onChange={(e)=>
@@ -747,9 +858,7 @@ export default function ProfilePage() {
               }
 
 
-
               rows={6}
-
 
 
               className="
@@ -776,57 +885,69 @@ export default function ProfilePage() {
 
 
 
+          <div className="flex gap-4 mt-8">
+
+              <button
+
+                onClick={handleSave}
+
+                disabled={saving}
+
+                className="
+                  flex-1
+                  rounded-xl
+                  bg-blue-600
+                  hover:bg-blue-700
+                  transition
+                  p-4
+                  font-bold
+                  text-lg
+                  disabled:opacity-50
+                "
+
+              >
+
+                {
+                  saving
+                    ? "در حال ذخیره..."
+                    : "ذخیره تغییرات"
+                }
+
+              </button>
 
 
 
+              <button
 
-          <button
+                onClick={() => router.push("/profile")}
 
+                type="button"
 
-            onClick={handleSave}
+                className="
+                  flex-1
+                  rounded-xl
+                  bg-zinc-700
+                  hover:bg-zinc-600
+                  transition
+                  p-4
+                  font-bold
+                  text-lg
+                "
 
+              >
 
+                انصراف
 
-            disabled={saving}
-
-
-
-            className="
-              mt-8
-              w-full
-              rounded-xl
-              bg-blue-600
-              hover:bg-blue-700
-              transition
-              p-4
-              font-bold
-              text-lg
-              disabled:opacity-50
-            "
+              </button>
 
 
-          >
-
-
-            {
-              saving
-                ? "در حال ذخیره..."
-                : "ذخیره تغییرات"
-            }
-
-
-          </button>
-
-
-
+            </div>
 
 
         </div>
 
 
-
       </div>
-
 
 
     </main>

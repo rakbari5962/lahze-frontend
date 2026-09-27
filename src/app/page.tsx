@@ -6,6 +6,8 @@ import {
   useState
 } from "react";
 
+import { useRouter } from "next/navigation";
+
 
 import {
   getToken
@@ -21,9 +23,8 @@ import {
 
 export default function HomePage() {
 
-
+  const router = useRouter();
   const [user, setUser] = useState<any>(null);
-
   const [loading, setLoading] = useState(true);
 
 
@@ -176,6 +177,23 @@ export default function HomePage() {
                     : "ناقص"
                 }
               </p>
+
+              <button
+                onClick={() => router.push("/profile")}
+                className="
+                  mt-6
+                  w-full
+                  rounded-xl
+                  bg-blue-600
+                  py-3
+                  font-bold
+                  text-white
+                  transition
+                  hover:bg-blue-700
+                "
+              >
+                مشاهده پروفایل
+              </button>
 
 
 

@@ -1,3 +1,6 @@
+import moment from "moment-jalaali";
+
+
 export function toJalali(
   date?: string | null
 ) {
@@ -6,21 +9,13 @@ export function toJalali(
     return "";
   }
 
-  const d = new Date(date);
+  const m = moment(date, "YYYY-MM-DD");
 
-  if (isNaN(d.getTime())) {
+  if (!m.isValid()) {
     return "";
   }
 
-  return new Intl.DateTimeFormat(
-    "fa-IR-u-ca-persian",
-    {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit"
-    }
-  ).format(d)
-    .replaceAll("/", "/");
+  return m.format("jYYYY/jMM/jDD");
 
 }
 
@@ -34,9 +29,15 @@ export function toGregorian(
     return "";
   }
 
-  // فعلاً فقط فرمت ذخیره را نگه می‌داریم
-  // تبدیل دقیق شمسی به میلادی را بعداً اضافه می‌کنیم
+  const m = moment(
+    jalaliDate,
+    "jYYYY/jMM/jDD"
+  );
 
-  return jalaliDate;
+  if (!m.isValid()) {
+    return "";
+  }
+
+  return m.format("YYYY-MM-DD");
 
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { toJalali } from "@/lib/date";
 
 import {
   useEffect,
@@ -19,8 +20,6 @@ import {
   getCurrentUser,
   CurrentUser
 } from "@/services/user.service";
-
-
 
 
 
@@ -236,14 +235,34 @@ export default function ProfilePage(){
 
 
 
+            <div className="flex gap-3">
 
+              <Link
+
+                href="/profile/edit"
+
+                className="
+                  bg-blue-600
+                  hover:bg-blue-700
+                  transition
+                  px-5
+                  py-3
+                  rounded-xl
+                  font-bold
+                "
+
+              >
+                ویرایش
+              </Link>
+
+            </div>
             <Link
 
-              href="/profile/edit"
+              href="/"
 
               className="
-                bg-blue-600
-                hover:bg-blue-700
+                bg-zinc-800
+                hover:bg-zinc-700
                 transition
                 px-5
                 py-3
@@ -253,10 +272,9 @@ export default function ProfilePage(){
 
             >
 
-              ویرایش
+              بازگشت
 
             </Link>
-
 
 
           </div>
@@ -335,11 +353,15 @@ export default function ProfilePage(){
 
 
 
-            <ProfileCard
+            <ProfileCard 
 
               title="تاریخ تولد"
 
-              value={user?.birth_date}
+              value={
+                user?.birth_date
+                  ? toJalali(user.birth_date)
+                  : "تکمیل نشده"
+              }
 
             />
 
