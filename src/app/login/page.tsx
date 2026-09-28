@@ -2,7 +2,8 @@
 
 
 import {
-  useState
+  useState,
+  useEffect
 } from "react";
 
 
@@ -35,9 +36,29 @@ export default function LoginPage() {
 
   const [loading, setLoading] = useState(false);
 
+  const [resendTimer, setResendTimer] = useState(0);
+
+useEffect(() => {
+
+  if (resendTimer <= 0) {
+    return;
+  }
+
+
+  const timer = setInterval(() => {
+
+    setResendTimer(
+      prev => prev - 1
+    );
+
+  }, 1000);
 
 
 
+  return () => clearInterval(timer);
+
+
+}, [resendTimer]);
 
   function saveLoginData(
     result: {
@@ -110,6 +131,11 @@ async function handleRequestOtp() {
     );
 
 
+    setResendTimer(
+      60
+    );
+
+
 
   } catch(error:any) {
 
@@ -120,9 +146,25 @@ async function handleRequestOtp() {
     );
 
 
-    alert(
-      error.message || "خطا در ارسال کد"
-    );
+    let message = "خطا در ارسال کد";
+
+
+    if ( 
+      error.message?.includes( 
+        "Please wait before requesting another OTP" 
+      ) 
+    ) { 
+
+      setResendTimer(60);
+
+
+      message = 
+        "⏳ لطفاً کمی صبر کنید.\n\nارسال مجدد کد تا ۶۰ ثانیه دیگر امکان‌پذیر است."; 
+
+    }
+
+
+    alert(message);
 
 
   } finally {
@@ -460,7 +502,9 @@ async function handleRequestOtp() {
 
                     onClick={handleRequestOtp}
 
-                    disabled={loading}
+                    disabled={
+                      loading || resendTimer > 0
+                    }
 
                     className="
                       mt-6
@@ -480,8 +524,10 @@ async function handleRequestOtp() {
 
                   {
                     loading
-                    ? "در حال ارسال..."
-                    : "دریافت کد"
+                      ? "در حال ارسال..."
+                      : resendTimer > 0
+                        ? `ارسال مجدد کد تا ${resendTimer} ثانیه دیگر`
+                        : "دریافت کد"
                   }
 
 
@@ -552,6 +598,35 @@ async function handleRequestOtp() {
 
                 </button>
 
+
+                  {
+                    resendTimer > 0 && (
+                      <p className="
+                        mt-4
+                        text-center
+                        text-zinc-400
+                      ">
+                        ارسال مجدد کد تا {resendTimer} ثانیه دیگر
+                      </p>
+                    )
+                  }
+
+                  {
+                    resendTimer === 0 && (
+                      <button
+                        type="button"
+                        onClick={handleRequestOtp}
+                        className="
+                          mt-4
+                          w-full
+                          text-blue-400
+                          font-bold
+                        "
+                      >
+                        ارسال مجدد کد
+                      </button>
+                    )
+                  }      
 
               </>
 
