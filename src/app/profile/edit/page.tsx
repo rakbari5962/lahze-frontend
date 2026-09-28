@@ -220,7 +220,9 @@ loadProfile();
               : "IR" + form.iban
             : null,
 
-        birth_date: toGregorian(form.birth_date),
+        birth_date: form.birth_date
+          ? toGregorian(form.birth_date)
+          : null,
       };
 
 
@@ -239,7 +241,9 @@ loadProfile();
                 : "IR" + form.iban
               : null,
 
-          birth_date: toGregorian(form.birth_date),
+          birth_date: form.birth_date
+            ? toGregorian(form.birth_date)
+            : null,
         }
       );
 
@@ -247,24 +251,17 @@ loadProfile();
 
       setUser(updated);
 
-
-
-      alert(
-        "پروفایل با موفقیت ذخیره شد"
-      );
-
       router.push("/profile");
+      router.refresh();
+
+    } catch (error:any) {
 
 
-
-    } catch (error) {
-
-
-      console.log(error);
+      console.log("SAVE ERROR:", error);
 
 
       alert(
-        "خطا در ذخیره اطلاعات"
+        error.message || "خطا در ذخیره اطلاعات"
       );
 
 

@@ -10,9 +10,13 @@ import { useRouter } from "next/navigation";
 
 
 import {
-  getToken
+  getToken,
+  removeToken
 } from "@/lib/auth";
 
+import {
+  logout
+} from "@/services/auth.service";
 
 import {
   getCurrentUser
@@ -90,7 +94,32 @@ export default function HomePage() {
   }, []);
 
 
+async function handleLogout() {
 
+  const token = getToken();
+
+
+  if (token) {
+
+    try {
+
+      await logout(token);
+
+    } catch(error) {
+
+      console.log(error);
+
+    }
+
+  }
+
+
+  removeToken();
+
+
+  router.push("/login");
+
+}
 
 
 
@@ -195,7 +224,22 @@ export default function HomePage() {
                 مشاهده پروفایل
               </button>
 
-
+              <button
+                onClick={handleLogout}
+                className="
+                  mt-3
+                  w-full
+                  rounded-xl
+                  bg-red-600
+                  py-3
+                  font-bold
+                  text-white
+                  transition
+                  hover:bg-red-700
+                "
+              >
+                خروج از حساب
+              </button>
 
 
             </div>

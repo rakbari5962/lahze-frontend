@@ -61,3 +61,17 @@ export async function verifyOtp(
   );
 
 }
+
+export async function logout(
+  token: string
+) {
+
+  return apiPost<{
+    success: boolean;
+    message: string;
+  }>(
+    `/auth/logout?token=${token}`,
+    {}
+  );
+
+}

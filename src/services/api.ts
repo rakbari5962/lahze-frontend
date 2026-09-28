@@ -72,7 +72,11 @@ export async function apiPost<T>(
 
 ): Promise<T> {
 
-
+  console.log(
+    "POST REQUEST:",
+    `${API_BASE_URL}${endpoint}`,
+    body
+  );
 
   const response = await fetch(
 
