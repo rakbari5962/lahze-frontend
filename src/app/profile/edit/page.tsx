@@ -229,30 +229,33 @@ loadProfile();
       console.log("FINAL PAYLOAD:", payload);
       console.log("JOB TITLE IN PAYLOAD:", payload.job_title);
 
-      const updated = await updateUserProfile(
-        token,
-        {
-          ...form,
+      const updated = await updateUserProfile( 
+  token,
+  { 
+    ...form,
 
-          iban:
-            form.iban
-              ? form.iban.startsWith("IR")
-                ? form.iban
-                : "IR" + form.iban
-              : null,
+    iban:
+      form.iban
+        ? form.iban.startsWith("IR")
+          ? form.iban
+          : "IR" + form.iban
+        : null,
 
-          birth_date: form.birth_date
-            ? toGregorian(form.birth_date)
-            : null,
-        }
-      );
+    birth_date: form.birth_date
+      ? toGregorian(form.birth_date)
+      : null,
+  }
+);
 
 
+setUser(updated);
 
-      setUser(updated);
 
-      router.push("/profile");
-      router.refresh();
+alert("اطلاعات شما با موفقیت ذخیره شد");
+
+
+router.push("/profile");
+router.refresh();
 
     } catch (error:any) {
 
@@ -285,672 +288,528 @@ loadProfile();
 
   if (loading) {
 
-
-    return (
-
-      <main
-        className="
-          min-h-screen
-          bg-zinc-950
-          flex
-          items-center
-          justify-center
-          text-white
-        "
-      >
-
-        در حال بارگذاری...
-
-      </main>
-
-    );
-
-
-  }
-
-
-
-
-
-
-
   return (
-
-
     <main
-
       dir="rtl"
-
       className="
         min-h-screen
-        bg-zinc-950
-        p-6
-        text-white
+        flex
+        items-center
+        justify-center
+        bg-[#f5f6f8]
+        text-zinc-700
       "
-
     >
-
-
-
-      <div
-        className="
-          max-w-4xl
-          mx-auto
-        "
-      >
-
-
-
-
-        <div
-
-          className="
-            bg-zinc-900
-            border
-            border-zinc-800
-            rounded-3xl
-            p-8
-            shadow-xl
-          "
-
-        >
-
-
-
-          <div className="mb-8">
-
-
-            <h1
-
-              className="
-                text-3xl
-                font-bold
-                mb-2
-              "
-
-            >
-
-              پروفایل من
-
-            </h1>
-
-
-            <p
-
-              className="
-                text-zinc-400
-              "
-
-            >
-
-              اطلاعات شخصی خود را تکمیل کنید
-
-            </p>
-
-
-          </div>
-
-
-
-
-
-
-
-          <div
-
-            className="
-              mb-8
-              p-5
-              rounded-2xl
-              bg-zinc-800/50
-              border
-              border-zinc-700
-            "
-
-          >
-
-
-            <label
-
-              className="
-                block
-                mb-3
-                text-zinc-300
-              "
-
-            >
-
-              شماره موبایل اصلی
-
-            </label>
-
-
-
-            <input
-
-              value={
-                form.phone_number
-              }
-
-              disabled
-
-              className="
-                w-full
-                rounded-xl
-                bg-zinc-800
-                border
-                border-zinc-700
-                p-4
-                text-zinc-400
-                cursor-not-allowed
-              "
-
-            />
-
-
-          </div>
-
-
-
-
-
-
-
-
-
-          <div
-
-            className="
-              grid
-              grid-cols-1
-              md:grid-cols-2
-              gap-5
-            "
-
-          >
-            <div>
-
-            <label
-            className="
-            block
-            mb-2
-            text-sm
-            text-zinc-300
-            "
-            >
-            شماره شبا
-            </label>
-
-
-            <div
-            className="
-            flex
-            items-center
-            bg-zinc-800
-            border
-            border-zinc-700
-            rounded-xl
-            overflow-hidden
-            "
-            dir="ltr"
-            >
-
-            <span
-              className="
-                px-5
-                py-2
-                mx-2
-                rounded-xl
-                bg-emerald-950/60
-                border
-                border-emerald-500/40
-                text-emerald-300
-                font-semibold
-                text-lg
-                flex
-                items-center
-                justify-center
-                shadow-inner
-              "
-            >
-              IR
-            </span>
-
-
-            <input
-
-            value={
-              formatIban(
-                form.iban.replace("IR","")
-              )
-            }
-
-            onChange={(e)=>{
-
-              const raw = cleanIban(
-                e.target.value
-              );
-
-
-              handleChange(
-                "iban",
-                raw
-              );
-
-            }}
-
-
-            placeholder="مثال: 1234-5678-9012-3456-7890-1234"
-            
-
-            className="
-            flex-1
-            bg-zinc-800
-            p-4
-            outline-none
-            text-left
-            tracking-wider
-            "
-            />
-
-
-            </div>
-
-
-            <div>
-
-              <label
-                className="
-                  block
-                  mb-2
-                  text-sm
-                  text-zinc-300
-                "
-              >
-                کد ملی
-              </label>
-
-
-              <input
-
-                value={
-                  form.national_id
-                }
-
-
-                onChange={(e)=>{
-
-                  handleChange(
-                    "national_id",
-                    formatNationalId(
-                      e.target.value
-                    )
-                  );
-
-                }}
-
-
-                placeholder="مثال: 0012345678"
-
-
-                maxLength={10}
-
-
-                className="
-                  w-full
-                  rounded-xl
-                  bg-zinc-800
-                  border
-                  border-zinc-700
-                  p-4
-                  outline-none
-                  transition
-                  focus:border-blue-500
-                  focus:ring-2
-                  focus:ring-blue-500/20
-                "
-
-              />
-
-            </div>
-
-
-
-            </div>
-
-            {
-              [
-                ["first_name","نام"],
-                ["last_name","نام خانوادگی"],
-                ["secondary_phone","شماره موبایل دوم"],
-                ["gender","جنسیت"],
-                ["birth_date","تاریخ تولد"],
-                ["education","تحصیلات"],
-                ["job_title","شغل"],
-                ["email","ایمیل"]
-
-              ].map(([key,label]) => (
-
-                <div key={key}>
-
-
-                  <label
-
-                    className="
-                      block
-                      mb-2
-                      text-sm
-                      text-zinc-300
-                    "
-
-                  >
-
-                    {label}
-
-                  </label>
-
-
-
-                  {
-                    key === "gender" ? (
-
-                      <select
-
-                        value={form.gender}
-
-                        onChange={(e)=>
-                          handleChange(
-                            "gender",
-                            e.target.value
-                          )
-                        }
-
-
-                        className="
-                          w-full
-                          rounded-xl
-                          bg-zinc-800
-                          border
-                          border-zinc-700
-                          p-4
-                          outline-none
-                          transition
-                          focus:border-blue-500
-                          focus:ring-2
-                          focus:ring-blue-500/20
-                        "
-
-                      >
-
-                        <option value="">
-                          انتخاب کنید
-                        </option>
-
-
-                        <option value="مرد">
-                          مرد
-                        </option>
-
-
-                        <option value="زن">
-                          زن
-                        </option>
-
-
-                      </select>
-
-
-                    ) : (
-
-                      <div className="relative">
-
-                        {key === "secondary_phone" && (
-                          <div
-                            className="
-                              absolute
-                              left-0
-                              top-0
-                              h-full
-                              w-16
-                              flex
-                              items-center
-                              justify-center
-                              text-amber-400
-                              text-lg
-                              font-bold
-                              tracking-wide
-                              border-r
-                              border-zinc-700
-                              select-none
-                            "
-                            
-                          >
-                            09
-                          </div>
-                          )}
-
-
-                          <input
-
-                            type="text"
-
-                            dir="ltr"
-
-                            value={
-                              key === "secondary_phone"
-                                ? (form.secondary_phone?.replace(/^09/, "") ?? "")
-                                : (form as any)[key]
-                            }
-
-
-                            placeholder={
-                              key === "secondary_phone"
-                                ? "xxxxxxxxx"
-                                : key === "birth_date"
-                                  ? "مثال: 1365/04/26"
-                                  : ""
-                            }
-
-
-                            maxLength={
-                              key === "secondary_phone"
-                                ? 9
-                                : undefined
-                            }
-
-
-                            onChange={(e)=>{
-
-                              if(key === "secondary_phone"){
-
-                                const value = e.target.value
-                                  .replace(/\D/g,"")
-                                  .slice(0,9);
-
-
-                                handleChange(
-                                  "secondary_phone",
-                                  value ? "09" + value : ""
-                                );
-
-
-                              } else {
-
-                                handleChange(
-                                  key,
-                                  e.target.value
-                                );
-
-                              }
-
-                            }}
-
-
-                            className="
-                              w-full
-                              rounded-xl
-                              bg-zinc-800
-                              border
-                              border-zinc-700
-                              p-4
-                              pl-20
-                              outline-none
-                              transition
-                              focus:border-blue-500
-                              focus:ring-2
-                              focus:ring-blue-500/20
-                            "
-
-                          />
-
-                        </div>
-
-
-                    )
-                  }
-
-
-                </div>
-
-              ))
-
-            }
-
-          </div>
-
-
-          <div className="mt-5">
-
-
-            <label
-
-              className="
-                block
-                mb-2
-                text-sm
-                text-zinc-300
-              "
-
-            >
-
-              درباره من
-
-            </label>
-
-
-
-            <textarea
-
-
-              value={form.bio}
-
-
-              onChange={(e)=>
-
-                handleChange(
-                  "bio",
-                  e.target.value
-                )
-
-              }
-
-
-              rows={6}
-
-
-              className="
-                w-full
-                rounded-xl
-                bg-zinc-800
-                border
-                border-zinc-700
-                p-4
-                resize-none
-                outline-none
-                focus:border-blue-500
-                focus:ring-2
-                focus:ring-blue-500/20
-              "
-
-
-            />
-
-
-          </div>
-
-
-
-
-
-          <div className="flex gap-4 mt-8">
-
-              <button
-
-                onClick={handleSave}
-
-                disabled={saving}
-
-                className="
-                  flex-1
-                  rounded-xl
-                  bg-blue-600
-                  hover:bg-blue-700
-                  transition
-                  p-4
-                  font-bold
-                  text-lg
-                  disabled:opacity-50
-                "
-
-              >
-
-                {
-                  saving
-                    ? "در حال ذخیره..."
-                    : "ذخیره تغییرات"
-                }
-
-              </button>
-
-
-
-              <button
-
-                onClick={() => router.push("/profile")}
-
-                type="button"
-
-                className="
-                  flex-1
-                  rounded-xl
-                  bg-zinc-700
-                  hover:bg-zinc-600
-                  transition
-                  p-4
-                  font-bold
-                  text-lg
-                "
-
-              >
-
-                انصراف
-
-              </button>
-
-
-            </div>
-
-
-        </div>
-
-
-      </div>
-
-
+      در حال بارگذاری...
     </main>
-
-
   );
 
+}
+
+
+return (
+
+<main
+dir="rtl"
+className="
+min-h-screen
+bg-[#f5f6f8]
+p-6
+"
+>
+
+
+<div
+className="
+max-w-5xl
+mx-auto
+bg-white
+border
+border-zinc-200
+rounded-3xl
+shadow-sm
+p-10
+"
+>
+
+
+<div
+className="
+flex
+items-center
+justify-between
+mb-10
+"
+>
+
+
+<div>
+
+<h1
+className="
+text-3xl
+font-black
+text-zinc-900
+"
+>
+پروفایل من
+</h1>
+
+
+<p
+className="
+mt-3
+text-zinc-500
+font-medium
+"
+>
+اطلاعات شخصی خود را تکمیل کنید
+</p>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<EditSection title="اطلاعات تماس">
+
+
+<div className="
+grid
+md:grid-cols-2
+gap-5
+">
+
+
+<EditField
+label="شماره موبایل اصلی"
+value={form.phone_number}
+disabled
+/>
+
+
+<EditField
+label="ایمیل"
+value={form.email}
+onChange={(v)=>handleChange("email",v)}
+/>
+
+
+</div>
+
+
+</EditSection>
+
+
+
+
+
+<EditSection title="اطلاعات هویتی">
+
+
+<div
+className="
+grid
+md:grid-cols-2
+gap-5
+"
+>
+
+
+<EditField
+label="نام"
+value={form.first_name}
+onChange={(v)=>handleChange("first_name",v)}
+/>
+
+
+<EditField
+label="نام خانوادگی"
+value={form.last_name}
+onChange={(v)=>handleChange("last_name",v)}
+/>
+
+
+<EditField
+label="کد ملی"
+value={form.national_id}
+onChange={(v)=>handleChange("national_id",formatNationalId(v))}
+/>
+
+<div>
+
+<label
+className="
+block
+mb-2
+text-sm
+font-bold
+text-zinc-700
+"
+>
+جنسیت
+</label>
+
+
+<select
+value={form.gender}
+onChange={(e)=>handleChange("gender", e.target.value)}
+className="
+w-full
+rounded-xl
+border
+border-zinc-200
+px-4
+py-3
+bg-white
+text-zinc-900
+font-medium
+outline-none
+focus:border-blue-500
+"
+>
+
+<option value="">
+انتخاب کنید
+</option>
+
+<option value="مرد">
+مرد
+</option>
+
+<option value="زن">
+زن
+</option>
+
+</select>
+
+</div>
+
+
+<EditField
+label="تاریخ تولد"
+value={form.birth_date}
+placeholder="مثال: 1365/04/26"
+onChange={(v)=>handleChange("birth_date",v)}
+/>
+
+
+
+</div>
+
+</EditSection>
+
+
+
+
+
+
+<EditSection title="اطلاعات کاری">
+
+
+<div
+className="
+grid
+md:grid-cols-2
+gap-5
+"
+>
+
+
+<EditField
+label="تحصیلات"
+value={form.education}
+onChange={(v)=>handleChange("education",v)}
+/>
+
+
+
+<EditField
+label="شغل"
+value={form.job_title}
+onChange={(v)=>handleChange("job_title",v)}
+/>
+
+
+</div>
+
+
+</EditSection>
+
+
+
+
+
+
+<EditSection title="اطلاعات بانکی">
+
+
+<EditField
+label="شماره شبا"
+value={form.iban}
+onChange={(v)=>handleChange("iban",v)}
+/>
+
+
+</EditSection>
+
+
+
+
+
+<EditSection title="درباره من">
+
+
+<textarea
+
+value={form.bio}
+
+onChange={(e)=>
+handleChange(
+"bio",
+e.target.value
+)
+}
+
+rows={5}
+
+className="
+w-full
+rounded-xl
+bg-zinc-50
+border
+border-zinc-200
+p-4
+text-zinc-900
+font-medium
+outline-none
+focus:border-blue-500
+"
+
+ />
+
+
+</EditSection>
+
+
+
+
+
+<div
+className="
+flex
+gap-4
+mt-10
+"
+>
+
+
+<button
+
+onClick={handleSave}
+
+disabled={saving}
+
+className="
+flex-1
+bg-blue-600
+hover:bg-blue-700
+text-white
+rounded-xl
+py-4
+font-bold
+text-lg
+transition
+"
+
+>
+
+{
+saving
+?
+"در حال ذخیره..."
+:
+"ذخیره تغییرات"
+}
+
+</button>
+
+
+
+<button
+
+type="button"
+
+onClick={()=>
+router.push("/profile")
+}
+
+className="
+flex-1
+bg-zinc-100
+hover:bg-zinc-200
+text-zinc-700
+rounded-xl
+py-4
+font-bold
+text-lg
+"
+
+>
+
+انصراف
+
+</button>
+
+
+
+</div>
+
+
+
+
+</div>
+
+
+</main>
+
+);
+
+}   
+
+
+
+
+
+function EditSection({
+
+title,
+children
+
+}:{
+
+title:string;
+children:React.ReactNode;
+
+}){
+
+
+return (
+
+<section 
+className="
+mb-7
+"
+>
+
+<h2
+className="
+text-lg
+font-bold
+text-zinc-900
+mb-3
+"
+>
+
+{title}
+
+</h2>
+
+
+{children}
+
+
+</section>
+
+)
+
+}
+
+
+
+
+
+function EditField({
+
+label,
+value,
+onChange,
+disabled,
+placeholder
+
+}:{
+
+label:string;
+value:string;
+onChange?:(v:string)=>void;
+disabled?:boolean;
+placeholder?:string;
+
+}){
+
+
+return (
+
+<div>
+
+
+<label
+className="
+block
+mb-2
+text-sm
+font-bold
+text-zinc-700
+"
+>
+
+{label}
+
+</label>
+
+
+<input
+
+value={value ?? ""}
+
+placeholder={placeholder}
+
+disabled={disabled}
+
+onChange={(e)=>
+onChange?.(e.target.value)
+}
+
+className={`
+w-full
+rounded-xl
+border
+px-4
+py-3
+font-medium
+outline-none
+
+${
+disabled
+?
+"bg-zinc-100 text-zinc-500"
+:
+"bg-white text-zinc-900 border-zinc-200 focus:border-blue-500"
+}
+
+`}
+
+/>
+
+
+</div>
+
+
+)
 
 }

@@ -116,10 +116,14 @@ export default function ProfilePage(){
       <main
         className="
           min-h-screen
-          bg-zinc-950
           flex
           items-center
           justify-center
+          p-6
+          bg-gradient-to-br
+          from-zinc-950
+          via-slate-900
+          to-blue-950
           text-white
         "
       >
@@ -140,366 +144,375 @@ export default function ProfilePage(){
 
   return (
 
+  <main
+  dir="rtl"
+  className="
+  min-h-screen
+  p-6
+  bg-[#F6F7FB]
+  text-zinc-900
+  "
+  >
+
+  <div
+  className="
+  max-w-5xl
+  mx-auto
+  bg-white
+  border
+  border-zinc-200
+  rounded-2xl
+  p-8
+  shadow-sm
+  "
+  >
+
+
+  {/* Header */}
+
+  <div
+  className="
+  flex
+  items-center
+  justify-between
+  mb-12
+  "
+  >
+
+  <div>
 
+  <h1
+  className="
+  text-4xl
+  font-black
+  "
+  >
+  پروفایل من
+  </h1>
 
 
-    <main
+  <p
+  className="
+  mt-3
+  text-zinc-400
+  "
+  >
+  اطلاعات شخصی حساب کاربری
+  </p>
 
-      dir="rtl"
+  </div>
 
-      className="
-        min-h-screen
-        bg-zinc-950
-        p-6
-        text-white
-      "
 
-    >
 
+  <div
+  className="
+  flex
+  gap-3
+  "
+  >
 
 
-      <div
+  <Link
+  href="/profile/edit"
+  className="
+  bg-blue-600
+  hover:bg-blue-700
+  px-6
+  py-3
+  rounded-xl
+  font-bold
+  transition
+  shadow-lg
+  shadow-blue-600/20
+  "
+  >
+  ویرایش
+  </Link>
 
-        className="
-          max-w-3xl
-          mx-auto
-        "
 
-      >
 
+  <Link
+  href="/"
+  className="
+  bg-zinc-100
+  hover:bg-zinc-200
+  text-zinc-700
+  px-6
+  py-3
+  rounded-xl
+  font-bold
+  transition
+  "
+  >
+  بازگشت
+  </Link>
 
 
-        <div
+  </div>
 
-          className="
-            bg-zinc-900
-            border
-            border-zinc-800
-            rounded-3xl
-            p-8
-            shadow-xl
-          "
 
-        >
+  </div>
 
 
 
-          <div
 
-            className="
-              flex
-              items-center
-              justify-between
-              mb-8
-            "
 
-          >
+  <ProfileSection title="اطلاعات تماس">
 
+  <div className="grid md:grid-cols-3 gap-5">
 
+  <ProfileCard
+  title="شماره موبایل"
+  value={user?.phone_number}
+  />
 
-            <div>
 
+  <ProfileCard
+  title="شماره موبایل دوم"
+  value={user?.secondary_phone}
+  />
 
-              <h1
 
-                className="
-                  text-3xl
-                  font-bold
-                "
+  <ProfileCard
+  title="ایمیل"
+  value={user?.email}
+  />
 
-              >
 
-                پروفایل من
+  </div>
 
-              </h1>
+  </ProfileSection>
 
 
 
-              <p
 
-                className="
-                  text-zinc-400
-                  mt-2
-                "
 
-              >
+  <ProfileSection title="اطلاعات شخصی">
 
-                اطلاعات شخصی حساب کاربری
 
-              </p>
+  <div
+  className="
+  grid
+  md:grid-cols-2
+  gap-x-12
+  gap-y-2
+  "
+  >
 
 
+  <ProfileCard
+  title="نام"
+  value={user?.first_name}
+  />
 
-            </div>
 
+  <ProfileCard
+  title="نام خانوادگی"
+  value={user?.last_name}
+  />
 
 
+  <ProfileCard
+  title="کد ملی"
+  value={user?.national_id}
+  />
 
-            <div className="flex gap-3">
 
-              <Link
+  <ProfileCard
+  title="جنسیت"
+  value={user?.gender}
+  />
 
-                href="/profile/edit"
 
-                className="
-                  bg-blue-600
-                  hover:bg-blue-700
-                  transition
-                  px-5
-                  py-3
-                  rounded-xl
-                  font-bold
-                "
+  <ProfileCard
+  title="تاریخ تولد"
+  value={
+  user?.birth_date
+  ?
+  toJalali(user.birth_date)
+  :
+  "تکمیل نشده"
+  }
+  />
 
-              >
-                ویرایش
-              </Link>
 
-            </div>
-            <Link
+  </div>
 
-              href="/"
 
-              className="
-                bg-zinc-800
-                hover:bg-zinc-700
-                transition
-                px-5
-                py-3
-                rounded-xl
-                font-bold
-              "
+  </ProfileSection>
 
-            >
 
-              بازگشت
 
-            </Link>
 
 
-          </div>
+  <ProfileSection title="اطلاعات کاری">
 
 
+  <div
+  className="
+  grid
+  md:grid-cols-3
+  gap-x-12
+  gap-y-2
+  "
+  >
 
 
+  <ProfileCard
+  title="تحصیلات"
+  value={user?.education}
+  />
 
 
+  <ProfileCard
+  title="شغل"
+  value={user?.job_title}
+  />
 
 
-          <div
-            className="
-              space-y-4
-            "
-          >
+  <ProfileCard
+  title="شماره شبا"
+  value={user?.iban}
+  />
 
 
-            <ProfileCard
+  </div>
 
-              title="شماره موبایل"
 
-              value={user?.phone_number}
+  </ProfileSection>
 
-            />
 
 
-            <ProfileCard
 
-              title="نام"
 
-              value={user?.first_name}
+  <ProfileSection title="درباره من">
 
-            />
 
+  <ProfileCard
+  title=""
+  value={user?.bio}
+  />
 
 
+  </ProfileSection>
 
-            <ProfileCard
 
-              title="نام خانوادگی"
 
-              value={user?.last_name}
 
-            />
+  </div>
 
 
-
-            <ProfileCard
-
-              title="شماره موبایل دوم"
-
-              value={user?.secondary_phone}
-
-            />
-
-
-
-            <ProfileCard
-
-              title="کد ملی"
-
-              value={user?.national_id}
-
-            />
-
-
-
-            <ProfileCard
-
-              title="جنسیت"
-
-              value={user?.gender}
-
-            />
-
-
-
-            <ProfileCard 
-
-              title="تاریخ تولد"
-
-              value={
-                user?.birth_date
-                  ? toJalali(user.birth_date)
-                  : "تکمیل نشده"
-              }
-
-            />
-
-
-
-            <ProfileCard
-
-              title="تحصیلات"
-
-              value={user?.education}
-
-            />
-
-
-
-            <ProfileCard
-
-              title="شغل"
-
-              value={user?.job_title}
-
-            />
-
-
-
-            <ProfileCard
-
-              title="ایمیل"
-
-              value={user?.email}
-
-            />
-
-
-
-            <ProfileCard
-
-              title="شماره شبا"
-
-              value={user?.iban}
-
-            />
-
-
-
-            <ProfileCard
-
-              title="درباره من"
-
-              value={user?.bio}
-
-            />
-
-
-
-          </div>
-
-
-
-
-
-        </div>
-
-
-
-      </div>
-
-
-
-    </main>
-
+  </main>
 
   );
 
 
 }
 
+function ProfileSection({
+
+  title,
+  children
+
+}:{
+
+  title:string;
+  children:React.ReactNode;
+
+}) {
 
 
+  return (
+
+    <section
+      className="
+        mb-12
+      "
+    >
+
+      <div className="mb-6">
+
+      <h2
+      className="
+      text-xl
+      font-bold
+      text-zinc-900
+      "
+      >
+      {title}
+      </h2>
 
 
+      <p
+      className="
+      text-sm
+      font-medium
+      text-zinc-400
+      mt-2
+      "
+      >
+      اطلاعات مربوط به این بخش
+      </p>
 
+
+      </div>
+
+
+      {children}
+
+
+    </section>
+
+  );
+
+}
 
 
 function ProfileCard({
 
   title,
-
   value
 
 }:{
 
   title:string;
-
   value?:string|null;
 
-}){
+}) {
 
 
   return (
 
-
     <div
-
       className="
-        bg-zinc-800/60
-        border
-        border-zinc-700
-        rounded-2xl
-        p-5
+        py-5
+        border-b
+        border-zinc-800
+        last:border-none
       "
-
     >
 
-
-      <p
-
-        className="
-          text-sm
-          text-zinc-400
-          mb-2
-        "
-
-      >
-
-        {title}
-
-      </p>
-
+      {
+        title &&
+        <p
+          className="
+            text-sm
+            font-bold
+            text-zinc-500
+            mb-3
+          "
+        >
+          {title}
+        </p>
+      }
 
 
       <p
-
         className="
-          text-lg
-          font-medium
+        text-base
+        font-semibold
+        text-zinc-900
         "
-
       >
 
         {
@@ -509,11 +522,8 @@ function ProfileCard({
       </p>
 
 
-
     </div>
 
-
   );
-
 
 }

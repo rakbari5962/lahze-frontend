@@ -1,5 +1,12 @@
 "use client";
 
+import { 
+Heart,
+CalendarDays,
+Store,
+Users
+} from "lucide-react";
+
 
 import {
   useEffect,
@@ -22,7 +29,11 @@ import {
   getCurrentUser
 } from "@/services/user.service";
 
-
+import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import CityCard from "@/components/dashboard/CityCard";
+import MainActionCard from "@/components/dashboard/MainActionCard";
+import QuickActionCard from "@/components/dashboard/QuickActionCard";
+import StatsCard from "@/components/dashboard/StatsCard";
 
 
 export default function HomePage() {
@@ -147,125 +158,275 @@ async function handleLogout() {
 
   return (
 
-
-    <main className="min-h-screen bg-zinc-950 flex items-center justify-center p-6">
-
-
-      <div className="w-full max-w-md rounded-xl bg-zinc-900 border border-zinc-800 p-8 text-white">
-
-
-        <h1 className="text-3xl font-bold mb-6">
-          داشبورد لحظه
-        </h1>
-
-
-
+  <main 
+dir="rtl" 
+className="
+min-h-screen
+bg-[#f5f7fb]
+flex
+justify-center
+p-6
+text-right
+  "
+  >
 
 
-        {
-          user ? (
+  <div
+  className="
+  w-full
+  max-w-6xl
+  mx-auto
+  "
+  >
 
 
-            <div className="space-y-3">
+  <div
+  className="
+  bg-white
+  rounded-[32px]
+  shadow-sm
+  border
+  border-slate-100
+  p-10
+  "
+  >
 
 
+  <DashboardHeader
 
-              <p>
-                شماره:
-                {" "}
-                {user.phone_number}
-              </p>
+  name={user?.first_name}
+  phone={user?.phone_number}
 
-
-
-              <p>
-                نقش:
-                {" "}
-                {user.role}
-              </p>
-
-
-
-              <p>
-                شهر:
-                {" "}
-                {
-                  user.city_name ?? "انتخاب نشده"
-                }
-              </p>
+  />
 
 
 
+  <CityCard
 
-              <p>
-                پروفایل:
-                {" "}
-                {
-                  user.profile_completed
-                    ? "تکمیل شده"
-                    : "ناقص"
-                }
-              </p>
+  city={user?.city_name}
 
-              <button
-                onClick={() => router.push("/profile")}
-                className="
-                  mt-6
-                  w-full
-                  rounded-xl
-                  bg-blue-600
-                  py-3
-                  font-bold
-                  text-white
-                  transition
-                  hover:bg-blue-700
-                "
-              >
-                مشاهده پروفایل
-              </button>
-
-              <button
-                onClick={handleLogout}
-                className="
-                  mt-3
-                  w-full
-                  rounded-xl
-                  bg-red-600
-                  py-3
-                  font-bold
-                  text-white
-                  transition
-                  hover:bg-red-700
-                "
-              >
-                خروج از حساب
-              </button>
-
-
-            </div>
+  />
 
 
 
-          ) : (
+  <div
+  className="
+  mt-6
+  "
+  >
+
+
+  <MainActionCard
+
+  title="مشاهده فرصت‌های لحظه‌ای"
+
+  subtitle="فرصت‌های موجود امروز در شهر شما"
+
+  />
+
+
+  </div>
 
 
 
-            <p>
-              کاربر پیدا نشد
-            </p>
+  <div
+  className="
+  grid
+  md:grid-cols-2
+  gap-5
+  mt-6
+  "
+  >
+
+
+  <QuickActionCard
+
+  title="علاقه‌مندی‌ها"
+
+  subtitle="فرصت‌های ذخیره شده"
+
+  icon="❤️"
+  theme="red"
+
+  />
 
 
 
-          )
+  <QuickActionCard
 
-        }
+  title="رزروهای من"
+
+  subtitle="مشاهده و مدیریت رزروها"
+
+  icon="📅"
+  theme="green"
+
+  />
 
 
 
-      </div>
+  <QuickActionCard
+
+  title="افزودن کسب و کار خودم"
+
+  subtitle="کسب و کار خود را در لحظه ثبت کنید"
+
+  icon="🏪"
+  theme="purple"
+
+  />
 
 
-    </main>
+
+  <QuickActionCard
+
+  title="دعوت دوستان"
+
+  subtitle="لحظه را به دوستان معرفی کن"
+
+  icon="👥"
+  theme="blue"
+
+  />
+
+
+
+  <QuickActionCard
+
+  title="راهنما و پشتیبانی"
+
+  subtitle="سوالات متداول و ارتباط با ما"
+
+  icon="❓"
+  theme="teal"
+
+  />
+
+
+
+  </div>
+
+
+
+
+  <div
+  className="
+  grid
+  grid-cols-2
+  md:grid-cols-4
+  gap-4
+  mt-8
+  "
+  >
+
+
+  <StatsCard
+
+  title="فرصت فعال امروز"
+
+  value="12"
+
+  icon={<Store size={28}/>}
+
+  theme="blue"
+/>
+
+
+<StatsCard
+
+title="فرصت ذخیره شده"
+
+value="3"
+
+icon={<Heart size={28}/>}
+
+theme="red"
+/>
+
+
+<StatsCard
+
+title="رزرو آینده"
+
+value="2"
+
+icon={<CalendarDays size={28}/>}
+
+theme="green"
+/>
+
+
+<StatsCard
+
+title="دعوت ارسال شده"
+
+value="1"
+
+icon={<Users size={28}/>}
+
+theme="purple"
+
+  />
+
+
+
+  </div>
+
+
+
+
+  <button
+
+  onClick={()=>router.push("/profile")}
+
+  className="
+  w-full
+  mt-8
+  rounded-2xl
+  bg-slate-100
+  py-4
+  font-bold
+  text-slate-700
+  "
+
+  >
+
+  مشاهده و ویرایش پروفایل
+
+  </button>
+
+
+
+
+  <button
+
+  onClick={handleLogout}
+
+  className="
+  w-full
+  mt-4
+  rounded-2xl
+  bg-red-500
+  py-4
+  font-bold
+  text-white
+  "
+
+  >
+
+  خروج از حساب
+
+  </button>
+
+
+
+  </div>
+
+
+  </div>
+
+
+  </main>
 
 
   );
