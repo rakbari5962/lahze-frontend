@@ -227,24 +227,18 @@ loadProfile();
 
 
       console.log("FINAL PAYLOAD:", payload);
-      console.log("JOB TITLE IN PAYLOAD:", payload.job_title);
+console.log("JOB TITLE IN PAYLOAD:", payload.job_title);
 
-      const updated = await updateUserProfile( 
+
+const updated = await updateUserProfile(
   token,
-  { 
-    ...form,
+  payload
+);
 
-    iban:
-      form.iban
-        ? form.iban.startsWith("IR")
-          ? form.iban
-          : "IR" + form.iban
-        : null,
 
-    birth_date: form.birth_date
-      ? toGregorian(form.birth_date)
-      : null,
-  }
+console.log(
+  "UPDATED USER AFTER SAVE:",
+  updated
 );
 
 
@@ -255,7 +249,7 @@ alert("اطلاعات شما با موفقیت ذخیره شد");
 
 
 router.push("/profile");
-router.refresh();
+
 
     } catch (error:any) {
 

@@ -24,3 +24,457 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* =========================================================
+   PROFILE PAGE THEME
+   Presentation-only styles. No functional behavior is changed.
+   ========================================================= */
+
+.profile-page {
+  --profile-bg: #f6f5ff;
+  --profile-surface: rgba(255, 255, 255, 0.82);
+  --profile-text: #12184c;
+  --profile-muted: #7d839e;
+  --profile-border: #e7e4fb;
+  --profile-accent: #5a31ed;
+  --profile-accent-soft: #f0edff;
+
+  position: relative;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 7% 8%, rgba(151, 126, 255, 0.13), transparent 23rem),
+    radial-gradient(circle at 87% 14%, rgba(116, 91, 239, 0.08), transparent 22rem),
+    linear-gradient(180deg, #f7f6ff 0%, #f4f5ff 48%, #eef2ff 100%);
+  color: var(--profile-text);
+  font-family: Vazirmatn, Tahoma, Arial, sans-serif;
+}
+
+.profile-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 30% 0%, rgba(255,255,255,0.82), transparent 30rem),
+    radial-gradient(circle at 100% 55%, rgba(122,91,255,0.06), transparent 28rem);
+}
+
+.profile-shell {
+  position: relative;
+  z-index: 1;
+}
+
+.profile-page select,
+.profile-page input,
+.profile-page textarea,
+.profile-page button {
+  font-family: inherit;
+}
+
+.profile-page ::selection {
+  background: rgba(99, 55, 235, 0.18);
+  color: #151a4b;
+}
+
+@media (max-width: 1023px) {
+  .profile-page {
+    background:
+      radial-gradient(circle at 15% 5%, rgba(151, 126, 255, 0.12), transparent 18rem),
+      linear-gradient(180deg, #f7f6ff 0%, #f2f4ff 100%);
+  }
+}
+
+
+
+/* =========================================================
+   HOME PAGE THEME
+   Mirrors the Profile page visual language.
+   Presentation-only. Functional behavior is untouched.
+   ========================================================= */
+
+.home-page {
+  --home-bg: #f6f5ff;
+  --home-surface: rgba(255, 255, 255, 0.78);
+  --home-surface-strong: rgba(255, 255, 255, 0.92);
+  --home-text: #12184c;
+  --home-muted: #7d839e;
+  --home-border: #e7e4fb;
+  --home-accent: #5a31ed;
+  --home-accent-2: #7d5cf5;
+  --home-accent-soft: #f0edff;
+  --home-blue: #3f6ff6;
+
+  position: relative;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 7% 8%, rgba(151, 126, 255, 0.13), transparent 23rem),
+    radial-gradient(circle at 87% 14%, rgba(116, 91, 239, 0.08), transparent 22rem),
+    linear-gradient(180deg, #f7f6ff 0%, #f4f5ff 48%, #eef2ff 100%);
+  color: var(--home-text);
+  font-family: Vazirmatn, Tahoma, Arial, sans-serif;
+}
+
+.home-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 30% 0%, rgba(255,255,255,0.82), transparent 30rem),
+    radial-gradient(circle at 100% 55%, rgba(122,91,255,0.06), transparent 28rem);
+}
+
+.home-shell {
+  position: relative;
+  z-index: 1;
+}
+
+.home-content {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.54);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 30px;
+  padding: clamp(14px, 2vw, 24px);
+  box-shadow: 0 18px 60px rgba(66, 48, 170, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.home-content::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 170px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(255,255,255,0.75), transparent 22rem),
+    radial-gradient(circle at 82% 0%, rgba(206,197,255,0.22), transparent 25rem),
+    linear-gradient(180deg, rgba(238,233,255,0.78), rgba(255,255,255,0));
+}
+
+.home-content > * {
+  position: relative;
+  z-index: 1;
+}
+
+/*
+ * Invite dropdown stacking:
+ * .home-content > * creates separate stacking contexts at z-index: 1.
+ * Raise only the invite section so its dropdown can appear above
+ * the QuickAction cards without changing the dropdown logic itself.
+ */
+.home-invite-wrap {
+  z-index: 20;
+}
+
+/* Header */
+.home-header {
+  margin-bottom: 18px !important;
+  padding: 20px 22px;
+  border: 1px solid rgba(255,255,255,0.92);
+  border-radius: 24px;
+  background: rgba(255,255,255,0.74);
+  box-shadow: 0 10px 35px rgba(73,55,175,0.07);
+  backdrop-filter: blur(14px);
+}
+
+.home-header h1,
+.home-header .text-slate-900 {
+  color: #11184d;
+}
+
+.home-header h1 {
+  font-size: 30px;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+
+.home-header p {
+  color: #626984;
+}
+
+.home-header > div:first-child > div:first-child {
+  background: #f0edff;
+  color: #5a31ed;
+  box-shadow: 0 6px 18px rgba(90,49,237,0.08);
+  border: 1px solid #e5e0ff;
+}
+
+.home-header > div:last-child > div:last-child {
+  background: linear-gradient(135deg, #eeeaff, #ffffff);
+  color: #5a35e8;
+  border: 3px solid #fff;
+  box-shadow: 0 10px 28px rgba(78,52,215,0.16);
+}
+
+/* City */
+.home-city-card {
+  margin-bottom: 0 !important;
+  min-height: 82px;
+  padding: 14px 18px;
+  border: 1px solid rgba(255,255,255,0.92);
+  border-radius: 22px;
+  background: rgba(255,255,255,0.76);
+  box-shadow: 0 8px 28px rgba(73,55,175,0.055);
+  backdrop-filter: blur(14px);
+}
+
+.home-city-card > div:first-child > div:first-child {
+  background: #f0edff;
+  color: #5a31ed;
+  box-shadow: 0 6px 16px rgba(90,49,237,0.08);
+  border: 1px solid #e4ddff;
+}
+
+.home-city-card p {
+  color: #8b90a8;
+}
+
+.home-city-card h3 {
+  color: #171c4b;
+}
+
+.home-city-card > button {
+  color: #5a31ed;
+  background: rgba(255,255,255,0.88);
+  border: 1px solid #ece8ff;
+  box-shadow: 0 5px 14px rgba(73,55,175,0.07);
+}
+
+.home-city-card > button:hover {
+  background: #f8f6ff;
+}
+
+/* Primary action */
+.home-main-action {
+  min-height: 150px;
+  padding: 26px 28px;
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 24px;
+  background: linear-gradient(135deg, #5a31ed 0%, #6b43ef 48%, #7d5cf5 100%);
+  box-shadow: 0 16px 38px rgba(90,49,237,0.18);
+}
+
+.home-main-action h2 {
+  color: #fff;
+  font-size: clamp(20px, 2.2vw, 27px);
+}
+
+.home-main-action p {
+  color: rgba(255,255,255,0.78);
+}
+
+.home-main-action > div:last-child > div:first-child {
+  background: rgba(255,255,255,0.12);
+  box-shadow: none;
+}
+
+.home-main-action > div:last-child > div:last-child {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.22);
+}
+
+/* Invite / add-business card */
+.home-invite-card {
+  border-radius: 24px;
+  padding: 24px 26px;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(255,255,255,0.18), transparent 18rem),
+    linear-gradient(135deg, #4930df 0%, #5a31ed 52%, #7655ef 100%);
+  box-shadow: 0 16px 42px rgba(90,49,237,0.16);
+}
+
+.home-invite-card h2 {
+  font-size: clamp(20px, 2.1vw, 27px);
+}
+
+.home-invite-card a {
+  border-color: rgba(255,255,255,0.28);
+  background: rgba(255,255,255,0.10);
+}
+
+.home-invite-card a:hover {
+  background: rgba(255,255,255,0.18);
+}
+
+.home-invite-card > div > div:last-child > button {
+  color: #5a31ed;
+}
+
+/* Quick action cards */
+.home-quick-card {
+  min-height: 118px;
+  padding: 20px 22px;
+  border: 1px solid rgba(255,255,255,0.92);
+  border-radius: 22px;
+  background: rgba(255,255,255,0.76) !important;
+  box-shadow: 0 8px 28px rgba(73,55,175,0.055);
+  backdrop-filter: blur(14px);
+}
+
+.home-quick-card h3 {
+  color: #171c4b;
+  font-size: 18px;
+}
+
+.home-quick-card p {
+  color: #8b90a8;
+}
+
+.home-quick-card > div:last-child > div {
+  background: #f0edff;
+  color: #5a31ed;
+  box-shadow: 0 6px 16px rgba(90,49,237,0.07);
+  border-color: #e5e0ff;
+}
+
+.home-quick-card > div:last-child > span {
+  color: #5a31ed;
+}
+
+/* Stats */
+.home-stats-card {
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,0.92);
+  border-radius: 22px;
+  background: rgba(255,255,255,0.78);
+  box-shadow: 0 8px 28px rgba(73,55,175,0.055);
+  backdrop-filter: blur(14px);
+}
+
+.home-stats-card > div:first-child {
+  background: #f0edff;
+  color: #5a31ed;
+  box-shadow: 0 6px 16px rgba(90,49,237,0.07);
+}
+
+.home-stats-card > p:nth-of-type(1) {
+  color: #5a31ed;
+}
+
+.home-stats-card > p:last-child {
+  color: #8b90a8;
+}
+
+/* Bottom actions */
+.home-profile-btn {
+  min-height: 54px;
+  border: 1px solid #e6e1ff;
+  background: rgba(255,255,255,0.78);
+  color: #5a31ed;
+  box-shadow: 0 8px 24px rgba(73,55,175,0.06);
+  backdrop-filter: blur(12px);
+}
+
+.home-profile-btn:hover {
+  background: #f8f6ff;
+  box-shadow: 0 12px 28px rgba(73,55,175,0.10);
+}
+
+.home-logout-btn {
+  min-height: 54px;
+  border: 1px solid #f0dce5;
+  background: rgba(255,255,255,0.78);
+  color: #a34f67;
+  box-shadow: 0 8px 24px rgba(120,60,90,0.05);
+  backdrop-filter: blur(12px);
+}
+
+.home-logout-btn:hover {
+  background: #fff8fa;
+}
+
+/* City selector modal */
+.home-city-modal {
+  background: rgba(42, 35, 83, 0.24);
+  backdrop-filter: blur(8px);
+}
+
+.home-city-modal-panel {
+  border: 1px solid rgba(255,255,255,0.92);
+  border-radius: 24px;
+  background: rgba(255,255,255,0.96);
+  box-shadow: 0 24px 70px rgba(66,48,170,0.18);
+  backdrop-filter: blur(18px);
+}
+
+.home-city-modal-panel h2 {
+  color: #171c4b;
+}
+
+.home-city-modal-panel label {
+  color: #626984;
+}
+
+.home-city-modal-panel select {
+  border-color: #e6e3f7;
+  background: #fbfaff;
+  color: #171c4b;
+}
+
+.home-city-modal-panel select:focus {
+  border-color: #6a3bea;
+  box-shadow: 0 0 0 4px rgba(106,59,234,0.10);
+}
+
+.home-city-modal-panel > div > div:first-child > div:first-child {
+  background: #f0edff;
+  color: #5a31ed;
+}
+
+.home-city-modal-panel > button:last-child {
+  background: linear-gradient(90deg, #4c28e8, #6838ef, #8b62ff);
+  box-shadow: 0 10px 25px rgba(93,52,235,0.18);
+}
+
+.home-city-modal-panel > button:last-child:hover {
+  background: linear-gradient(90deg, #4220d6, #7446f1);
+}
+
+@media (max-width: 767px) {
+  .home-content {
+    padding: 12px;
+    border-radius: 24px;
+  }
+
+  .home-header {
+    padding: 16px;
+  }
+
+  .home-header,
+  .home-city-card,
+  .home-main-action,
+  .home-invite-card {
+    border-radius: 20px;
+  }
+
+  .home-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .home-header > div {
+    width: 100%;
+  }
+
+  .home-city-card {
+    align-items: stretch;
+    gap: 14px;
+    flex-direction: column;
+  }
+
+  .home-city-card > button {
+    align-self: flex-start;
+  }
+
+  .home-main-action,
+  .home-invite-card {
+    padding: 20px;
+  }
+
+  .home-main-action > div:last-child {
+    gap: 10px;
+  }
+}

@@ -1,10 +1,11 @@
 "use client";
 
-import { 
-Heart,
-CalendarDays,
-Store,
-Users
+import {
+  Heart,
+  CalendarDays,
+  Store,
+  Users,
+  CircleHelp,
 } from "lucide-react";
 
 
@@ -29,11 +30,13 @@ import {
   getCurrentUser
 } from "@/services/user.service";
 
+import InviteBusinessCard from "@/components/dashboard/InviteBusinessCard";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import CityCard from "@/components/dashboard/CityCard";
 import MainActionCard from "@/components/dashboard/MainActionCard";
 import QuickActionCard from "@/components/dashboard/QuickActionCard";
 import StatsCard from "@/components/dashboard/StatsCard";
+import CitySelectorModal from "@/components/dashboard/CitySelectorModal";
 
 
 export default function HomePage() {
@@ -41,6 +44,7 @@ export default function HomePage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [showCityModal, setShowCityModal] = useState(false);
 
 
 
@@ -73,7 +77,9 @@ export default function HomePage() {
         );
 
 
-        setUser(data);
+        setUser({
+  ...data
+});
 
 
 
@@ -158,23 +164,26 @@ async function handleLogout() {
 
   return (
 
-  <main 
-dir="rtl" 
+  <main
+dir="rtl"
 className="
+home-page
 min-h-screen
-bg-[#f5f7fb]
 flex
 justify-center
-p-6
+p-4
+sm:p-5
+lg:p-6
 text-right
-  "
-  >
+"
+>
 
 
   <div
   className="
+  home-shell
   w-full
-  max-w-6xl
+  max-w-[1320px]
   mx-auto
   "
   >
@@ -182,6 +191,7 @@ text-right
 
   <div
   className="
+  home-content
   bg-white
   rounded-[32px]
   shadow-sm
@@ -202,26 +212,28 @@ text-right
 
 
   <CityCard
-
-  city={user?.city_name}
+  city={`${user?.city_name || "انتخاب نشده"}`}
+  onChangeCity={()=>setShowCityModal(true)}
 
   />
 
 
 
-  <div
-  className="
-  mt-6
-  "
-  >
-
-
+  <div className="home-main-action-wrap mt-6">
   <MainActionCard
+    title="مشاهده فرصت‌های لحظه آخری"
+    subtitle="فرصت‌های موجود امروز در شهر شما"
+  />
+</div>
 
-  title="مشاهده فرصت‌های لحظه‌ای"
-
-  subtitle="فرصت‌های موجود امروز در شهر شما"
-
+<div className="home-invite-wrap mt-5">
+  <InviteBusinessCard
+  onScanQR={() => {
+    console.log("QR scanner clicked");
+  }}
+  onInviteSMS={() => {
+    console.log("SMS invite clicked");
+  }}
   />
 
 
@@ -240,64 +252,37 @@ text-right
 
 
   <QuickActionCard
-
   title="علاقه‌مندی‌ها"
-
   subtitle="فرصت‌های ذخیره شده"
-
-  icon="❤️"
+  icon={<Heart size={28} strokeWidth={2} />}
   theme="red"
+/>
 
-  />
-
-
-
-  <QuickActionCard
-
+<QuickActionCard
   title="رزروهای من"
-
   subtitle="مشاهده و مدیریت رزروها"
-
-  icon="📅"
+  icon={<CalendarDays size={28} strokeWidth={2} />}
   theme="green"
+/>
 
-  />
-
-
-
-  <QuickActionCard
-
+<QuickActionCard
   title="افزودن کسب و کار خودم"
-
   subtitle="کسب و کار خود را در لحظه ثبت کنید"
-
-  icon="🏪"
+  icon={<Store size={28} strokeWidth={2} />}
   theme="purple"
+/>
 
-  />
-
-
-
-  <QuickActionCard
-
+<QuickActionCard
   title="دعوت دوستان"
-
   subtitle="لحظه را به دوستان معرفی کن"
-
-  icon="👥"
+  icon={<Users size={28} strokeWidth={2} />}
   theme="blue"
+/>
 
-  />
-
-
-
-  <QuickActionCard
-
+<QuickActionCard
   title="راهنما و پشتیبانی"
-
   subtitle="سوالات متداول و ارتباط با ما"
-
-  icon="❓"
+  icon={<CircleHelp size={28} strokeWidth={2} />}
   theme="teal"
 
   />
@@ -321,50 +306,35 @@ text-right
 
 
   <StatsCard
-
   title="فرصت فعال امروز"
-
   value="12"
-
-  icon={<Store size={28}/>}
-
+  status="+۳ امروز"
+  icon={<Store size={28} strokeWidth={2} />}
   theme="blue"
 />
 
-
 <StatsCard
-
-title="فرصت ذخیره شده"
-
-value="3"
-
-icon={<Heart size={28}/>}
-
-theme="red"
+  title="فرصت ذخیره شده"
+  value="3"
+  status="+۱ امروز"
+  icon={<Heart size={28} strokeWidth={2} />}
+  theme="red"
 />
 
-
 <StatsCard
-
-title="رزرو آینده"
-
-value="2"
-
-icon={<CalendarDays size={28}/>}
-
-theme="green"
+  title="رزرو آینده"
+  value="2"
+  status="۲ رزرو جدید"
+  icon={<CalendarDays size={28} strokeWidth={2} />}
+  theme="green"
 />
 
-
 <StatsCard
-
-title="دعوت ارسال شده"
-
-value="1"
-
-icon={<Users size={28}/>}
-
-theme="purple"
+  title="دعوت ارسال شده"
+  value="1"
+  status="آخرین بروزرسانی"
+  icon={<Users size={28} strokeWidth={2} />}
+  theme="purple"
 
   />
 
@@ -380,6 +350,7 @@ theme="purple"
   onClick={()=>router.push("/profile")}
 
   className="
+  home-profile-btn
   w-full
   mt-8
   rounded-2xl
@@ -399,37 +370,68 @@ theme="purple"
 
 
   <button
-
   onClick={handleLogout}
-
   className="
-  w-full
-  mt-4
-  rounded-2xl
-  bg-red-500
-  py-4
-  font-bold
-  text-white
+    home-logout-btn
+    w-full
+    mt-4
+    rounded-2xl
+    bg-red-500
+    py-4
+    font-bold
+    text-white
   "
-
-  >
-
+>
   خروج از حساب
-
-  </button>
-
+</button>
 
 
-  </div>
+{
+showCityModal && (
 
+<CitySelectorModal
 
-  </div>
+  currentProvinceId={user?.province_id}
 
+  currentCityId={user?.city_id}
 
-  </main>
+  onClose={()=>setShowCityModal(false)}
 
+  onSaved={(updatedUser)=>{
 
+  console.log(
+    "CITY NAME:",
+    updatedUser.city_name
   );
 
+  console.log(
+    "STATE UPDATE CITY:",
+    updatedUser.city_name
+  );
+
+  setUser(prev => ({
+  ...prev,
+  ...updatedUser
+}));
+
+  setShowCityModal(false);
+
+  }}
+
+/>
+
+)
+}
+
+
+</div>
+
+
+</div>
+
+
+</main>
+
+);
 
 }

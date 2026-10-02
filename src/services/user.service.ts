@@ -51,9 +51,9 @@ export interface CurrentUser {
 
 
   province_id?: number | null;
-
   city_id?: number | null;
 
+  province_name?: string | null;
   city_name?: string | null;
 
 }
@@ -93,4 +93,17 @@ export async function updateUserProfile(
 
 }
 
+export async function updateUserCity(
+  token: string,
+  data: {
+    province_id: number;
+    city_id: number;
+  }
+): Promise<CurrentUser> {
 
+  return apiPatch<CurrentUser>(
+    `/users/me/city?token=${encodeURIComponent(token)}`,
+    data
+  );
+
+}
