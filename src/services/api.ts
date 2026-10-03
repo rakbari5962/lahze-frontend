@@ -144,34 +144,20 @@ export async function apiPost<T>(
 
 
 export async function apiPatch<T>(
-
   endpoint: string,
-
   body: unknown
-
 ): Promise<T> {
 
-
   const response = await fetch(
-
     `${API_BASE_URL}${endpoint}`,
-
     {
-
       method: "PATCH",
-
       headers: {
-
         "Content-Type": "application/json"
-
       },
-
       body: JSON.stringify(body)
-
     }
-
   );
-
 
 
   if (!response.ok) {
@@ -179,26 +165,53 @@ export async function apiPatch<T>(
 
     const errorText = await response.text();
 
-
     console.log(
-
       "API ERROR:",
-
+      response.status,
       errorText
-
     );
-
 
 
     throw new Error(
-
       `API Error: ${response.status} - ${errorText}`
-
     );
-
 
   }
 
+
+  return response.json();
+
+}
+
+
+export async function apiDelete<T>(
+  endpoint: string
+): Promise<T> {
+
+  const response = await fetch(
+    `${API_BASE_URL}${endpoint}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+
+  if (!response.ok) {
+
+    const errorText = await response.text();
+
+    console.log(
+      "API ERROR:",
+      response.status,
+      errorText
+    );
+
+
+    throw new Error(
+      `API Error: ${response.status} - ${errorText}`
+    );
+
+  }
 
 
   return response.json();

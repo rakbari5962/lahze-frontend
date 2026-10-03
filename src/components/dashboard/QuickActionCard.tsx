@@ -74,6 +74,7 @@ export default function QuickActionCard({
     <button
       type="button"
       onClick={onClick}
+      data-card-theme={theme}
       className={`
         home-quick-card
         group
@@ -120,6 +121,20 @@ export default function QuickActionCard({
           {subtitle}
         </p>
       </div>
+
+      <span className="home-quick-illustration" aria-hidden="true">
+        <svg viewBox="0 0 220 170" fill="none">
+          <path d="M30 74L110 28L190 74" stroke="#8C66F4" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M48 68V143H172V68" fill="#E9E3FF" />
+          <path d="M40 68H180L165 42H55L40 68Z" fill="#8E6CF5" />
+          <path d="M40 68H180V82C180 92 172 99 162 99C152 99 145 92 145 82C145 92 138 99 128 99C118 99 110 92 110 82C110 92 103 99 93 99C83 99 75 92 75 82C75 92 68 99 58 99C48 99 40 92 40 82V68Z" fill="#A98BFF" />
+          <rect x="65" y="101" width="38" height="42" rx="7" fill="#FFFFFF" />
+          <rect x="116" y="112" width="34" height="31" rx="6" fill="#FFFFFF" />
+          <circle cx="177" cy="42" r="18" fill="#FFF2B7" />
+          <path d="M177 34V50M169 42H185" stroke="#8C66F4" strokeWidth="3" strokeLinecap="round" />
+          <path d="M29 30L32 38L40 41L32 44L29 52L26 44L18 41L26 38L29 30ZM195 84L198 91L205 94L198 97L195 104L192 97L185 94L192 91L195 84Z" fill="#FFD76A" />
+        </svg>
+      </span>
 
       {/* آیکون + فلش */}
       <div

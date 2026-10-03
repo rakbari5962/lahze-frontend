@@ -812,6 +812,12 @@ export default function ProfilePage() {
                 />
 
                 <SidebarItem
+                  href="/business"
+                  icon={<Building2 />}
+                  label="مدیریت کسب‌وکارهای من"
+                />
+
+                <SidebarItem
                   href="/settings"
                   icon={<Settings />}
                   label="تنظیمات"

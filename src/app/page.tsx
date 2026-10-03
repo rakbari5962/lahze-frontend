@@ -219,14 +219,14 @@ text-right
 
 
 
-  <div className="home-main-action-wrap mt-6">
+  <div className="home-main-action-wrap home-hero-wrap mt-6">
   <MainActionCard
     title="مشاهده فرصت‌های لحظه آخری"
     subtitle="فرصت‌های موجود امروز در شهر شما"
   />
 </div>
 
-<div className="home-invite-wrap mt-5">
+<div className="home-invite-wrap home-feature-invite-wrap mt-5">
   <InviteBusinessCard
   onScanQR={() => {
     console.log("QR scanner clicked");
@@ -243,6 +243,7 @@ text-right
 
   <div
   className="
+  home-quick-grid
   grid
   md:grid-cols-2
   gap-5
@@ -266,10 +267,11 @@ text-right
 />
 
 <QuickActionCard
-  title="افزودن کسب و کار خودم"
-  subtitle="کسب و کار خود را در لحظه ثبت کنید"
+  title="افزودن کسب‌وکار من"
+  subtitle="کسب‌وکارتان را ثبت کنید و از فرصت‌های جدید بهره‌مند شوید"
   icon={<Store size={28} strokeWidth={2} />}
   theme="purple"
+  onClick={() => router.push("/business/add")}
 />
 
 <QuickActionCard
@@ -296,6 +298,7 @@ text-right
 
   <div
   className="
+  home-stats-grid
   grid
   grid-cols-2
   md:grid-cols-4
@@ -362,7 +365,45 @@ text-right
 
   >
 
-  مشاهده و ویرایش پروفایل
+  <span className="home-profile-content">
+    <span className="home-profile-icon" aria-hidden="true">
+      <svg
+        width="25"
+        height="25"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path
+          d="M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4 21a8 8 0 0 1 16 0"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+        />
+      </svg>
+    </span>
+
+    <span className="home-profile-copy">
+      <span className="home-profile-title">مشاهده و ویرایش پروفایل</span>
+      <span className="home-profile-subtitle">اطلاعات حساب کاربری شما</span>
+    </span>
+
+    <svg
+      className="home-profile-arrow"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M14 6L8 12L14 18"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  </span>
 
   </button>
 

@@ -66,205 +66,122 @@ export default function InviteBusinessCard({
         w-full
         overflow-visible
         rounded-[28px]
-        bg-gradient-to-l
-        from-[#4037F5]
-        via-[#4656EE]
-        to-[#7A2FF2]
         px-7
         py-7
-        shadow-[0_12px_35px_rgba(74,63,230,0.16)]
-        sm:px-8
-        sm:py-8
       "
     >
-      <div className="flex min-h-[190px] items-center justify-between gap-8">
-        {/* متن اصلی */}
-        <div className="flex-1 text-right">
-          {/* Label */}
-          <div
-            className="
-              mb-4
-              inline-flex
-              items-center
-              gap-2
-              rounded-full
-              bg-white/15
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-white
-              backdrop-blur-sm
-            "
-          >
-            <svg
-              width="17"
-              height="17"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M12 2L14.2 8.1L20.5 9.2L15.8 13.5L17 20L12 16.8L7 20L8.2 13.5L3.5 9.2L9.8 8.1L12 2Z"
-                fill="currentColor"
-              />
-            </svg>
+      <span className="home-invite-bg-orb home-invite-bg-orb-one" aria-hidden="true" />
+      <span className="home-invite-bg-orb home-invite-bg-orb-two" aria-hidden="true" />
 
-            تخفیف‌های لحظه‌آخری
-          </div>
+      <span className="home-invite-content">
+        <span className="home-invite-copy">
+          <span className="home-invite-badge">
+            <span className="home-invite-badge-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M4 12L20 4L15 20L10 14L4 12Z" fill="currentColor" />
+                <path d="M10 14L13 11" stroke="white" strokeWidth="1.7" strokeLinecap="round" />
+              </svg>
+            </span>
+            دعوت کسب‌وکار مورد علاقه
+          </span>
 
-          {/* عنوان */}
-          <h2
-            className="
-              m-0
-              text-2xl
-              font-bold
-              leading-[1.8]
-              tracking-tight
-              text-white
-              sm:text-[28px]
-            "
-          >
-            می‌خوام اضافه‌ش کنم؛ شاید یه تخفیف خوب گذاشت
+          <h2>
+            دعوت کسب‌وکار مورد علاقه
           </h2>
 
-          {/* توضیح */}
+          <p>
+            کسب‌وکاری که دوست دارید هنوز در لحظه نیست؟
+            <br />
+            دعوتش کنید و به جامعه لحظه اضافه کنید.
+          </p>
 
-        </div>
+          <span className="home-invite-doodle" aria-hidden="true">
+            <svg viewBox="0 0 190 72" fill="none">
+              <path
+                d="M8 53C45 65 72 58 104 39C125 27 142 15 170 13"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeDasharray="7 7"
+              />
+              <path
+                d="M157 8L172 13L163 24"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+        </span>
 
-        {/* دکمه + منوی انتخاب روش */}
-        <div
-  ref={menuRef}
-  className="
-    relative
-    flex
-    shrink-0
-    flex-col
-    items-stretch
-    gap-3
-  "
->
-  <button
-    type="button"
-    onClick={() => setIsOpen((prev) => !prev)}
-    aria-expanded={isOpen}
-    aria-haspopup="menu"
-    className="
-      flex
-      min-w-[190px]
-      items-center
-      justify-center
-      gap-3
-      rounded-2xl
-      bg-white
-      px-6
-      py-4
-      text-base
-      font-bold
-      text-[#3159E8]
-      shadow-[0_8px_20px_rgba(0,0,0,0.10)]
-      transition-all
-      duration-200
-      hover:-translate-y-0.5
-      hover:shadow-[0_10px_25px_rgba(0,0,0,0.14)]
-      active:translate-y-0
-      focus:outline-none
-      focus:ring-4
-      focus:ring-white/30
-    "
-  >
-    <span>اضافه کن</span>
+        <span className="home-invite-visual" aria-hidden="true">
+          <span className="home-invite-paper-plane">
+            <svg viewBox="0 0 250 170" fill="none">
+              <path d="M24 105L211 22L143 146L111 101L24 105Z" fill="#7B3FF2" />
+              <path d="M24 105L211 22L111 101L24 105Z" fill="#9A68FF" />
+              <path d="M111 101L143 146L126 91" fill="#5F2AD1" />
+              <path d="M111 101L126 91L143 146" stroke="#4B20A9" strokeWidth="4" strokeLinejoin="round" />
+              <path d="M126 91L188 40" stroke="#C8B2FF" strokeWidth="5" strokeLinecap="round" opacity="0.8" />
+            </svg>
+          </span>
 
-    <span
-      className="
-        flex
-        h-9
-        w-9
-        items-center
-        justify-center
-        rounded-xl
-        bg-[#EEF3FF]
-        text-[#3159E8]
-      "
-    >
-      {isOpen ? (
-        <svg
-          width="21"
-          height="21"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
+          <span className="home-invite-store">
+            <svg viewBox="0 0 250 190" fill="none">
+              <path d="M45 73H205L187 38H63L45 73Z" fill="#FF5E82" />
+              <path d="M45 73H205V91C205 105 194 115 180 115C166 115 156 105 156 91C156 105 146 115 132 115C118 115 108 105 108 91C108 105 98 115 84 115C70 115 60 105 60 91C60 105 50 115 36 115C28 115 21 111 17 105L45 73Z" fill="#FF7A96" />
+              <rect x="47" y="111" width="158" height="61" rx="8" fill="#F5A66E" />
+              <rect x="73" y="127" width="42" height="45" rx="6" fill="#FFF2DF" />
+              <rect x="126" y="129" width="55" height="12" rx="6" fill="#FFF2DF" />
+              <rect x="126" y="148" width="43" height="8" rx="4" fill="#FFD5BC" />
+              <circle cx="192" cy="151" r="10" fill="#6C3DEB" />
+              <path d="M192 145V157M186 151H198" stroke="white" strokeWidth="2.4" strokeLinecap="round" />
+              <circle cx="61" cy="45" r="8" fill="#F8D05F" />
+              <circle cx="189" cy="49" r="6" fill="#A7D5FF" />
+            </svg>
+          </span>
+        </span>
+
+        <span
+          ref={menuRef}
+          className="
+            home-invite-actions
+            relative
+            flex
+            shrink-0
+            flex-col
+            items-stretch
+            gap-3
+          "
         >
-          <path
-            d="M6 6L18 18M18 6L6 18"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-          />
-        </svg>
-      ) : (
-        <svg
-          width="21"
-          height="21"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M12 5V19M5 12H19"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-          />
-        </svg>
-      )}
-    </span>
-  </button>
+          <button
+            type="button"
+            onClick={() => setIsOpen((prev) => !prev)}
+            aria-expanded={isOpen}
+            aria-haspopup="menu"
+            className="home-invite-cta"
+          >
+            <span>دعوت کسب‌وکار</span>
+            <span className="home-invite-cta-icon">
+              {isOpen ? (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+                </svg>
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+                </svg>
+              )}
+            </span>
+          </button>
 
-  <a
-    href="/business-guide"
-    className="
-      flex
-      min-w-[190px]
-      items-center
-      justify-center
-      gap-2
-      rounded-2xl
-      border
-      border-white/25
-      bg-white/10
-      px-5
-      py-3
-      text-sm
-      font-bold
-      text-white
-      backdrop-blur-sm
-      transition-all
-      duration-200
-      hover:bg-white/20
-      hover:border-white/40
-    "
-  >
-    <span>راهنمایی بیشتر</span>
+          <a href="/business-guide" className="home-invite-guide">
+            <span>راهنمایی بیشتر</span>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M14 6L8 12L14 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </a>
 
-    <svg
-      width="17"
-      height="17"
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M14 6L8 12L14 18"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  </a>
-
-          {/* Dropdown */}
           {isOpen && (
             <div
               role="menu"
@@ -283,7 +200,6 @@ export default function InviteBusinessCard({
                 shadow-[0_18px_45px_rgba(20,30,80,0.18)]
               "
             >
-              {/* QR */}
               <button
                 type="button"
                 role="menuitem"
@@ -301,68 +217,22 @@ export default function InviteBusinessCard({
                   hover:bg-slate-50
                 "
               >
-                <span
-                  className="
-                    flex
-                    h-11
-                    w-11
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-blue-50
-                    text-blue-600
-                  "
-                >
-                  <svg
-                    width="23"
-                    height="23"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M4 4H9V9H4V4ZM15 4H20V9H15V4ZM4 15H9V20H4V15ZM15 15H17V17H15V15ZM18 18H20V20H18V18ZM15 19H17V20H15V19ZM18 15H20V17H18V15Z"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                  <svg width="23" height="23" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 4H9V9H4V4ZM15 4H20V9H15V4ZM4 15H9V20H4V15ZM15 15H17V17H15V15ZM18 18H20V20H18V18ZM15 19H17V20H15V19ZM18 15H20V17H18V15Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </span>
-
                 <span className="flex-1">
-                  <span className="block text-sm font-bold text-slate-800">
-                    اسکن QR Code مجموعه
-                  </span>
-
-                  <span className="mt-0.5 block text-xs text-slate-400">
-                    سریع و مستقیم
-                  </span>
+                  <span className="block text-sm font-bold text-slate-800">اسکن QR Code مجموعه</span>
+                  <span className="mt-0.5 block text-xs text-slate-400">سریع و مستقیم</span>
                 </span>
-
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  className="text-slate-400"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M9 18L15 12L9 6"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-slate-400" aria-hidden="true">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
 
-              {/* Divider */}
               <div className="mx-3 h-px bg-slate-100" />
 
-              {/* SMS */}
               <button
                 type="button"
                 role="menuitem"
@@ -380,73 +250,24 @@ export default function InviteBusinessCard({
                   hover:bg-slate-50
                 "
               >
-                <span
-                  className="
-                    flex
-                    h-11
-                    w-11
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-purple-50
-                    text-purple-600
-                  "
-                >
-                  <svg
-                    width="23"
-                    height="23"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M5 5H19C20.1 5 21 5.9 21 7V16C21 17.1 20.1 18 19 18H9L5 21V18H5C3.9 18 3 17.1 3 16V7C3 5.9 3.9 5 5 5Z"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M7 9H17M7 13H14"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                    />
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-purple-50 text-purple-600">
+                  <svg width="23" height="23" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M5 5H19C20.1 5 21 5.9 21 7V16C21 17.1 20.1 18 19 18H9L5 21V18H5C3.9 18 3 17.1 3 16V7C3 5.9 3.9 5 5 5Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M7 9H17M7 13H14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
                   </svg>
                 </span>
-
                 <span className="flex-1">
-                  <span className="block text-sm font-bold text-slate-800">
-                    دعوت با ارسال SMS
-                  </span>
-
-                  <span className="mt-0.5 block text-xs text-slate-400">
-                    ارسال درخواست مستقیم
-                  </span>
+                  <span className="block text-sm font-bold text-slate-800">دعوت با ارسال SMS</span>
+                  <span className="mt-0.5 block text-xs text-slate-400">ارسال درخواست مستقیم</span>
                 </span>
-
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  className="text-slate-400"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M9 18L15 12L9 6"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-slate-400" aria-hidden="true">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
             </div>
           )}
-        </div>
-      </div>
+        </span>
+      </span>
     </section>
   );
 }

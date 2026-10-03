@@ -55,6 +55,7 @@ export default function StatsCard({
 
   return (
     <div
+      data-stat-theme={theme}
       className="
         home-stats-card
         group
