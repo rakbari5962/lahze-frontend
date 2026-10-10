@@ -7,6 +7,7 @@ import {
   MapPin,
   Plus,
   Store,
+  Trash2,
 } from "lucide-react";
 
 import {
@@ -23,6 +24,7 @@ import {
 import {
   getMyBusinesses,
   getBusinessCompletion,
+  deleteBusiness,
 } from "@/services/business.service";
 
 import {
@@ -55,6 +57,9 @@ export default function MyBusinessesPage() {
 
   const [businesses, setBusinesses] =
     useState<BusinessCardData[]>([]);
+	
+  const [deletingBusinessId, setDeletingBusinessId] =
+	useState<number | null>(null);
 
 
   const [loading, setLoading] =
@@ -63,6 +68,167 @@ export default function MyBusinessesPage() {
 
   const [error, setError] =
     useState(false);
+
+function getBusinessDeletionBlockerMessage(
+  blocker: {
+    type: string;
+    count: number;
+    statuses?: string[];
+  }
+): string {
+  switch (blocker.type) {
+    case "NON_TERMINAL_BOOKING":
+      if (blocker.statuses?.includes("PENDING_CONFIRMATION")) {
+        return `• ${blocker.count} رزرو در انتظار تأیید وجود دارد. تا تعیین تکلیف این رزروها، امکان حذف کسب‌وکار وجود ندارد.`;
+      }
+
+      if (blocker.statuses?.includes("CONFIRMED")) {
+        return `• ${blocker.count} رزرو تأییدشده وجود دارد. تا تکمیل یا لغو این رزروها، امکان حذف کسب‌وکار وجود ندارد.`;
+      }
+
+      if (blocker.statuses?.includes("NO_SHOW_REPORTED")) {
+        return `• ${blocker.count} رزرو در حال بررسی وضعیت عدم حضور مشتری است. تا تعیین تکلیف این رزروها، امکان حذف کسب‌وکار وجود ندارد.`;
+      }
+
+      return `• ${blocker.count} رزرو فعال یا تعیین‌تکلیف‌نشده وجود دارد. تا تعیین تکلیف آن‌ها، امکان حذف کسب‌وکار وجود ندارد.`;
+
+    case "PENDING_NO_SHOW":
+      return `• ${blocker.count} مورد عدم حضور مشتری در حال بررسی است. تا پایان بررسی، امکان حذف کسب‌وکار وجود ندارد.`;
+
+    case "NON_TERMINAL_OPPORTUNITY":
+      return `• ${blocker.count} فرصت فعال یا تعیین‌تکلیف‌نشده وجود دارد. تا پایان یا لغو این فرصت‌ها، امکان حذف کسب‌وکار وجود ندارد.`;
+
+    case "ACTIVE_WALLET_HOLD":
+      return `• ${blocker.count} مبلغ در حساب کسب‌وکار در حال نگهداری است. تا تعیین تکلیف این مبلغ، امکان حذف کسب‌وکار وجود ندارد.`;
+
+    case "UNKNOWN_WALLET_HOLD_STATUS":
+      return `• ${blocker.count} مورد مالی با وضعیت نامشخص وجود دارد. تا تعیین تکلیف آن، امکان حذف کسب‌وکار وجود ندارد.`;
+
+    case "NON_COMPLETED_FINANCIAL_TRANSACTION":
+		return `• ${blocker.count} تراکنش مالی هنوز تکمیل نشده است. تا تکمیل یا تعیین تکلیف این تراکنش‌ها، امکان حذف کسب‌وکار وجود ندارد.`;
+
+    default:
+      return `• ${blocker.count} مورد تعیین‌تکلیف‌نشده وجود دارد که مانع حذف کسب‌وکار است.`;
+  }
+}
+
+async function handleDeleteBusiness(
+  businessId: number,
+  businessName: string
+) {
+  console.log(
+    "DELETE BUSINESS CLICK:",
+    businessId,
+    businessName
+  );
+
+  const confirmed = window.confirm(
+	`آیا مطمئن هستید که می‌خواهید کسب‌وکار «${businessName}» را حذف کنید؟\n\nاین عملیات کسب‌وکار را از حالت فعال خارج می‌کند و داده‌های تاریخی آن حذف نمی‌شوند.`
+  );
+
+  if (!confirmed) {
+	return;
+  }
+
+  const token = getToken();
+
+  if (!token) {
+	router.push("/login");
+	return;
+  }
+
+  try {
+	setDeletingBusinessId(businessId);
+
+	await deleteBusiness(
+	  token,
+	  businessId
+	);
+
+	setBusinesses(currentBusinesses =>
+	  currentBusinesses.filter(
+		business =>
+		  business.id !== businessId
+	  )
+	);
+
+  } catch (err) {
+	console.error(
+	  "Failed to delete business:",
+	  err
+	);
+
+	const message =
+	  err instanceof Error
+		? err.message
+		: "";
+
+	if (
+	  message.includes(
+		"BUSINESS_DELETION_BLOCKED"
+	  )
+	) {
+	  try {
+		const jsonText =
+		  message.split(" - ")[1];
+
+		const payload =
+		  JSON.parse(jsonText);
+
+		const blockers =
+		  payload?.detail?.blockers ?? [];
+
+		const blockerText = blockers
+		  .map(getBusinessDeletionBlockerMessage)
+		  .join("\n");
+
+		window.alert(
+		  `امکان حذف این کسب‌وکار وجود ندارد.\n\nموارد زیر مانع حذف هستند:\n\n${blockerText}`
+		);
+
+	  } catch {
+		window.alert(
+		  "امکان حذف این کسب‌وکار وجود ندارد؛ برای این کسب‌وکار موارد فعال یا تسویه‌نشده وجود دارد."
+		);
+	  }
+
+	} else if (
+	  message.includes(
+		"BUSINESS_OWNER_REQUIRED"
+	  )
+	) {
+	  window.alert(
+		"شما مالک این کسب‌وکار نیستید."
+	  );
+
+	} else if (
+	  message.includes(
+		"BUSINESS_NOT_FOUND"
+	  )
+	) {
+	  window.alert(
+		"این کسب‌وکار پیدا نشد."
+	  );
+
+	} else if (
+	  message.includes(
+		"BUSINESS_ALREADY_DELETED"
+	  )
+	) {
+	  window.alert(
+		"این کسب‌وکار قبلاً حذف شده است."
+	  );
+
+	} else {
+	  window.alert(
+		"حذف کسب‌وکار با خطا مواجه شد. لطفاً دوباره تلاش کنید."
+	  );
+	}
+
+  } finally {
+	setDeletingBusinessId(null);
+  }
+}
 
 
   useEffect(() => {
@@ -286,14 +452,7 @@ export default function MyBusinessesPage() {
 
       <main
         dir="rtl"
-        className="
-          min-h-screen
-          bg-slate-50
-          px-4
-          py-8
-          sm:px-6
-          lg:px-8
-        "
+        className="business-management-page min-h-screen px-4 py-8 sm:px-6 lg:px-8"
       >
 
         <div
@@ -356,7 +515,7 @@ export default function MyBusinessesPage() {
         dir="rtl"
         className="
           min-h-screen
-          bg-slate-50
+          business-management-page
           px-4
           py-8
           sm:px-6
@@ -376,16 +535,7 @@ export default function MyBusinessesPage() {
         >
 
           <div
-            className="
-              w-full
-              rounded-3xl
-              border
-              border-red-100
-              bg-white
-              p-8
-              text-center
-              shadow-sm
-            "
+            className="business-error-card w-full p-8 text-center sm:p-12"
           >
 
             <div
@@ -467,51 +617,44 @@ export default function MyBusinessesPage() {
   return (
 
     <main
-      dir="rtl"
-      className="
-        min-h-screen
-        bg-slate-50
-        px-4
-        py-6
-        sm:px-6
-        lg:px-8
-      "
+	  dir="rtl"
+	  className="business-management-page min-h-screen px-4 py-5 sm:px-6 lg:px-8"
     >
 
-      <div
-        className="
-          mx-auto
-          max-w-6xl
-        "
-      >
+      <div className="business-management-shell mx-auto w-full max-w-[1360px]">
+
+		<div
+		  dir="ltr"
+		  className="business-back-wrap mb-5 flex justify-start"
+		>
+		  <button
+			type="button"
+			onClick={() => window.history.back()}
+			className="business-back-button inline-flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-extrabold transition-all duration-300"
+		  >
+			<ArrowLeft size={17} />
+			بازگشت
+		  </button>
+		</div>
 
         {/* Header */}
 
         <div
-          className="
-            mb-8
-            flex
-            flex-col
-            gap-5
-            sm:flex-row
-            sm:items-center
-            sm:justify-between
-          "
+		  className="
+			business-management-header
+			mb-6
+			flex
+			flex-col
+			gap-5
+			sm:flex-row
+			sm:items-center
+			sm:justify-between
+		  "
         >
 
-          <div>
+          <div className="business-header-copy">
 
-            <div
-              className="
-                mb-2
-                flex
-                items-center
-                gap-2
-                text-sm
-                font-medium
-                text-violet-600
-              "
-            >
+            <div className="business-header-eyebrow mb-2 flex items-center gap-2">
 
               <Store
                 size={18}
@@ -524,29 +667,14 @@ export default function MyBusinessesPage() {
             </div>
 
 
-            <h1
-              className="
-                text-2xl
-                font-extrabold
-                tracking-tight
-                text-slate-900
-                sm:text-3xl
-              "
-            >
-              کسب‌وکارهای من
+            <h1 className="business-page-title">
+			  کسب‌وکارهای من
             </h1>
 
 
-            <p
-              className="
-                mt-2
-                text-sm
-                leading-6
-                text-slate-500
-              "
-            >
-              کسب‌وکارهای ثبت‌شده خود را مشاهده و مدیریت کنید.
-            </p>
+            <p className="business-page-subtitle mt-2">
+			  کسب‌وکارهای ثبت‌شده خود را مشاهده و مدیریت کنید.
+			</p>
 
           </div>
 
@@ -588,32 +716,10 @@ export default function MyBusinessesPage() {
 
         {businesses.length === 0 && (
 
-          <div
-            className="
-              rounded-[28px]
-              border
-              border-slate-200
-              bg-white
-              p-8
-              text-center
-              shadow-sm
-              sm:p-12
-            "
-          >
+          <div className="business-empty-state rounded-[28px] p-8 text-center sm:p-12">
 
             <div
-              className="
-                mx-auto
-                mb-5
-                flex
-                h-20
-                w-20
-                items-center
-                justify-center
-                rounded-3xl
-                bg-violet-50
-                text-violet-600
-              "
+              className="business-empty-icon mx-auto mb-5 flex h-[72px] w-[72px] items-center justify-center rounded-[22px]"
             >
 
               <Store
@@ -729,26 +835,11 @@ export default function MyBusinessesPage() {
                 return (
 
                   <div
-                    key={business.id}
-                    className="
-                      overflow-hidden
-                      rounded-[28px]
-                      border
-                      border-slate-200
-                      bg-white
-                      shadow-sm
-                      transition
-                      hover:-translate-y-0.5
-                      hover:shadow-md
-                    "
+					  key={business.id}
+					  className="business-management-card overflow-hidden rounded-[26px] transition-all duration-300"
                   >
 
-                    <div
-                      className="
-                        p-6
-                        sm:p-7
-                      "
-                    >
+                    <div className="business-card-content p-5 sm:p-6">
 
                       {/* Card Header */}
 
@@ -770,19 +861,7 @@ export default function MyBusinessesPage() {
                           "
                         >
 
-                          <div
-                            className="
-                              flex
-                              h-14
-                              w-14
-                              shrink-0
-                              items-center
-                              justify-center
-                              rounded-2xl
-                              bg-violet-50
-                              text-violet-600
-                            "
-                          >
+                          <div className="business-card-icon flex h-14 w-14 shrink-0 items-center justify-center rounded-[18px]">
 
                             <Store
                               size={27}
@@ -798,30 +877,14 @@ export default function MyBusinessesPage() {
                             "
                           >
 
-                            <h2
-                              className="
-                                truncate
-                                text-lg
-                                font-extrabold
-                                text-slate-900
-                              "
-                            >
+                            <h2 className="business-card-title truncate">
                               {business.name}
                             </h2>
 
 
                             {locationText && (
 
-                              <div
-                                className="
-                                  mt-1.5
-                                  flex
-                                  items-center
-                                  gap-1.5
-                                  text-sm
-                                  text-slate-500
-                                "
-                              >
+                              <div className="business-card-location mt-1.5 flex items-center gap-1.5">
 
                                 <MapPin
                                   size={15}
@@ -841,17 +904,8 @@ export default function MyBusinessesPage() {
 
 
                         <span
-                          className="
-                            shrink-0
-                            rounded-full
-                            bg-slate-100
-                            px-3
-                            py-1.5
-                            text-xs
-                            font-bold
-                            text-slate-600
-                          "
-                        >
+						  className={`business-status-badge business-status-${business.status.toLowerCase()} shrink-0 rounded-full px-3 py-1.5 text-xs font-extrabold`}
+						>
                           {statusLabel}
                         </span>
 
@@ -862,14 +916,7 @@ export default function MyBusinessesPage() {
 
                       {completion && (
 
-                        <div
-                          className="
-                            mt-7
-                            rounded-2xl
-                            bg-slate-50
-                            p-4
-                          "
-                        >
+                        <div className="business-completion-panel mt-5 rounded-[18px] p-4">
 
                           <div
                             className="
@@ -917,35 +964,17 @@ export default function MyBusinessesPage() {
                             </div>
 
 
-                            <span
-                              className="
-                                text-sm
-                                font-extrabold
-                                text-violet-600
-                              "
-                            >
+                            <span className="business-completion-percent text-lg font-black">
                               {completion.completion_percentage}٪
                             </span>
 
                           </div>
 
 
-                          <div
-                            className="
-                              h-2
-                              overflow-hidden
-                              rounded-full
-                              bg-slate-200
-                            "
-                          >
+                          <div className="business-progress-track h-2 overflow-hidden rounded-full">
 
                             <div
-                              className="
-                                h-full
-                                rounded-full
-                                bg-violet-600
-                                transition-all
-                              "
+								className="business-progress-fill h-full rounded-full transition-all"
                               style={{
                                 width:
                                   `${Math.min(
@@ -986,15 +1015,7 @@ export default function MyBusinessesPage() {
 
                       {/* Actions */}
 
-                      <div
-                        className="
-                          mt-6
-                          flex
-                          flex-col
-                          gap-3
-                          sm:flex-row
-                        "
-                      >
+                      <div className="business-card-actions mt-5 flex flex-col gap-3 sm:flex-row">
 
                         <button
                           type="button"
@@ -1003,21 +1024,7 @@ export default function MyBusinessesPage() {
                               `/business/${business.id}/manage`
                             )
                           }
-                          className="
-                            flex
-                            flex-1
-                            items-center
-                            justify-center
-                            gap-2
-                            rounded-2xl
-                            bg-violet-600
-                            px-5
-                            py-3.5
-                            font-bold
-                            text-white
-                            transition
-                            hover:bg-violet-700
-                          "
+                          className="business-manage-button flex flex-1 items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-sm font-black transition-all duration-300"
                         >
 
                           {completion &&
@@ -1033,6 +1040,27 @@ export default function MyBusinessesPage() {
                         </button>
 
 
+						<button
+						  type="button"
+						  disabled={
+							deletingBusinessId === business.id
+						  }
+						  onClick={() =>
+							handleDeleteBusiness(
+							  business.id,
+							  business.name
+							)
+						  }
+						  className="business-delete-button flex items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-sm font-extrabold transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50"
+						>
+						  <Trash2 size={18} />
+
+						  {deletingBusinessId === business.id
+							? "در حال حذف..."
+							: "حذف کسب‌وکار"
+						  }
+						</button>
+
                         <button
                           type="button"
                           onClick={() =>
@@ -1040,18 +1068,7 @@ export default function MyBusinessesPage() {
                               `/business/${business.id}`
                             )
                           }
-                          className="
-                            rounded-2xl
-                            border
-                            border-slate-200
-                            bg-white
-                            px-5
-                            py-3.5
-                            font-bold
-                            text-slate-700
-                            transition
-                            hover:bg-slate-50
-                          "
+                          className="business-view-button rounded-2xl px-5 py-3.5 text-sm font-extrabold transition-all duration-300"
                         >
                           مشاهده
                         </button>

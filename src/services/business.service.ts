@@ -18,7 +18,10 @@ import type {
   BusinessProfileUpdate,
   BusinessLocationUpdate,
   BusinessServiceCreate,
-  BusinessServiceResponse
+  BusinessServiceResponse,
+  BusinessCategoryOption,
+  BusinessCategorySuggestionRequest,
+  BusinessCategorySuggestionResponse
 } from "@/types/business";
 
 
@@ -89,6 +92,15 @@ export async function getMyBusinesses(
     `/businesses/?token=${encodeURIComponent(token)}`
   );
 
+}
+
+export async function deleteBusiness(
+  token: string,
+  businessId: number
+): Promise<BusinessManagementResponse> {
+  return apiDelete<BusinessManagementResponse>(
+    `/businesses/${businessId}?token=${encodeURIComponent(token)}`
+  );
 }
 
 
@@ -206,3 +218,19 @@ export async function deleteBusinessService(
   );
 
 }
+
+/** Returns active categories backed by the business_categories table. */
+export async function getBusinessCategories(): Promise<BusinessCategoryOption[]> {
+  return apiGet<BusinessCategoryOption[]>("/business-categories/");
+}
+
+/** Runs the existing category-classification service without creating a business or a suggestion record. */
+export async function suggestBusinessCategory(
+  request: BusinessCategorySuggestionRequest
+): Promise<BusinessCategorySuggestionResponse> {
+  return apiPost<BusinessCategorySuggestionResponse>(
+    "/businesses/suggest-category",
+    request
+  );
+}
+

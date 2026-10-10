@@ -1,9 +1,11 @@
 "use client";
+import dynamic from "next/dynamic";
 
 import {
   AlertCircle,
   ArrowRight,
   CheckCircle2,
+  ChevronDown,
   MapPin,
   Pencil,
   Plus,
@@ -36,35 +38,45 @@ import {
 
 import {
   getProvinces,
-  getCitiesByProvince,
+  getCitiesByProvince
 } from "@/services/location.service";
 
+import type {
+  Province,
+  City
+} from "@/services/location.service";
+
+const BusinessLocationMap = dynamic(
+  () =>
+    import("@/components/business/BusinessLocationMap"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="business-location-map-loading">
+        <MapPin size={22} />
+        <span>در حال آماده‌سازی نقشه...</span>
+      </div>
+    ),
+  }
+);
 
 interface BusinessResponse {
-
   id: number;
-
   name: string;
-
   owner_user_id: number;
 
-  province_id: number;
-
-  city_id: number;
+  province_id: number | null;
+  city_id: number | null;
 
   latitude: number | null;
-
   longitude: number | null;
-
   address: string | null;
 
   description: string | null;
-
   phone: string | null;
-
   status: string | null;
-
 }
+
 
 
 interface BusinessCompletionResponse {
@@ -104,20 +116,17 @@ interface BusinessServiceResponse {
 
 
 interface BusinessProfileUpdate {
-
-  description: string | null;
-
-  phone: string | null;
+  description?: string | null;
+  phone?: string | null;
 
 }
 
 
 interface BusinessLocationUpdate {
-
+  province_id: number;
+  city_id: number;
   latitude: number;
-
   longitude: number;
-
   address: string | null;
 
 }
@@ -235,13 +244,20 @@ export default function ManageBusinessPage() {
     useState<BusinessServiceResponse[]>([]);
 
 
-  const [provinceName, setProvinceName] =
-    useState("");
+  const [provinces, setProvinces] = useState<Province[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
 
+  const [provinceId, setProvinceId] = useState<number | null>(null);
+  const [cityId, setCityId] = useState<number | null>(null);
 
-  const [cityName, setCityName] =
-    useState("");
+  const [loadingCities, setLoadingCities] = useState(false);
 
+  const provinceName =
+  provinces.find(item => item.id === provinceId)?.name ?? "";
+
+  const cityName =
+  cities.find(item => item.id === cityId)?.name ?? "";
+  
 
   const [loading, setLoading] =
     useState(true);
@@ -302,6 +318,75 @@ export default function ManageBusinessPage() {
   const [success, setSuccess] =
     useState("");
 
+
+useEffect(() => {
+    if (!provinceId) {
+	  setCities([]);
+	  setLoadingCities(false);
+	  return;
+    }
+
+    const selectedProvinceId = provinceId;
+    let cancelled = false;
+
+    async function loadCities() {
+      try {
+        setLoadingCities(true);
+
+        const data =
+          await getCitiesByProvince(selectedProvinceId);
+
+        if (cancelled) {
+          return;
+        }
+
+        setCities(data);
+
+        /*
+         * هنگام load اولیه، اگر شهر ذخیره‌شده
+         * متعلق به استان فعلی نباشد، آن را پاک می‌کنیم.
+         */
+        setCityId(currentCityId => {
+          if (currentCityId === null) {
+            return null;
+          }
+
+          return data.some(
+            city => city.id === currentCityId
+          )
+            ? currentCityId
+            : null;
+        });
+
+      } catch (error) {
+        if (!cancelled) {
+          console.error(
+            "خطا در دریافت شهرها:",
+            error
+          );
+
+          setCities([]);
+          setCityId(null);
+
+          setError(
+            "دریافت لیست شهرها با مشکل مواجه شد."
+          );
+        }
+
+      } finally {
+        if (!cancelled) {
+          setLoadingCities(false);
+        }
+      }
+    }
+
+    loadCities();
+
+    return () => {
+      cancelled = true;
+    };
+
+  }, [provinceId]);
 
   async function loadBusiness(
     activeToken: string
@@ -381,40 +466,20 @@ export default function ManageBusinessPage() {
 
       try {
 
-        const provinces =
-          await getProvinces();
+        const provincesData =
+		  await getProvinces();
 
+		setProvinces(
+		  provincesData
+		);
 
-        const province =
-          provinces.find(
-            item =>
-              item.id ===
-              businessData.province_id
-          );
+		setProvinceId(
+		  businessData.province_id ?? null
+		);
 
-
-        setProvinceName(
-          province?.name ?? ""
-        );
-
-
-        const cities =
-          await getCitiesByProvince(
-            businessData.province_id
-          );
-
-
-        const city =
-          cities.find(
-            item =>
-              item.id ===
-              businessData.city_id
-          );
-
-
-        setCityName(
-          city?.name ?? ""
-        );
+		setCityId(
+		  businessData.city_id ?? null
+		);
 
       } catch (
         locationError
@@ -601,138 +666,107 @@ export default function ManageBusinessPage() {
 
   }
 
+async function handleLocationSubmit(
+  event: FormEvent<HTMLFormElement>
+) {
+  event.preventDefault();
 
-  async function handleLocationSubmit(
-    event: FormEvent<HTMLFormElement>
+  if (!token) {
+    router.push("/login");
+    return;
+  }
+
+  clearMessages();
+
+  if (!provinceId || !cityId) {
+    setError("لطفاً استان و شهر را انتخاب کنید.");
+    return;
+  }
+
+  const latitudeText = locationForm.latitude.trim();
+  const longitudeText = locationForm.longitude.trim();
+
+  if (!latitudeText || !longitudeText) {
+    setError("لطفاً ابتدا موقعیت کسب‌وکار را روی نقشه انتخاب کنید.");
+    return;
+  }
+
+  const latitude = Number(latitudeText);
+  const longitude = Number(longitudeText);
+
+  if (
+    !Number.isFinite(latitude) ||
+    !Number.isFinite(longitude) ||
+    latitude < -90 ||
+    latitude > 90 ||
+    longitude < -180 ||
+    longitude > 180
   ) {
+    setError("مختصات جغرافیایی معتبر نیست.");
+    return;
+  }
 
-    event.preventDefault();
+  setSavingLocation(true);
 
+  try {
+    const data: BusinessLocationUpdate = {
+      province_id: provinceId,
+      city_id: cityId,
+      latitude,
+      longitude,
+      address: locationForm.address.trim() || null,
+    };
 
-    if (!token) {
+    const updated = await apiPatch<BusinessResponse>(
+      `/businesses/${businessId}/location?token=${encodeURIComponent(token)}`,
+      data
+    );
 
-      router.push("/login");
+    // فقط پس از موفقیت درخواست ذخیره، وضعیت محلی را به‌روز می‌کنیم.
+    setBusiness(updated);
 
-      return;
+    setProvinceId(updated.province_id ?? provinceId);
+    setCityId(updated.city_id ?? cityId);
 
-    }
+    setLocationForm({
+      latitude:
+        updated.latitude !== null
+          ? String(updated.latitude)
+          : "",
+      longitude:
+        updated.longitude !== null
+          ? String(updated.longitude)
+          : "",
+      address: updated.address ?? "",
+    });
 
+    setSuccess("استان، شهر و موقعیت کسب‌وکار با موفقیت ذخیره شدند.");
 
-    const latitude =
-      Number(
-        locationForm.latitude
-      );
-
-
-    const longitude =
-      Number(
-        locationForm.longitude
-      );
-
-
-    if (
-      !Number.isFinite(latitude) ||
-      !Number.isFinite(longitude)
-    ) {
-
-      setError(
-        "لطفاً عرض و طول جغرافیایی معتبر وارد کنید."
-      );
-
-      return;
-
-    }
-
-
-    clearMessages();
-
-    setSavingLocation(true);
-
-
+    // خطای به‌روزرسانی تکمیل پروفایل نباید ذخیره موفق را ناموفق جلوه دهد.
     try {
-
-      const data:
-        BusinessLocationUpdate = {
-
-        latitude,
-
-        longitude,
-
-        address:
-          locationForm.address.trim() ||
-          null,
-
-      };
-
-
-      const updated =
-        await apiPatch<BusinessResponse>(
-
-          `/businesses/${businessId}/location?token=${encodeURIComponent(token)}`,
-
-          data
-
-        );
-
-
-      setBusiness(
-        updated
-      );
-
-
-      setLocationForm({
-
-        latitude:
-          updated.latitude !== null
-            ? String(updated.latitude)
-            : "",
-
-        longitude:
-          updated.longitude !== null
-            ? String(updated.longitude)
-            : "",
-
-        address:
-          updated.address ?? "",
-
-      });
-
-
-      setSuccess(
-        "اطلاعات موقعیت با موفقیت ذخیره شد."
-      );
-
-
       const updatedCompletion =
         await apiGet<BusinessCompletionResponse>(
           `/businesses/${businessId}/completion?token=${encodeURIComponent(token)}`
         );
 
-
-      setCompletion(
-        updatedCompletion
+      setCompletion(updatedCompletion);
+    } catch (completionError) {
+      console.error(
+        "خطا در به‌روزرسانی وضعیت تکمیل پروفایل:",
+        completionError
       );
-
-    } catch (
-      requestError
-    ) {
-
-      console.log(
-        requestError
-      );
-
-
-      setError(
-        "ذخیره موقعیت انجام نشد."
-      );
-
-    } finally {
-
-      setSavingLocation(false);
-
     }
+  } catch (requestError) {
+    console.error("خطا در ذخیره موقعیت کسب‌وکار:", requestError);
 
+    setError(
+      "ذخیره موقعیت انجام نشد. لطفاً اطلاعات را بررسی و دوباره تلاش کنید."
+    );
+  } finally {
+    setSavingLocation(false);
   }
+}
+
 
 
   function startEditService(
@@ -813,6 +847,7 @@ export default function ManageBusinessPage() {
     );
 
   }
+
 
 
   async function handleServiceSubmit(
@@ -1961,354 +1996,339 @@ export default function ManageBusinessPage() {
 
         </section>
 
+		{/* Location */}
 
-        {/* Location */}
+		<section className="business-location-card mb-6">
 
-        <section
-          className="
-            mb-6
-            rounded-[28px]
-            border
-            border-slate-200
-            bg-white
-            p-6
-            shadow-sm
-            sm:p-8
-          "
-        >
+		  <div className="business-location-header">
 
-          <div
-            className="
-              mb-6
-            "
-          >
+			<div>
+			  <div className="business-location-eyebrow">
+				موقعیت و دسترسی
+			  </div>
 
-            <h2
-              className="
-                text-lg
-                font-extrabold
-                text-slate-900
-              "
-            >
-              موقعیت کسب‌وکار
-            </h2>
+			  <h2 className="business-location-title">
+				موقعیت کسب‌وکار
+			  </h2>
 
-            <p
-              className="
-                mt-1
-                text-sm
-                leading-6
-                text-slate-500
-              "
-            >
-              استان و شهر ثبت‌شده در حال حاضر فقط نمایش داده می‌شوند.
-              آدرس و مختصات مکانی را می‌توانید ویرایش کنید.
-            </p>
+			  <p className="business-location-description">
+				نشانگر را روی محل دقیق کسب‌وکارتان قرار دهید و سپس موقعیت را ذخیره کنید.
+			  </p>
+			</div>
 
-          </div>
+		  </div>
 
 
-          <div
-            className="
-              mb-5
-              grid
-              gap-4
-              sm:grid-cols-2
-            "
-          >
-
-            <div>
-
-              <label
-                className="
-                  mb-2
-                  block
-                  text-sm
-                  font-bold
-                  text-slate-700
-                "
-              >
-                استان
-              </label>
-
-              <div
-                className="
-                  rounded-2xl
-                  border
-                  border-slate-200
-                  bg-slate-100
-                  px-4
-                  py-3
-                  text-sm
-                  text-slate-600
-                "
-              >
-                {provinceName ||
-                  "نامشخص"}
-              </div>
-
-            </div>
 
 
-            <div>
+			{/* Province / City */}
 
-              <label
-                className="
-                  mb-2
-                  block
-                  text-sm
-                  font-bold
-                  text-slate-700
-                "
-              >
-                شهر
-              </label>
+			<form
+			  onSubmit={handleLocationSubmit}
+			  className="business-location-form"
+			>
+			  <div className="business-location-meta">
 
-              <div
-                className="
-                  rounded-2xl
-                  border
-                  border-slate-200
-                  bg-slate-100
-                  px-4
-                  py-3
-                  text-sm
-                  text-slate-600
-                "
-              >
-                {cityName ||
-                  "نامشخص"}
-              </div>
+			  <div className="business-location-meta-item">
 
-            </div>
+				<div className="business-location-meta-label">
+				  استان
+				</div>
 
-          </div>
+				<div className="relative">
 
+				  <select
+					value={provinceId ?? ""}
+					onChange={event => {
 
-          <form
-            onSubmit={
-              handleLocationSubmit
-            }
-            className="
-              space-y-5
-            "
-          >
+					  const value =
+						event.target.value;
 
-            <div
-              className="
-                grid
-                gap-4
-                sm:grid-cols-2
-              "
-            >
+					  setProvinceId(
+						value
+						  ? Number(value)
+						  : null
+					  );
 
-              <div>
+					  /*
+					   * تغییر استان باید شهر قبلی را
+					   * حتماً reset کند.
+					   */
+					  setCityId(null);
 
-                <label
-                  className="
-                    mb-2
-                    block
-                    text-sm
-                    font-bold
-                    text-slate-700
-                  "
-                >
-                  Latitude
-                </label>
+					  setError("");
+					  setSuccess("");
 
-                <input
-                  type="number"
-                  step="any"
-                  value={
-                    locationForm.latitude
-                  }
-                  onChange={event =>
-                    setLocationForm(
-                      previous => ({
+					}}
+					disabled={savingLocation}
+					className="
+					  w-full
+					  rounded-xl
+					  border
+					  border-slate-200
+					  bg-white
+					  px-4
+					  py-3
+					  pr-4
+					  text-right
+					  text-slate-900
+					  font-medium
+					  outline-none
+					  transition
+					  focus:border-blue-500
+					  focus:ring-4
+					  focus:ring-blue-100
+					  disabled:bg-slate-50
+					  disabled:text-slate-400
+					  appearance-none
+					  cursor-pointer
+					"
+				  >
 
-                        ...previous,
+					<option value="">
+					  انتخاب استان
+					</option>
 
-                        latitude:
-                          event.target.value,
+					{provinces.map(province => (
 
-                      })
-                    )
-                  }
-                  placeholder="مثلاً 35.6892"
-                  className="
-                    w-full
-                    rounded-2xl
-                    border
-                    border-slate-200
-                    bg-slate-50
-                    px-4
-                    py-3
-                    text-sm
-                    text-slate-900
-                    outline-none
-                    focus:border-violet-400
-                    focus:bg-white
-                    focus:ring-2
-                    focus:ring-violet-100
-                  "
-                />
+					  <option
+						key={province.id}
+						value={province.id}
+					  >
+						{province.name}
+					  </option>
 
-              </div>
+					))}
+
+				  </select>
+
+				  <ChevronDown
+					className="
+					  absolute
+					  left-4
+					  top-1/2
+					  -translate-y-1/2
+					  text-slate-400
+					  pointer-events-none
+					"
+					size={18}
+				  />
+
+				</div>
+
+			  </div>
 
 
-              <div>
+			  <div className="business-location-meta-item">
 
-                <label
-                  className="
-                    mb-2
-                    block
-                    text-sm
-                    font-bold
-                    text-slate-700
-                  "
-                >
-                  Longitude
-                </label>
+				<div className="business-location-meta-label">
+				  شهر
+				</div>
 
-                <input
-                  type="number"
-                  step="any"
-                  value={
-                    locationForm.longitude
-                  }
-                  onChange={event =>
-                    setLocationForm(
-                      previous => ({
+				<div className="relative">
 
-                        ...previous,
+				  <select
+					value={cityId ?? ""}
+					onChange={event => {
 
-                        longitude:
-                          event.target.value,
+					  const value =
+						event.target.value;
 
-                      })
-                    )
-                  }
-                  placeholder="مثلاً 51.3890"
-                  className="
-                    w-full
-                    rounded-2xl
-                    border
-                    border-slate-200
-                    bg-slate-50
-                    px-4
-                    py-3
-                    text-sm
-                    text-slate-900
-                    outline-none
-                    focus:border-violet-400
-                    focus:bg-white
-                    focus:ring-2
-                    focus:ring-violet-100
-                  "
-                />
+					  setCityId(
+						value
+						  ? Number(value)
+						  : null
+					  );
 
-              </div>
+					  setError("");
+					  setSuccess("");
 
-            </div>
+					}}
+					disabled={
+					  !provinceId ||
+					  loadingCities ||
+					  savingLocation
+					}
+					className="
+					  w-full
+					  rounded-xl
+					  border
+					  border-slate-200
+					  bg-white
+					  px-4
+					  py-3
+					  pr-4
+					  text-right
+					  text-slate-900
+					  font-medium
+					  outline-none
+					  transition
+					  focus:border-blue-500
+					  focus:ring-4
+					  focus:ring-blue-100
+					  disabled:bg-slate-50
+					  disabled:text-slate-400
+					  appearance-none
+					  cursor-pointer
+					"
+				  >
+
+					<option value="">
+					  {loadingCities
+						? "در حال دریافت شهرها..."
+						: "انتخاب شهر"}
+					</option>
+
+					{cities.map(city => (
+
+					  <option
+						key={city.id}
+						value={city.id}
+					  >
+						{city.name}
+					  </option>
+
+					))}
+
+				  </select>
+
+				  <ChevronDown
+					className="
+					  absolute
+					  left-4
+					  top-1/2
+					  -translate-y-1/2
+					  text-slate-400
+					  pointer-events-none
+					"
+					size={18}
+				  />
+
+				</div>
+
+			  </div>
+
+			</div>
+			<BusinessLocationMap
+				latitude={
+				  locationForm.latitude.trim()
+					? Number(locationForm.latitude)
+					: null
+				}
+				longitude={
+				  locationForm.longitude.trim()
+					? Number(locationForm.longitude)
+					: null
+				}
+				onLocationChange={(
+				  latitude,
+				  longitude
+				) => {
+
+				  setLocationForm(previous => ({
+					...previous,
+					latitude: String(latitude),
+					longitude: String(longitude),
+				  }));
+
+				}}
+			  />
 
 
-            <div>
+   
 
-              <label
-                className="
-                  mb-2
-                  block
-                  text-sm
-                  font-bold
-                  text-slate-700
-                "
-              >
-                آدرس
-              </label>
+			{/* Selected location */}
 
-              <textarea
-                value={
-                  locationForm.address
-                }
-                onChange={event =>
-                  setLocationForm(
-                    previous => ({
+			<div className="business-location-selected">
 
-                      ...previous,
+			  <div className="business-location-selected-icon">
+				<MapPin size={17} />
+			  </div>
 
-                      address:
-                        event.target.value,
+			  <div className="min-w-0">
 
-                    })
-                  )
-                }
-                rows={3}
-                placeholder="آدرس کامل کسب‌وکار"
-                className="
-                  w-full
-                  resize-y
-                  rounded-2xl
-                  border
-                  border-slate-200
-                  bg-slate-50
-                  px-4
-                  py-3
-                  text-sm
-                  text-slate-900
-                  outline-none
-                  focus:border-violet-400
-                  focus:bg-white
-                  focus:ring-2
-                  focus:ring-violet-100
-                "
-              />
+				<div className="business-location-selected-label">
+				  موقعیت انتخاب‌شده
+				</div>
 
-            </div>
+				<div className="business-location-selected-value">
+				  {locationForm.latitude &&
+				  locationForm.longitude
+					? `نقطه انتخاب‌شده روی نقشه`
+					: "هنوز موقعیتی انتخاب نشده است"}
+				</div>
+
+			  </div>
+
+			</div>
 
 
-            <div
-              className="
-                flex
-                justify-end
-              "
-            >
+			{/* Address */}
 
-              <button
-                type="submit"
-                disabled={
-                  savingLocation
-                }
-                className="
-                  inline-flex
-                  items-center
-                  gap-2
-                  rounded-2xl
-                  bg-violet-600
-                  px-5
-                  py-3
-                  font-bold
-                  text-white
-                  hover:bg-violet-700
-                  disabled:cursor-not-allowed
-                  disabled:opacity-60
-                "
-              >
+			<div className="business-location-address">
 
-                <Save
-                  size={18}
-                />
+			  <label
+				htmlFor="business-address"
+				className="business-location-field-label"
+			  >
+				آدرس کسب‌وکار
+			  </label>
 
-                {savingLocation
-                  ? "در حال ذخیره..."
-                  : "ذخیره موقعیت"}
+			  <textarea
+				id="business-address"
+				value={locationForm.address}
+				onChange={event =>
+				  setLocationForm(previous => ({
+					...previous,
+					address: event.target.value,
+				  }))
+				}
+				rows={3}
+				placeholder="آدرس دقیق کسب‌وکار را وارد کنید"
+				className="business-location-address-input"
+			  />
 
-              </button>
+			  <p className="business-location-address-hint">
+				آدرس و موقعیت روی نقشه مکمل یکدیگر هستند و برای ثبت دقیق‌تر استفاده می‌شوند.
+			  </p>
 
-            </div>
+			</div>
 
-          </form>
 
-        </section>
+			{/* Save */}
+
+			<div className="business-location-actions">
+
+			  <div className="business-location-save-hint">
+
+				<MapPin size={16} />
+
+				<span>
+				  موقعیت انتخاب‌شده برای کسب‌وکار شما ذخیره می‌شود.
+				</span>
+
+			  </div>
+
+
+			  <button
+				type="submit"
+				disabled={savingLocation}
+				className="business-location-save-button"
+			  >
+
+				<Save size={18} />
+
+				{savingLocation
+				  ? "در حال ذخیره..."
+				  : "ذخیره موقعیت"}
+
+			  </button>
+
+			</div>
+
+		  </form>
+
+		</section>
 
 
         {/* Services */}

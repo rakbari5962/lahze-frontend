@@ -192,6 +192,9 @@ export interface CreateBusinessRequest {
 
   name: string;
 
+  /** Selected active BusinessCategory ID confirmed by the user. */
+  category_id?: number | null;
+
   province_id: number;
 
   city_id: number;
@@ -210,6 +213,8 @@ export interface BusinessCreateResponse {
   id: number;
 
   name: string;
+
+  category_id?: number | null;
 
   owner_user_id: number;
 
@@ -247,6 +252,8 @@ export interface BusinessListItem {
   name: string;
 
   owner_user_id: number;
+
+  category_id?: number | null;
 
   province_id: number;
 
@@ -339,4 +346,28 @@ export interface BusinessServiceResponse {
 
   is_active: boolean;
 
+}
+
+
+export interface BusinessCategoryOption {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string | null;
+  is_active: boolean;
+}
+
+
+export interface BusinessCategorySuggestionRequest {
+  name: string;
+  description?: string | null;
+  services?: string[];
+}
+
+
+export interface BusinessCategorySuggestionResponse {
+  category_id: number | null;
+  category_name: string | null;
+  confidence: number;
+  reason: string;
 }

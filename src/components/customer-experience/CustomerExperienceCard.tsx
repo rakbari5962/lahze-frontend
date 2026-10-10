@@ -1,360 +1,130 @@
 import {
-  Clock,
   Award,
-  Users
+  Clock,
+  Users,
 } from "lucide-react";
 
-
-
 interface CustomerExperienceItem {
-
   title: string;
-
   total_mentions: number;
-
   positive_mentions: number;
-
   negative_mentions: number;
-
   positive_percentage: number;
-
   negative_percentage: number;
-
 }
-
-
 
 interface Props {
-
   item: CustomerExperienceItem;
-
 }
 
-
-
 export default function CustomerExperienceCard({
-
-  item
-
+  item,
 }: Props) {
-
-
-
   const getIcon = () => {
-
-
     if (item.title.includes("زمان")) {
-
-      return <Clock size={68} strokeWidth={2} />;
-
+      return <Clock size={25} strokeWidth={1.8} />;
     }
-
 
     if (item.title.includes("برخورد")) {
-
-      return <Users size={68} strokeWidth={2} />;
-
+      return <Users size={25} strokeWidth={1.8} />;
     }
 
-
-    return <Award size={68} strokeWidth={2} />;
-
-
+    return <Award size={25} strokeWidth={1.8} />;
   };
-
-
-
 
   const isPositive =
     item.positive_percentage >= 50;
 
-
-
-
   return (
-
-
-    <div
-
-      className={`
-        rounded-2xl
-        p-6
-        border
-        shadow-sm
-
-        ${
-          isPositive
-          ?
-          "bg-emerald-50 border-emerald-200"
-          :
-          "bg-red-50 border-red-200"
-        }
-
-      `}
-
-    >
-
-
-
-      {/* Top */}
-
-      <div
-
-        className="
-          flex
-          items-start
-          justify-between
-        "
-
-      >
-
-
-
-        {/* Icon */}
-
-        <div
-
-          className="
-            w-22
-            h-22
-            rounded-full
-            bg-white/70
-            flex
-            items-center
-            justify-center
-            text-emerald-700
-          "
-
-        >
-
+    <div className="business-experience-card">
+      <div className="business-experience-top">
+        <div className="business-experience-icon">
           {getIcon()}
-
         </div>
 
-
-
-
-        {/* Customer count */}
-
-        <div
-
-          className="
-            text-sm
-            text-zinc-600
-          "
-
-        >
-
-          بر اساس تجربه {item.total_mentions} مشتری
-
-        </div>
-
-
-
+        <span className="business-experience-count">
+          بر اساس تجربه{" "}
+          {item.total_mentions.toLocaleString("fa-IR")} مشتری
+        </span>
       </div>
 
+      <div className="mt-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h3 className="business-experience-title">
+            {item.title}
+          </h3>
 
-
-
-
-
-      {/* Center */}
-
-      <div
-
-        className="
-          text-center
-          mt-5
-        "
-
-      >
-
-
-
-        <h3
-		  className={`
-			inline-flex
-			items-center
-			justify-center
-			px-6
-			py-3
-			rounded-xl
-
-			border
-
-			text-xl
-			font-black
-
-			transition-all
-
-			${
-			  isPositive
-				? `
-				  bg-emerald-100
-				  border-emerald-200
-				  text-emerald-700
-
-				  shadow-[inset_2px_2px_5px_rgba(6,78,59,0.15),inset_-2px_-2px_5px_rgba(255,255,255,0.8),0_4px_10px_rgba(16,185,129,0.15)]
-				`
-				: `
-				  bg-red-100
-				  border-red-200
-				  text-red-700
-
-				  shadow-[inset_2px_2px_5px_rgba(127,29,29,0.15),inset_-2px_-2px_5px_rgba(255,255,255,0.8),0_4px_10px_rgba(239,68,68,0.15)]
-				`
-			}
-		  `}
-		>
-		  {item.title}
-		</h3>
-
-
-
-
-        <div
-
-          className={`
-            mt-3
-            text-4xl
-            font-bold
-
-            ${
+          <span
+            className={
               isPositive
-              ?
-              "text-emerald-700"
-              :
-              "text-red-600"
+                ? "business-experience-status business-experience-status-positive"
+                : "business-experience-status business-experience-status-negative"
             }
-
-          `}
-
-        >
-
-          {item.positive_percentage}%
-
+          >
+            {isPositive
+              ? "مثبت"
+              : "نیاز به بررسی"}
+          </span>
         </div>
 
+        <div className="mt-4 flex items-end justify-between gap-4">
+          <div>
+            <div
+              className={
+                isPositive
+                  ? "business-experience-percent business-experience-percent-positive"
+                  : "business-experience-percent business-experience-percent-negative"
+              }
+            >
+              {item.positive_percentage.toLocaleString(
+                "fa-IR"
+              )}
+              ٪
+            </div>
 
-
-
-        <div
-
-          className="
-            text-sm
-            text-zinc-500
-            mt-1
-          "
-
-        >
-
-          رضایت مشتریان
-
+            <div className="business-experience-percent-label">
+              رضایت مشتریان
+            </div>
+          </div>
         </div>
-
-
       </div>
 
-
-
-
-
-
-      {/* Bar */}
-
-      <div
-
-        dir="ltr"
-
-        className="
-          mt-6
-          h-3
-          rounded-full
-          overflow-hidden
-          bg-zinc-200
-          flex
-        "
-
-      >
-
-
+      <div className="business-experience-bar mt-5" dir="ltr">
         <div
-
-          className="bg-green-500"
-
+          className="business-experience-bar-positive"
           style={{
-
-            width:
-            `${item.positive_percentage}%`
-
+            width: `${Math.max(
+              0,
+              Math.min(100, item.positive_percentage)
+            )}%`,
           }}
-
         />
 
-
-
         <div
-
-          className="bg-red-400"
-
+          className="business-experience-bar-negative"
           style={{
-
-            width:
-            `${item.negative_percentage}%`
-
+            width: `${Math.max(
+              0,
+              Math.min(100, item.negative_percentage)
+            )}%`,
           }}
-
         />
-
-
-
       </div>
 
-
-
-
-
-
-      {/* Bottom */}
-
-      <div
-
-        className="
-          mt-5
-          flex
-          justify-between
-          text-sm
-        "
-
-      >
-
-
-        <span className="text-green-700">
-
-          ✓ {item.positive_mentions} مثبت
-
+		<div
+		  className="business-experience-footer mt-4"
+		  dir="ltr"
+		>
+        <span className="business-positive-count">
+          ✓{" "}
+          {item.positive_mentions.toLocaleString("fa-IR")} مثبت
         </span>
 
-
-
-
-        <span className="text-red-600">
-
-          × {item.negative_mentions} منفی
-
+        <span className="business-negative-count">
+          ×{" "}
+          {item.negative_mentions.toLocaleString("fa-IR")} منفی
         </span>
-
-
-
       </div>
-
-
-
-
     </div>
-
-
   );
-
-
 }

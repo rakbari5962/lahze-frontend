@@ -1009,3 +1009,2430 @@ body {
 .home-content .home-logout-btn {
   direction: rtl;
 }
+
+
+/* =========================================================
+   BUSINESS PUBLIC PAGE THEME
+   Presentation-only theme for /business/[id]
+   ========================================================= */
+
+.business-public-page {
+  --business-bg: #f7f6ff;
+  --business-bg-2: #eef3ff;
+  --business-surface: rgba(255, 255, 255, 0.88);
+  --business-surface-strong: rgba(255, 255, 255, 0.95);
+  --business-text: #12184c;
+  --business-muted: #727993;
+  --business-border: #e6e2fb;
+  --business-accent: #5a31ed;
+  --business-accent-2: #7655ef;
+  --business-accent-soft: #f0edff;
+  --business-success: #24a35a;
+  --business-success-soft: #ebf8ef;
+  --business-danger: #d85a71;
+  --business-danger-soft: #fff0f4;
+
+  position: relative;
+  overflow-x: hidden;
+  background:
+    radial-gradient(
+      circle at 7% 5%,
+      rgba(144, 117, 255, 0.15),
+      transparent 24rem
+    ),
+    radial-gradient(
+      circle at 93% 11%,
+      rgba(89, 128, 255, 0.08),
+      transparent 24rem
+    ),
+    linear-gradient(
+      180deg,
+      var(--business-bg) 0%,
+      #f5f5ff 45%,
+      var(--business-bg-2) 100%
+    );
+  color: var(--business-text);
+  font-family: Vazirmatn, Tahoma, Arial, sans-serif;
+}
+
+.business-public-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 32% 0%,
+      rgba(255, 255, 255, 0.82),
+      transparent 30rem
+    ),
+    radial-gradient(
+      circle at 100% 62%,
+      rgba(126, 94, 255, 0.06),
+      transparent 28rem
+    );
+}
+
+.business-public-shell {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hero */
+
+.business-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 235px;
+  height: 235px;
+  border: 1px solid rgba(255, 255, 255, 0.94);
+  border-radius: 28px;
+  background:
+    radial-gradient(
+      circle at 12% 50%,
+      rgba(147, 121, 255, 0.15),
+      transparent 17rem
+    ),
+    linear-gradient(
+      135deg,
+      rgba(236, 233, 255, 0.96),
+      rgba(255, 255, 255, 0.96) 53%,
+      rgba(239, 244, 255, 0.96)
+    );
+  box-shadow:
+    0 18px 52px rgba(79, 61, 174, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(18px);
+}
+
+.business-hero-decoration {
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.business-hero-decoration-one {
+  width: 300px;
+  height: 300px;
+  left: -90px;
+  top: -95px;
+  background: rgba(116, 84, 239, 0.11);
+  filter: blur(1px);
+}
+
+.business-hero-decoration-two {
+  width: 180px;
+  height: 180px;
+  left: 110px;
+  bottom: -100px;
+  background: rgba(140, 164, 255, 0.11);
+}
+
+.business-hero-icon {
+  color: var(--business-accent);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.94),
+      rgba(241, 237, 255, 0.96)
+    );
+  border: 1px solid rgba(255, 255, 255, 0.98);
+  box-shadow:
+    0 12px 30px rgba(90, 49, 237, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.business-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px;
+
+  color: #5a31ed;
+  background: rgba(255, 255, 255, 0.90);
+
+  border: 1px solid rgba(255, 255, 255, 0.96);
+  border-radius: 999px;
+
+  box-shadow: 0 6px 16px rgba(73, 55, 175, 0.07);
+
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.business-hero-title {
+  color: #12184c;
+  font-size: clamp(1.8rem, 2.7vw, 2.45rem);
+  font-weight: 950;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.business-hero-description {
+  color: #69708d;
+  font-size: 0.85rem;
+  line-height: 1.8;
+  font-weight: 650;
+}
+
+.business-phone {
+  color: var(--business-accent);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid #e3ddff;
+  box-shadow: 0 8px 20px rgba(90, 49, 237, 0.07);
+}
+
+.business-hero-side {
+  align-items: center;
+  justify-content: center;
+  min-width: 128px;
+}
+
+.business-hero-orb {
+  width: 86px;
+  height: 86px;;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 22px;
+  color: #6f4af1;
+  background:
+    radial-gradient(
+      circle at 35% 28%,
+      rgba(255, 255, 255, 0.9),
+      transparent 40%
+    ),
+    linear-gradient(
+      145deg,
+      #f2eeff,
+      #ffffff
+    );
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 15px 35px rgba(90, 49, 237, 0.1);
+}
+
+/* Cards */
+
+.business-card {
+  border: 1px solid rgba(255, 255, 255, 0.96);
+  border-radius: 26px;
+  background: var(--business-surface);
+  box-shadow:
+    0 12px 35px rgba(72, 56, 160, 0.055),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+}
+
+.business-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.business-section-label {
+  color: #8a8fa6;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.business-section-title {
+  color: var(--business-text);
+}
+
+.business-section-title svg {
+  color: var(--business-accent);
+}
+
+/* Reputation */
+
+.business-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  padding: 8px 11px;
+  border-radius: 999px;
+  color: var(--business-accent);
+  background: var(--business-accent-soft);
+  border: 1px solid #e5dfff;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.business-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+  padding: 15px;
+  border-radius: 18px;
+  background: rgba(250, 249, 255, 0.9);
+  border: 1px solid #eeebfa;
+}
+
+.business-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  border-radius: 14px;
+  color: var(--business-accent);
+  background: #f0edff;
+}
+
+.business-stat-value {
+  color: var(--business-text);
+  font-weight: 950;
+  line-height: 1.2;
+}
+
+.business-stat-label {
+  margin-top: 4px;
+  color: var(--business-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.business-info-strip {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 12px 14px;
+  border-radius: 15px;
+  color: #616984;
+  background: #f7f5ff;
+  border: 1px solid #e9e4fc;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.business-info-strip svg {
+  color: var(--business-accent);
+  margin-top: 2px;
+}
+
+/* Empty states */
+
+.business-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 20px;
+  text-align: center;
+  border: 1px dashed #dfdaf7;
+  border-radius: 22px;
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      rgba(114, 77, 238, 0.055),
+      transparent 12rem
+    ),
+    rgba(250, 249, 255, 0.68);
+}
+
+.business-empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 22px;
+  color: #7351eb;
+  background:
+    linear-gradient(
+      145deg,
+      #f2eeff,
+      #ffffff
+    );
+  border: 1px solid #e7e1ff;
+  box-shadow: 0 10px 24px rgba(90, 49, 237, 0.08);
+}
+
+.business-empty-icon-success {
+  color: var(--business-success);
+  background: var(--business-success-soft);
+  border-color: #dcefe2;
+}
+
+.business-empty-state h3 {
+  color: var(--business-text);
+}
+
+.business-empty-state p {
+  color: var(--business-muted);
+}
+
+/* Weaknesses */
+
+.business-weakness-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 15px;
+  border-radius: 18px;
+  background: var(--business-danger-soft);
+  border: 1px solid #f1d6de;
+}
+
+.business-weakness-badge {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--business-danger);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.business-weakness-card h3 {
+  color: #842c43;
+}
+
+.business-weakness-card p {
+  color: #8b6671;
+}
+
+.business-weakness-percent {
+  color: var(--business-danger);
+  font-size: 22px;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+/* Customer experience */
+
+.business-experience-card {
+  padding: 18px;
+  border: 1px solid #ebe7fa;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 24px rgba(74, 57, 164, 0.045);
+}
+
+.business-experience-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.business-experience-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  color: var(--business-accent);
+  background: var(--business-accent-soft);
+}
+
+.business-experience-count {
+  color: #8a90a6;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.business-experience-title {
+  color: var(--business-text);
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.business-experience-status {
+  padding: 6px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.business-experience-status-positive {
+  color: var(--business-success);
+  background: var(--business-success-soft);
+  border: 1px solid #d8eedf;
+}
+
+.business-experience-status-negative {
+  color: var(--business-danger);
+  background: var(--business-danger-soft);
+  border: 1px solid #f1d6de;
+}
+
+.business-experience-percent {
+  font-size: 30px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.business-experience-percent-positive {
+  color: var(--business-success);
+}
+
+.business-experience-percent-negative {
+  color: var(--business-danger);
+}
+
+.business-experience-percent-label {
+  margin-top: 5px;
+  color: #9095aa;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.business-experience-bar {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: #eceef6;
+}
+
+.business-experience-bar-positive {
+  height: 100%;
+  background: #53bf7b;
+  transition: width 0.3s ease;
+}
+
+.business-experience-bar-negative {
+  height: 100%;
+  background: #eb8397;
+  transition: width 0.3s ease;
+}
+
+.business-experience-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.business-positive-count {
+  color: var(--business-success);
+}
+
+.business-negative-count {
+  color: var(--business-danger);
+}
+
+/* Opportunities */
+
+.business-opportunity {
+  padding: 20px;
+  border: 1px solid #e8e4f7;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 9px 26px rgba(74, 57, 164, 0.05);
+}
+
+.business-opportunity-disabled {
+  opacity: 0.68;
+}
+
+.business-opportunity-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.business-opportunity-badge {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: var(--business-accent);
+  background: var(--business-accent-soft);
+  border: 1px solid #e4ddff;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.business-opportunity-top h3 {
+  color: var(--business-text);
+}
+
+.business-capacity-badge {
+  display: inline-flex;
+  padding: 7px 10px;
+  border-radius: 999px;
+  color: #27874f;
+  background: var(--business-success-soft);
+  border: 1px solid #d9eedf;
+  font-size: 10px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.business-capacity-full {
+  color: #72778c;
+  background: #f1f2f7;
+  border-color: #e1e3eb;
+}
+
+.business-opportunity-detail {
+  padding: 13px 14px;
+  border-radius: 15px;
+  background: #faf9fe;
+  border: 1px solid #eeebf8;
+}
+
+.business-opportunity-detail span {
+  display: block;
+  color: #8b90a4;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.business-opportunity-detail strong {
+  display: block;
+  margin-top: 5px;
+  color: var(--business-text);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.business-opportunity-highlight {
+  background: #f4f0ff;
+  border-color: #e3dcff;
+}
+
+.business-opportunity-highlight strong {
+  color: var(--business-accent);
+}
+
+.business-opportunity-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 17px;
+}
+
+.business-start-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #777d94;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.business-start-time svg {
+  color: var(--business-accent);
+}
+
+.business-booking-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 15px;
+  background:
+    linear-gradient(
+      135deg,
+      #4e27e5 0%,
+      #5a31ed 48%,
+      #7853f2 100%
+    );
+  color: #fff;
+  box-shadow: 0 11px 24px rgba(90, 49, 237, 0.19);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.business-booking-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(90, 49, 237, 0.24);
+}
+
+.business-booking-disabled {
+  min-width: 150px;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 15px;
+  background: #eceef4;
+  color: #979caf;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: not-allowed;
+}
+
+/* Mobile */
+
+@media (max-width: 767px) {
+  .business-public-page {
+    background:
+      radial-gradient(
+        circle at 8% 3%,
+        rgba(144, 117, 255, 0.12),
+        transparent 17rem
+      ),
+      linear-gradient(
+        180deg,
+        #f8f7ff 0%,
+        #f1f4ff 100%
+      );
+  }
+
+  .business-public-shell {
+    padding-top: 12px;
+    padding-bottom: 24px;
+  }
+
+  .business-hero {
+    border-radius: 24px;
+  }
+
+  .business-card {
+    border-radius: 22px;
+  }
+
+  .business-section-heading {
+    align-items: flex-start;
+  }
+
+  .business-status-badge {
+    max-width: 150px;
+  }
+
+  .business-opportunity-top,
+  .business-opportunity-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .business-booking-button,
+  .business-booking-disabled {
+    width: 100%;
+  }
+
+  .business-start-time {
+    align-self: flex-start;
+  }
+
+  .business-weakness-card {
+    align-items: flex-start;
+  }
+}
+
+/* Keep the public business page light even when the OS/browser prefers dark mode. */
+
+@media (prefers-color-scheme: dark) {
+  .business-public-page {
+    background:
+      radial-gradient(
+        circle at 7% 5%,
+        rgba(144, 117, 255, 0.15),
+        transparent 24rem
+      ),
+      radial-gradient(
+        circle at 93% 11%,
+        rgba(89, 128, 255, 0.08),
+        transparent 24rem
+      ),
+      linear-gradient(
+        180deg,
+        #f7f6ff 0%,
+        #f5f5ff 45%,
+        #eef3ff 100%
+      );
+  }
+}
+
+/*
+============================================================
+LAHZE BUSINESS MANAGEMENT PAGE
+============================================================
+*/
+.business-management-page {
+  color: #12184c;
+  font-family: Vazirmatn, Tahoma, Arial, sans-serif;
+  background:
+    radial-gradient(
+      circle at 8% 6%,
+      rgba(146, 118, 255, 0.14),
+      transparent 25rem
+    ),
+    radial-gradient(
+      circle at 92% 10%,
+      rgba(112, 86, 241, 0.10),
+      transparent 24rem
+    ),
+    linear-gradient(
+      180deg,
+      #f8f8ff 0%,
+      #f3f4ff 52%,
+      #edf1ff 100%
+    );
+}
+
+.business-management-shell {
+  padding: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.48);
+  box-shadow: 0 20px 70px rgba(66, 48, 170, 0.085);
+  backdrop-filter: blur(20px);
+}
+
+/* -----------------------------
+   BACK
+------------------------------ */
+
+.business-back-button {
+  color: #5f6483;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8px 24px rgba(73, 55, 175, 0.055);
+}
+
+.business-back-button:hover {
+  color: #5a31ed;
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(73, 55, 175, 0.09);
+  transform: translateY(-1px);
+}
+
+/* -----------------------------
+   HEADER
+------------------------------ */
+
+.business-management-header {
+  padding: 20px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.94);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 10px 30px rgba(73, 55, 175, 0.055);
+  backdrop-filter: blur(16px);
+}
+
+.business-header-eyebrow {
+  color: #6b43ef;
+  font-weight: 800;
+}
+
+.business-page-title {
+  margin: 0;
+  color: #12184c;
+  font-size: clamp(1.7rem, 2.3vw, 2rem);
+  font-weight: 950;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+}
+
+.business-page-subtitle {
+  color: #7d839e;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.9;
+}
+
+/* -----------------------------
+   ADD BUSINESS
+------------------------------ */
+
+.business-add-button {
+  color: #ffffff;
+  background: linear-gradient(
+    115deg,
+    #4e27e5 0%,
+    #5a31ed 45%,
+    #7853f2 100%
+  );
+  box-shadow: 0 11px 24px rgba(90, 49, 237, 0.19);
+}
+
+.business-add-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(90, 49, 237, 0.24);
+}
+
+/* -----------------------------
+   EMPTY STATE
+------------------------------ */
+
+.business-empty-state {
+  border: 1px solid rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 32px rgba(73, 55, 175, 0.06);
+  backdrop-filter: blur(16px);
+}
+
+.business-empty-icon {
+  color: #5a31ed;
+  background: #f0edff;
+  box-shadow: 0 8px 22px rgba(90, 49, 237, 0.08);
+}
+
+/* -----------------------------
+   BUSINESS CARD
+------------------------------ */
+
+.business-management-card {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 30px rgba(73, 55, 175, 0.06);
+  backdrop-filter: blur(16px);
+}
+
+.business-management-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 38px rgba(73, 55, 175, 0.09);
+}
+
+.business-card-icon {
+  color: #5a31ed;
+  background: #f0edff;
+  box-shadow: 0 6px 18px rgba(90, 49, 237, 0.07);
+}
+
+.business-card-title {
+  color: #12184c;
+  font-size: 1.15rem;
+  font-weight: 950;
+  line-height: 1.5;
+}
+
+.business-card-location {
+  color: #7d839e;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.business-card-location svg {
+  color: #6b43ef;
+}
+
+/* -----------------------------
+   STATUS
+------------------------------ */
+
+.business-status-badge {
+  border: 1px solid transparent;
+}
+
+.business-status-active,
+.business-status-ready {
+  color: #218b4d;
+  background: #ebf9ef;
+  border-color: #d6f0df;
+}
+
+.business-status-profile_incomplete,
+.business-status-draft {
+  color: #7657d6;
+  background: #f0edff;
+  border-color: #e4ddff;
+}
+
+.business-status-suspended {
+  color: #c45773;
+  background: #fff0f4;
+  border-color: #f4d8e1;
+}
+
+/* -----------------------------
+   COMPLETION
+------------------------------ */
+
+.business-completion-panel {
+  border: 1px solid #e9e4fc;
+  background: rgba(247, 245, 255, 0.92);
+}
+
+.business-completion-percent {
+  color: #5a31ed;
+}
+
+.business-progress-track {
+  background: #eceef6;
+}
+
+.business-progress-fill {
+  background: linear-gradient(
+    90deg,
+    #5a31ed 0%,
+    #7853f2 100%
+  );
+}
+
+/* -----------------------------
+   ACTIONS
+------------------------------ */
+
+.business-manage-button {
+  color: #ffffff;
+  background: linear-gradient(
+    115deg,
+    #4e27e5 0%,
+    #5a31ed 45%,
+    #7853f2 100%
+  );
+  box-shadow: 0 10px 24px rgba(90, 49, 237, 0.16);
+}
+
+.business-manage-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 13px 28px rgba(90, 49, 237, 0.22);
+}
+
+.business-view-button {
+  color: #4e5675;
+  border: 1px solid #e5e0ff;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.business-view-button:hover {
+  color: #5a31ed;
+  background: #f8f6ff;
+  border-color: #dcd5ff;
+}
+
+.business-delete-button {
+  color: #d85a71;
+  border: 1px solid #f1d6de;
+  background: #fff0f4;
+}
+
+.business-delete-button:hover {
+  background: #ffe7ee;
+  border-color: #ecc4d0;
+}
+
+/* -----------------------------
+   MOBILE
+------------------------------ */
+
+@media (max-width: 767px) {
+  .business-management-page {
+    padding: 14px;
+  }
+
+  .business-management-shell {
+    padding: 12px;
+    border-radius: 24px;
+  }
+
+  .business-management-header {
+    padding: 18px;
+    border-radius: 22px;
+  }
+
+  .business-page-title {
+    font-size: 1.65rem;
+  }
+
+  .business-page-subtitle {
+    font-size: 0.78rem;
+  }
+
+  .business-card-content {
+    padding: 18px;
+  }
+
+  .business-card-actions {
+    flex-direction: column;
+  }
+
+  .business-manage-button,
+  .business-view-button,
+  .business-delete-button {
+    width: 100%;
+  }
+}
+
+
+.business-error-card {
+  border: 1px solid rgba(255, 255, 255, 0.96);
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 34px rgba(73, 55, 175, 0.07);
+  backdrop-filter: blur(16px);
+}
+
+/* =========================================================
+   LAHZE BUSINESS LOCATION MAP
+   ========================================================= */
+
+
+.business-location-map-loading {
+  width: 100%;
+  height: 460px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border-radius: 24px;
+
+  background: #f7f6ff;
+  color: #6b43ef;
+
+  font-family: Vazirmatn, Tahoma, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+@media (max-width: 767px) {
+  .business-location-map-loading {
+    height: 390px;
+  }
+}
+
+
+.business-location-map-shell {
+  position: relative;
+  overflow: hidden;
+
+  border: 1px solid #e7e4fb;
+  border-radius: 24px;
+
+  background: #f7f6ff;
+
+  box-shadow:
+    0 10px 30px rgba(73, 55, 175, 0.055);
+}
+
+.business-location-map {
+  width: 100%;
+  height: 460px;
+  direction: ltr;
+  z-index: 1;
+}
+
+/* Small map instruction */
+
+.business-location-map-hint {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 500;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  max-width: calc(100% - 28px);
+
+  padding: 8px 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.94);
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.90);
+
+  color: #4f5674;
+
+  font-family: Vazirmatn, Tahoma, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+
+  box-shadow:
+    0 8px 20px rgba(73, 55, 175, 0.08);
+
+  backdrop-filter: blur(12px);
+}
+
+.business-location-map-hint-dot {
+  width: 7px;
+  height: 7px;
+
+  flex: 0 0 7px;
+
+  border-radius: 50%;
+
+  background: #5a31ed;
+
+  box-shadow:
+    0 0 0 4px rgba(90, 49, 237, 0.10);
+}
+
+/* Map bottom hint */
+
+.business-location-map-overlay {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  z-index: 500;
+
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  transform: translateX(-50%);
+
+  padding: 8px 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.88);
+
+  color: #626985;
+
+  font-family: Vazirmatn, Tahoma, Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 750;
+
+  white-space: nowrap;
+
+  box-shadow:
+    0 8px 22px rgba(73, 55, 175, 0.08);
+
+  backdrop-filter: blur(12px);
+
+  pointer-events: none;
+}
+
+.business-location-map-overlay svg {
+  color: #5a31ed;
+}
+
+/* Hide some default Leaflet clutter */
+
+.business-location-map .leaflet-control-attribution {
+  font-size: 9px;
+  opacity: 0.68;
+}
+
+.business-location-map .leaflet-control-zoom {
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.96) !important;
+  border-radius: 14px !important;
+
+  box-shadow:
+    0 8px 22px rgba(73, 55, 175, 0.10) !important;
+}
+
+.business-location-map .leaflet-control-zoom a {
+  width: 34px !important;
+  height: 34px !important;
+
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+
+  border: 0 !important;
+
+  background: rgba(255, 255, 255, 0.92) !important;
+
+  color: #5a31ed !important;
+
+  font-family: Arial, sans-serif !important;
+  font-size: 20px !important;
+
+  backdrop-filter: blur(10px);
+}
+
+.business-location-map .leaflet-control-zoom a:hover {
+  background: #f4f1ff !important;
+}
+
+/* =========================================================
+   CUSTOM LAHZE MARKER
+   ========================================================= */
+
+.lahze-map-marker-wrapper {
+  background: transparent;
+  border: 0;
+}
+
+.lahze-map-marker {
+  position: relative;
+
+  width: 54px;
+  height: 68px;
+}
+
+.lahze-map-marker-pulse {
+  position: absolute;
+
+  left: 50%;
+  top: 18px;
+
+  width: 34px;
+  height: 34px;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  background: rgba(90, 49, 237, 0.18);
+
+  animation: lahze-marker-pulse 2s ease-out infinite;
+}
+
+.lahze-map-marker-pin {
+  position: absolute;
+
+  left: 50%;
+  top: 3px;
+
+  width: 34px;
+  height: 34px;
+
+  transform: translateX(-50%) rotate(-45deg);
+
+  border-radius: 50% 50% 50% 0;
+
+  background: linear-gradient(
+    145deg,
+    #4e27e5,
+    #6b43ef
+  );
+
+  border: 3px solid #ffffff;
+
+  box-shadow:
+    0 10px 22px rgba(73, 55, 175, 0.28);
+}
+
+.lahze-map-marker-dot {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 10px;
+  height: 10px;
+
+  transform: translate(-50%, -50%) rotate(45deg);
+
+  border-radius: 50%;
+
+  background: #ffffff;
+}
+
+@keyframes lahze-marker-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.72);
+    opacity: 0.8;
+  }
+
+  70% {
+    transform: translate(-50%, -50%) scale(1.35);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1.35);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .business-location-map {
+    height: 390px;
+  }
+
+  .business-location-map-hint {
+    right: 10px;
+    top: 10px;
+  }
+
+  .business-location-map-overlay {
+    bottom: 12px;
+    max-width: calc(100% - 24px);
+  }
+}
+
+
+/* =========================================================
+   BUSINESS LOCATION MANAGEMENT
+   ========================================================= */
+
+.business-location-card {
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.96);
+  border-radius: 28px;
+
+  background:
+    rgba(255, 255, 255, 0.92);
+
+  box-shadow:
+    0 10px 30px rgba(73, 55, 175, 0.055);
+
+  backdrop-filter: blur(16px);
+}
+
+.business-location-header {
+  margin-bottom: 20px;
+}
+
+.business-location-eyebrow {
+  margin-bottom: 5px;
+
+  color: #6b43ef;
+
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.business-location-title {
+  margin: 0;
+
+  color: #12184c;
+
+  font-family: Vazirmatn, Tahoma, Arial, sans-serif;
+
+  font-size: 1.35rem;
+  font-weight: 950;
+
+  line-height: 1.45;
+}
+
+.business-location-description {
+  max-width: 700px;
+
+  margin-top: 6px;
+
+  color: #7d839e;
+
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  line-height: 1.85;
+}
+
+
+/* Province / city */
+
+.business-location-meta {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+.business-location-meta-item {
+  padding: 13px 15px;
+
+  border: 1px solid #ebe8f8;
+  border-radius: 17px;
+
+  background: #faf9fe;
+}
+
+.business-location-meta-label {
+  margin-bottom: 4px;
+
+  color: #8b90a8;
+
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.business-location-meta-value {
+  color: #12184c;
+
+  font-size: 14px;
+  font-weight: 900;
+}
+
+
+/* Form */
+
+.business-location-form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 16px;
+}
+
+
+/* Selected location */
+
+.business-location-selected {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 12px 14px;
+
+  border: 1px solid #e6e1fa;
+  border-radius: 17px;
+
+  background: #f7f5ff;
+}
+
+.business-location-selected-icon {
+  width: 38px;
+  height: 38px;
+
+  flex: 0 0 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #f0edff;
+  color: #5a31ed;
+}
+
+.business-location-selected-label {
+  margin-bottom: 3px;
+
+  color: #8b90a8;
+
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.business-location-selected-value {
+  color: #12184c;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+
+/* Address */
+
+.business-location-address {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.business-location-field-label {
+  margin-bottom: 7px;
+
+  color: #4e5675;
+
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.business-location-address-input {
+  width: 100%;
+
+  min-height: 92px;
+
+  resize: vertical;
+
+  padding: 13px 15px;
+
+  border: 1px solid #e6e2f3;
+  border-radius: 17px;
+
+  background: #faf9fe;
+
+  color: #12184c;
+
+  font-family: Vazirmatn, Tahoma, Arial, sans-serif;
+
+  font-size: 13px;
+
+  line-height: 1.9;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.business-location-address-input::placeholder {
+  color: #9ba0b5;
+}
+
+.business-location-address-input:focus {
+  border-color: #bfb3fb;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 0 4px rgba(90, 49, 237, 0.07);
+}
+
+.business-location-address-hint {
+  margin-top: 6px;
+
+  color: #969bb0;
+
+  font-size: 10px;
+
+  line-height: 1.7;
+}
+
+
+/* Actions */
+
+.business-location-actions {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  padding-top: 4px;
+}
+
+.business-location-save-hint {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  color: #8b90a8;
+
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.business-location-save-hint svg {
+  color: #6b43ef;
+}
+
+.business-location-save-button {
+  min-height: 48px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 0 20px;
+
+  border: 0;
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      115deg,
+      #4e27e5 0%,
+      #5a31ed 45%,
+      #7853f2 100%
+    );
+
+  color: #ffffff;
+
+  font-family: Vazirmatn, Tahoma, Arial, sans-serif;
+
+  font-size: 13px;
+  font-weight: 900;
+
+  box-shadow:
+    0 10px 24px rgba(90, 49, 237, 0.18);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.business-location-save-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 13px 28px rgba(90, 49, 237, 0.23);
+}
+
+.business-location-save-button:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.58;
+}
+
+
+@media (max-width: 767px) {
+
+  .business-location-card {
+    padding: 18px;
+    border-radius: 24px;
+  }
+
+  .business-location-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .business-location-actions {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .business-location-save-hint {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .business-location-save-button {
+    width: 100%;
+  }
+}
+
+
+.business-map-location-button {
+  position: absolute;
+
+  left: 14px;
+  bottom: 16px;
+
+  z-index: 1000;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  min-height: 40px;
+
+  padding: 0 13px;
+
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.94);
+
+  color: #5a31ed;
+
+  font-family: Vazirmatn, Tahoma, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 850;
+
+  box-shadow:
+    0 8px 22px rgba(73, 55, 175, 0.12);
+
+  backdrop-filter: blur(12px);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.business-map-location-button:hover {
+  transform: translateY(-1px);
+
+  background: #ffffff;
+
+  box-shadow:
+    0 11px 26px rgba(73, 55, 175, 0.15);
+}
+
+.business-map-location-button:active {
+  transform: translateY(0);
+}
+
+.business-map-location-button svg {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 767px) {
+
+  .business-map-location-button {
+    left: 10px;
+    bottom: 12px;
+
+    min-height: 42px;
+
+    padding: 0 12px;
+
+    font-size: 10px;
+  }
+
+}
+
+/* =========================================================
+   LAHZE BUSINESS ONBOARDING — scoped to /business/add
+   ========================================================= */
+.lahze-onboarding-page {
+  --lo-text: #151b4d;
+  --lo-muted: #7c85a4;
+  --lo-accent: #6331ee;
+  --lo-accent-deep: #5125de;
+  --lo-accent-soft: #f2efff;
+  --lo-border: #e1e5f0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: clip;
+  background:
+    radial-gradient(circle at 8% 9%, rgba(145, 119, 255, .12), transparent 24rem),
+    radial-gradient(circle at 92% 20%, rgba(126, 109, 245, .09), transparent 26rem),
+    linear-gradient(180deg, #fbfbff 0%, #f3f3ff 55%, #f0f1ff 100%);
+  color: var(--lo-text);
+  font-family: Vazirmatn, Tahoma, Arial, sans-serif;
+}
+
+.lahze-onboarding-page,
+.lahze-onboarding-page * {
+  box-sizing: border-box;
+}
+
+.lahze-onboarding-page input,
+.lahze-onboarding-page select,
+.lahze-onboarding-page textarea,
+.lahze-onboarding-page button {
+  font: inherit;
+}
+
+.lahze-onboarding-header {
+  position: relative;
+  z-index: 5;
+  min-height: 74px;
+  border-bottom: 1px solid rgba(230, 229, 248, .82);
+  background: rgba(255, 255, 255, .86);
+  box-shadow: 0 3px 18px rgba(62, 48, 132, .025);
+  backdrop-filter: blur(18px);
+}
+
+.lahze-onboarding-header-inner {
+  width: min(100% - 64px, 1440px);
+  min-height: 74px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 28px;
+}
+
+.lahze-onboarding-account {
+  display: flex;
+  align-items: center;
+  justify-self: start;
+  gap: 9px;
+  white-space: nowrap;
+  color: #20264e;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.lahze-onboarding-avatar {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #eee9ff;
+  color: #5d31e9;
+  border: 1px solid #e3dbff;
+}
+
+.lahze-onboarding-notification {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline-start: 18px;
+  color: #1d2347;
+}
+
+.lahze-onboarding-notification i {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 6px;
+  height: 6px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  background: #6331ee;
+}
+
+.lahze-onboarding-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(18px, 2.6vw, 42px);
+  white-space: nowrap;
+}
+
+.lahze-onboarding-nav-link {
+  color: #515977;
+  font-size: 12px;
+  font-weight: 750;
+  text-decoration: none;
+  transition: color .18s ease;
+}
+
+.lahze-onboarding-nav-link:hover {
+  color: var(--lo-accent);
+}
+
+.lahze-onboarding-brand,
+.lahze-onboarding-footer-brand {
+  display: inline-flex;
+  justify-self: end;
+  align-items: center;
+  gap: 12px;
+  color: #111844;
+  font-size: 28px;
+  font-weight: 1000;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.lahze-onboarding-brand-mark {
+  position: relative;
+  display: inline-block;
+  width: 35px;
+  height: 34px;
+  flex: 0 0 35px;
+}
+
+.lahze-onboarding-brand-mark i {
+  position: absolute;
+  display: block;
+  width: 17px;
+  height: 17px;
+  border-radius: 7px 7px 7px 3px;
+  background: linear-gradient(145deg, #8056fa, #5122dd);
+  transform: rotate(28deg);
+}
+
+.lahze-onboarding-brand-mark i:nth-child(1) { top: 0; left: 10px; }
+.lahze-onboarding-brand-mark i:nth-child(2) { top: 13px; left: 1px; opacity: .84; }
+.lahze-onboarding-brand-mark i:nth-child(3) { top: 13px; left: 18px; opacity: .95; }
+
+.lahze-onboarding-main {
+  width: min(100% - 64px, 1290px);
+  margin: 0 auto;
+  flex: 1;
+  padding: 22px 0 36px;
+}
+
+.lahze-onboarding-breadcrumb-wrap {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0 14px 18px;
+}
+
+.lahze-onboarding-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #8189a5;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.lahze-onboarding-breadcrumb:hover { color: var(--lo-accent); }
+
+.lahze-onboarding-card {
+  display: grid;
+  grid-template-columns: minmax(270px, .73fr) minmax(0, 1.55fr);
+  align-items: stretch;
+  gap: clamp(28px, 4.2vw, 58px);
+  padding: 34px;
+  border: 1px solid rgba(255, 255, 255, .96);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, .93);
+  box-shadow: 0 18px 55px rgba(73, 55, 175, .075), inset 0 1px 0 rgba(255,255,255,.95);
+  backdrop-filter: blur(18px);
+}
+
+.lahze-onboarding-aside {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 22px 25px 24px;
+  border: 1px solid rgba(235, 231, 255, .75);
+  border-radius: 21px;
+  background: linear-gradient(160deg, rgba(244, 241, 255, .98), rgba(242, 241, 255, .92));
+}
+
+.lahze-onboarding-illustration {
+  width: 100%;
+  max-width: 305px;
+  margin: 0 auto 16px;
+}
+
+.lahze-onboarding-illustration svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+.lahze-onboarding-aside h2 {
+  margin: 4px 0 10px;
+  color: #151b4d;
+  font-size: clamp(18px, 1.6vw, 23px);
+  font-weight: 950;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.lahze-onboarding-aside-copy {
+  margin: 0;
+  color: #707b9d;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 2.0;
+  text-align: center;
+}
+
+.lahze-onboarding-benefits {
+  display: grid;
+  gap: 13px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e3def6;
+}
+
+.lahze-onboarding-benefits > div {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.lahze-onboarding-benefits > div > span {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #e9e3ff;
+  color: #6331ee;
+}
+
+.lahze-onboarding-benefits p {
+  margin: 0;
+  color: #525b7d;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.7;
+}
+
+.lahze-onboarding-form-panel { min-width: 0; padding-top: 8px; }
+
+.lahze-onboarding-intro { margin-bottom: 28px; }
+
+.lahze-onboarding-eyebrow {
+  display: inline-block;
+  margin-bottom: 11px;
+  color: #6331ee;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.lahze-onboarding-intro h1 {
+  margin: 0;
+  color: #151b4d;
+  font-size: clamp(24px, 2.1vw, 31px);
+  font-weight: 950;
+  letter-spacing: -.025em;
+  line-height: 1.55;
+}
+
+.lahze-onboarding-intro > p {
+  margin: 8px 0 0;
+  color: #7c85a4;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.9;
+}
+
+.lahze-onboarding-stepper {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 32px;
+  padding-top: 3px;
+  isolation: isolate;
+}
+
+.lahze-onboarding-step-line {
+  position: absolute;
+  top: 20px;
+  left: 15%;
+  right: 15%;
+  height: 4px;
+  z-index: -1;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #dce0e8;
+}
+
+.lahze-onboarding-step-line > span {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #7b4aff, #5828e7);
+  transition: width .2s ease;
+}
+
+.lahze-onboarding-step {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.lahze-onboarding-step-number {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  background: #e2e5ec;
+  color: #303956;
+  box-shadow: 0 0 0 5px rgba(255,255,255,.9);
+  font-size: 14px;
+  font-weight: 950;
+  transition: background .2s ease, color .2s ease;
+}
+
+.lahze-onboarding-step.is-current .lahze-onboarding-step-number,
+.lahze-onboarding-step.is-complete .lahze-onboarding-step-number {
+  color: #fff;
+  background: linear-gradient(145deg, #7748f5, #5526e3);
+}
+
+.lahze-onboarding-step strong {
+  color: #283052;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.6;
+}
+
+.lahze-onboarding-step small {
+  margin-top: 5px;
+  color: #8b94b1;
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.7;
+}
+
+.lahze-onboarding-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: -9px 0 18px;
+  padding: 11px 13px;
+  border: 1px solid #f1d5dc;
+  border-radius: 13px;
+  background: #fff5f7;
+  color: #a63e58;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.lahze-onboarding-alert svg { flex: 0 0 auto; margin-top: 2px; }
+.lahze-onboarding-step-fields { display: grid; gap: 19px; }
+.lahze-onboarding-field-group { display: flex; min-width: 0; flex-direction: column; }
+
+.lahze-onboarding-field-group label {
+  margin-bottom: 8px;
+  color: #20264e;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.lahze-onboarding-field-group label span { color: #ef5067; }
+
+.lahze-onboarding-field-group input,
+.lahze-onboarding-field-group select,
+.lahze-onboarding-field-group textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--lo-border);
+  border-radius: 17px;
+  outline: none;
+  background: #fff;
+  color: #20264e;
+  font-size: 13px;
+  font-weight: 600;
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.lahze-onboarding-field-group input,
+.lahze-onboarding-field-group select { height: 54px; padding: 0 17px; }
+.lahze-onboarding-field-group input::placeholder,
+.lahze-onboarding-field-group textarea::placeholder { color: #9aa3bd; opacity: 1; }
+
+.lahze-onboarding-field-group input:focus,
+.lahze-onboarding-field-group select:focus,
+.lahze-onboarding-field-group textarea:focus {
+  border-color: #a58bff;
+  box-shadow: 0 0 0 3px rgba(99, 49, 238, .09);
+}
+
+.lahze-onboarding-field-group input[aria-invalid="true"],
+.lahze-onboarding-field-group select[aria-invalid="true"] { border-color: #e5879b; }
+
+.lahze-onboarding-field-group textarea {
+  min-height: 118px;
+  resize: vertical;
+  padding: 13px 16px;
+  line-height: 1.9;
+}
+
+.lahze-onboarding-field-group > small {
+  margin-top: 6px;
+  color: #939bb4;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.75;
+}
+
+.lahze-onboarding-field-group .lahze-onboarding-field-error {
+  color: #bd4561;
+  font-weight: 800;
+}
+
+.lahze-onboarding-field-group .lahze-onboarding-category-note {
+  margin-top: 4px;
+  color: #a0a5b9;
+  font-size: 9px;
+}
+
+.lahze-onboarding-select-wrap { position: relative; }
+.lahze-onboarding-select-wrap select {
+  appearance: none;
+  padding-left: 42px;
+  cursor: pointer;
+}
+.lahze-onboarding-select-wrap > svg {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  color: #7a83a1;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+.lahze-onboarding-field-group select:disabled { cursor: not-allowed; background: #f6f7fb; color: #9ca3b8; }
+
+.lahze-onboarding-tip {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 1px;
+  padding: 15px 16px;
+  border-radius: 15px;
+  background: linear-gradient(115deg, #f3f0ff, #f7f5ff);
+  color: #434b6b;
+}
+
+.lahze-onboarding-tip-icon {
+  width: 35px;
+  height: 35px;
+  flex: 0 0 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #fff;
+  color: #6231ee;
+  box-shadow: 0 5px 14px rgba(82, 48, 202, .08);
+}
+
+.lahze-onboarding-tip strong { display: block; color: #252b51; font-size: 12px; font-weight: 900; line-height: 1.7; }
+.lahze-onboarding-tip p { margin: 3px 0 0; color: #7c85a4; font-size: 10px; font-weight: 600; line-height: 1.85; }
+
+.lahze-onboarding-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.lahze-onboarding-primary-button,
+.lahze-onboarding-secondary-button {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 23px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.lahze-onboarding-primary-button {
+  min-width: 175px;
+  border: 1px solid transparent;
+  background: linear-gradient(110deg, #5425e4, #7139f2);
+  color: #fff;
+  box-shadow: 0 9px 20px rgba(93, 48, 225, .16);
+}
+.lahze-onboarding-primary-button:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 25px rgba(93,48,225,.22); }
+.lahze-onboarding-secondary-button { min-width: 136px; border: 1px solid #e0e4ef; background: #fbfcff; color: #303654; }
+.lahze-onboarding-secondary-button:hover:not(:disabled) { background: #f5f3ff; border-color: #d9d0ff; }
+.lahze-onboarding-primary-button:disabled,
+.lahze-onboarding-secondary-button:disabled { cursor: not-allowed; opacity: .55; }
+
+.lahze-onboarding-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 15px;
+  border: 1px solid #e8e2ff;
+  border-radius: 15px;
+  background: #faf9ff;
+}
+.lahze-onboarding-summary-icon { width: 42px; height: 42px; flex: 0 0 42px; display: flex; align-items: center; justify-content: center; border-radius: 13px; background: #f0ebff; color: #6331ee; }
+.lahze-onboarding-summary strong { color: #171d4b; font-size: 13px; font-weight: 900; }
+.lahze-onboarding-summary p { margin: 3px 0 0; color: #818aa7; font-size: 11px; }
+
+.lahze-onboarding-footer {
+  margin-top: 0;
+  padding: 25px 0 16px;
+  border-top: 1px solid rgba(231, 230, 249, .7);
+  background: rgba(255,255,255,.56);
+}
+
+.lahze-onboarding-footer-inner {
+  width: min(100% - 64px, 1440px);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 28px;
+}
+
+.lahze-onboarding-footer-brand {
+  justify-self: start;
+  flex-wrap: wrap;
+  gap: 7px;
+  font-size: 23px;
+}
+.lahze-onboarding-footer-brand .lahze-onboarding-brand-mark { width: 29px; height: 27px; flex-basis: 29px; transform: scale(.82); transform-origin: right center; }
+.lahze-onboarding-footer-brand small { width: 100%; color: #8d96b0; font-size: 10px; font-weight: 600; }
+
+.lahze-onboarding-footer-links { display: flex; align-items: center; gap: clamp(15px, 2.7vw, 38px); }
+.lahze-onboarding-footer-links span { color: #737d9c; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.lahze-onboarding-socials { display: flex; align-items: center; gap: 14px; color: #7883a5; }
+.lahze-onboarding-socials span { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
+.lahze-onboarding-copyright { grid-column: 1 / -1; justify-self: end; margin: -12px 0 0; color: #98a0b8; font-size: 10px; }
+
+@media (max-width: 1050px) {
+  .lahze-onboarding-header-inner,
+  .lahze-onboarding-footer-inner { width: min(100% - 36px, 1440px); }
+  .lahze-onboarding-main { width: min(100% - 36px, 1290px); }
+  .lahze-onboarding-card { grid-template-columns: minmax(225px, .68fr) minmax(0, 1.55fr); gap: 26px; padding: 26px; }
+  .lahze-onboarding-aside { padding: 18px; }
+  .lahze-onboarding-nav { gap: 16px; }
+}
+
+@media (max-width: 760px) {
+  .lahze-onboarding-header,
+  .lahze-onboarding-header-inner { min-height: 64px; }
+  .lahze-onboarding-header-inner { width: calc(100% - 28px); grid-template-columns: 1fr auto; gap: 10px; }
+  .lahze-onboarding-account { gap: 6px; font-size: 10px; }
+  .lahze-onboarding-avatar { width: 31px; height: 31px; }
+  .lahze-onboarding-notification { margin-inline-start: 5px; }
+  .lahze-onboarding-nav { display: none; }
+  .lahze-onboarding-brand { font-size: 24px; gap: 8px; }
+  .lahze-onboarding-brand-mark { transform: scale(.88); transform-origin: right center; }
+  .lahze-onboarding-main { width: calc(100% - 24px); padding: 15px 0 22px; }
+  .lahze-onboarding-breadcrumb-wrap { margin: 0 4px 13px; }
+  .lahze-onboarding-card { grid-template-columns: minmax(0, 1fr); gap: 22px; padding: 16px; border-radius: 23px; }
+  .lahze-onboarding-aside { order: 2; padding: 16px; border-radius: 18px; }
+  .lahze-onboarding-form-panel { order: 1; padding-top: 2px; }
+  .lahze-onboarding-illustration { max-width: 205px; margin-bottom: 4px; }
+  .lahze-onboarding-aside h2 { margin-top: 2px; font-size: 18px; }
+  .lahze-onboarding-aside-copy { font-size: 12px; line-height: 1.9; }
+  .lahze-onboarding-benefits { grid-template-columns: 1fr; gap: 9px; margin-top: 15px; padding-top: 14px; }
+  .lahze-onboarding-benefits > div > span { width: 31px; height: 31px; flex-basis: 31px; }
+  .lahze-onboarding-intro { margin-bottom: 22px; }
+  .lahze-onboarding-intro h1 { font-size: 23px; line-height: 1.55; }
+  .lahze-onboarding-intro > p { font-size: 11px; }
+  .lahze-onboarding-stepper { gap: 6px; margin-bottom: 25px; }
+  .lahze-onboarding-step-line { top: 18px; left: 15%; right: 15%; height: 3px; }
+  .lahze-onboarding-step-number { width: 36px; height: 36px; margin-bottom: 8px; font-size: 12px; }
+  .lahze-onboarding-step strong { font-size: 10px; }
+  .lahze-onboarding-step small { font-size: 9px; }
+  .lahze-onboarding-step-fields { gap: 16px; }
+  .lahze-onboarding-field-group input,
+  .lahze-onboarding-field-group select { height: 51px; }
+  .lahze-onboarding-tip { padding: 12px; gap: 9px; }
+  .lahze-onboarding-tip p { font-size: 10px; }
+  .lahze-onboarding-actions { margin-top: 17px; gap: 10px; }
+  .lahze-onboarding-primary-button,
+  .lahze-onboarding-secondary-button { min-width: 0; min-height: 46px; padding: 0 15px; }
+  .lahze-onboarding-primary-button { flex: 1; }
+  .lahze-onboarding-secondary-button { min-width: 105px; }
+  .lahze-onboarding-footer { padding: 20px 0 14px; }
+  .lahze-onboarding-footer-inner { width: calc(100% - 28px); grid-template-columns: 1fr auto; gap: 16px; }
+  .lahze-onboarding-footer-brand { font-size: 20px; }
+  .lahze-onboarding-footer-links { grid-column: 1 / -1; grid-row: 2; flex-wrap: wrap; gap: 12px 18px; }
+  .lahze-onboarding-footer-links span { font-size: 10px; }
+  .lahze-onboarding-socials { justify-self: end; gap: 5px; }
+  .lahze-onboarding-copyright { grid-column: 1 / -1; justify-self: start; margin: 0; font-size: 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lahze-onboarding-page *,
+  .lahze-onboarding-page *::before,
+  .lahze-onboarding-page *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+
+/* Business category suggestion UI — append to src/app/globals.css */
+.lahze-category-suggestion-actions { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-top:8px; }
+.lahze-category-suggest-button { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:37px; padding:0 13px; border:1px solid #e3dcff; border-radius:12px; background:#f7f4ff; color:#5c31e8; font-size:11px; font-weight:850; cursor:pointer; transition:background .18s ease,border-color .18s ease,opacity .18s ease; }
+.lahze-category-suggest-button:hover:not(:disabled) { background:#eee8ff; border-color:#cfc2ff; }
+.lahze-category-suggest-button:disabled { opacity:.5; cursor:not-allowed; }
+.lahze-category-spinner { width:15px; height:15px; border:2px solid #d9ceff; border-top-color:#6331ee; border-radius:50%; animation:lahze-category-spin .75s linear infinite; }
+@keyframes lahze-category-spin { to { transform:rotate(360deg); } }
+.lahze-category-inline-error { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:8px; padding:9px 11px; border:1px solid #f1d5dc; border-radius:12px; background:#fff6f8; color:#a63e58; font-size:10px; line-height:1.8; }
+.lahze-category-inline-error button { flex:0 0 auto; border:0; background:transparent; color:#6a3dea; font-weight:900; cursor:pointer; }
+.lahze-category-suggestion-card { display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:10px; padding:13px; border:1px solid #e4ddff; border-radius:15px; background:linear-gradient(120deg,#faf9ff,#f3efff); }
+.lahze-category-suggestion-copy { display:flex; min-width:0; flex-direction:column; gap:4px; }
+.lahze-category-suggestion-eyebrow { color:#7959d9; font-size:9px; font-weight:900; }
+.lahze-category-suggestion-copy strong { color:#171d4b; font-size:13px; font-weight:950; }
+.lahze-category-suggestion-copy p { margin:0; color:#747d9d; font-size:10px; line-height:1.8; }
+.lahze-category-suggestion-copy small { color:#949ab0; font-size:9px; line-height:1.7; }
+.lahze-category-accept-button { flex:0 0 auto; min-height:36px; padding:0 12px; border:0; border-radius:11px; background:linear-gradient(110deg,#5425e4,#7139f2); color:white; font-size:10px; font-weight:900; cursor:pointer; }
+.lahze-category-accept-button:disabled { opacity:.55; cursor:not-allowed; }
+.lahze-category-accepted,.lahze-category-selection-status { display:inline-flex; align-items:center; gap:5px; color:#27804b; font-size:10px; font-weight:850; }
+.lahze-social-linkedin { font-family:Arial,sans-serif; font-weight:900; font-size:16px; }
+@media(max-width:760px) { .lahze-category-suggestion-card { align-items:stretch; flex-direction:column; } .lahze-category-accept-button { width:100%; min-height:42px; } .lahze-category-inline-error { align-items:flex-start; flex-direction:column; } }
+
