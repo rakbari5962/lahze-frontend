@@ -19,14 +19,19 @@ export function useAuth() {
 
   const [token, setToken] = useState<string | null>(null);
 
+	useEffect(() => {
+	  let cancelled = false;
 
-  useEffect(() => {
+	  void Promise.resolve().then(() => {
+		if (!cancelled) {
+		  setToken(getToken());
+		}
+	  });
 
-    setToken(
-      getToken()
-    );
-
-  }, []);
+	  return () => {
+		cancelled = true;
+	  };
+	}, []);
 
 
 

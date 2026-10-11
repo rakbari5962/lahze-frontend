@@ -904,7 +904,7 @@ async function handleDeleteBusiness(
 
 
                         <span
-						  className={`business-status-badge business-status-${business.status.toLowerCase()} shrink-0 rounded-full px-3 py-1.5 text-xs font-extrabold`}
+						  className={`business-status-badge business-status-${business.status?.toLowerCase() ?? "unknown"} shrink-0 rounded-full px-3 py-1.5 text-xs font-extrabold`}
 						>
                           {statusLabel}
                         </span>

@@ -1,10 +1,7 @@
 "use client";
 
-
-import {
-  useState,
-  useEffect
-} from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 
 import {
@@ -23,6 +20,7 @@ import {
 
 
 export default function LoginPage() {
+  const router = useRouter();
 
 
   const [phone, setPhone] = useState("");
@@ -137,23 +135,28 @@ async function handleRequestOtp() {
 
 
 
-  } catch(error:any) {
+  } catch (error: unknown) {
+    console.log("OTP ERROR:", error);
 
-
-    console.log(
-      "OTP ERROR:",
-      error
-    );
-
+    const errorMessage =
+	  error instanceof Error
+		? error.message
+		: typeof error === "string"
+		  ? error
+		  : typeof error === "object" &&
+			  error !== null &&
+			  "message" in error &&
+			  typeof error.message === "string"
+			? error.message
+			: "";
 
     let message = "خطا در ارسال کد";
 
-
-    if ( 
-      error.message?.includes( 
-        "Please wait before requesting another OTP" 
-      ) 
-    ) { 
+    if (
+      errorMessage.includes(
+        "Please wait before requesting another OTP"
+      )
+    ) {
 
       setResendTimer(60);
 
@@ -226,9 +229,7 @@ async function handleRequestOtp() {
       ) {
 
 
-        window.location.href =
-
-          `/select-city?user_id=${result.user_id}`;
+        router.push(`/select-city?user_id=${result.user_id}`);
 
 
         return;
@@ -241,7 +242,7 @@ async function handleRequestOtp() {
 
 
 
-      window.location.href = "/";
+      router.push("/");
 
 
 

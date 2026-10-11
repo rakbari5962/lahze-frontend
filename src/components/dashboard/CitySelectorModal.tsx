@@ -2,7 +2,8 @@
 
 import {
   useEffect,
-  useState
+  useState,
+  useSyncExternalStore,
 } from "react";
 
 import {
@@ -29,16 +30,20 @@ import {
 } from "@/lib/auth";
 
 import {
-  getCurrentUser,
-  updateUserProfile,
-  updateUserCity
+  updateUserCity,
+  type CurrentUser,
 } from "@/services/user.service";
 
+const subscribeToNothing = () => () => undefined;
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
+
 interface Props {
-  currentProvinceId?: number;
-  currentCityId?: number;
+  currentProvinceId?: number | null;
+  currentCityId?: number | null;
   onClose: () => void;
-  onSaved: (updatedUser: any) => void;
+  onSaved: (updatedUser: CurrentUser) => void;
 }
 
 
@@ -53,24 +58,23 @@ export default function CitySelectorModal({
   const [cities, setCities] = useState<City[]>([]);
 
   const [provinceId, setProvinceId] = useState<number | undefined>(
-    currentProvinceId
-  );
+  currentProvinceId ?? undefined
+);
 
-  const [cityId, setCityId] = useState<number | undefined>(
-    currentCityId
-  );
+const [cityId, setCityId] = useState<number | undefined>(
+  currentCityId ?? undefined
+);
 
-  const [loading,setLoading] = useState(false);
+const [loading, setLoading] = useState(false);
 
-  const [mounted, setMounted] = useState(false);
+const mounted = useSyncExternalStore(
+  subscribeToNothing,
+  getClientSnapshot,
+  getServerSnapshot
+);
 
-  useEffect(() => {
+const [error, setError] = useState("");
 
-	  setMounted(true);
-
-    }, []);
-  const [error, setError] = useState("");
-  const [saving, setSaving] = useState(false);
 
 
   /*
@@ -105,41 +109,35 @@ export default function CitySelectorModal({
    * دریافت شهرهای استان انتخاب‌شده
    */
   useEffect(() => {
+  const selectedProvinceId = provinceId;
 
-    if (!provinceId) {
+  if (selectedProvinceId == null) {
+    return;
+  }
 
-      setCities([]);
+  let cancelled = false;
 
-      return;
+  async function loadCities(provinceId: number) {
+    try {
+      const data = await getCitiesByProvince(provinceId);
 
-    }
-
-
-    async function loadCities() {
-
-      try {
-
-        setCities([]);
-
-        const data = await getCitiesByProvince(
-          provinceId
-        );
-
+      if (!cancelled) {
         setCities(data);
-
-      } catch (error) {
-
-        console.error("خطا در دریافت شهرها:", error);
-
-        setError("دریافت لیست شهرها با مشکل مواجه شد.");
-
       }
-
+    } catch (error) {
+      if (!cancelled) {
+        console.error("خطا در دریافت شهرها:", error);
+        setError("دریافت لیست شهرها با مشکل مواجه شد.");
+      }
     }
+  }
 
-    loadCities();
+  void loadCities(selectedProvinceId);
 
-  }, [provinceId]);
+  return () => {
+    cancelled = true;
+  };
+}, [provinceId]);
 
 
   /*
@@ -148,7 +146,7 @@ export default function CitySelectorModal({
   async function handleSave() {
 
 
-  if (!provinceId || !cityId) {
+  if (provinceId == null || cityId == null) {
 
     setError("لطفاً استان و شهر را انتخاب کنید");
 
@@ -197,7 +195,7 @@ export default function CitySelectorModal({
 
 
 
-  } catch (error:any) {
+  } catch (error: unknown) {
 
 
     console.log(error);
@@ -378,8 +376,8 @@ export default function CitySelectorModal({
                 );
 
                 setCityId(undefined);
-
-                setError("");
+				setCities([]);
+				setError("");
 
               }}
               disabled={loading}

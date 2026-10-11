@@ -177,7 +177,7 @@ export default function BookingsPage() {
 
 
       }
-      catch(error){
+      catch {
 
 
         setError(

@@ -181,7 +181,7 @@ export interface BusinessReviewSummary {
 
 
 
-  attribute_summary?: Record<string, any>;
+  attribute_summary?: Record<string, unknown>;
 
   model_version?: string;
 

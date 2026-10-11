@@ -17,7 +17,6 @@ import {
 import {
   getCurrentUser,
   updateUserProfile,
-  CurrentUser
 } from "@/services/user.service";
 
 import {
@@ -30,7 +29,6 @@ export default function ProfilePage() {
 
   const router = useRouter();
 
-  const [user, setUser] = useState<CurrentUser | null>(null);
 
   const [loading, setLoading] = useState(true);
 
@@ -123,20 +121,6 @@ loadProfile();
 }, []);
 
 
-  function formatIban(value: string) {
-
-    let numbers = value
-      .replace(/\D/g, "")
-      .slice(0, 24);
-
-
-    let formatted = numbers.match(/.{1,4}/g)?.join("-") ?? "";
-
-
-    return formatted;
-
-  }
-
 
   function formatNationalId(
     value: string
@@ -148,14 +132,6 @@ loadProfile();
 
   }
 
-
-  function cleanIban(value: string) {
-
-    return value
-      .replace(/\D/g, "")
-      .slice(0,24);
-
-  }
 
 
 
@@ -242,8 +218,6 @@ console.log(
 );
 
 
-setUser(updated);
-
 
 alert("اطلاعات شما با موفقیت ذخیره شد");
 
@@ -251,15 +225,15 @@ alert("اطلاعات شما با موفقیت ذخیره شد");
 router.push("/profile");
 
 
-    } catch (error:any) {
+    } catch (error: unknown) {
+	  console.log("SAVE ERROR:", error);
 
+	  const errorMessage =
+		error instanceof Error && error.message
+		  ? error.message
+		  : "خطا در ذخیره اطلاعات";
 
-      console.log("SAVE ERROR:", error);
-
-
-      alert(
-        error.message || "خطا در ذخیره اطلاعات"
-      );
+	  alert(errorMessage);
 
 
 

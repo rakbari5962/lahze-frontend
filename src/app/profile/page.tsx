@@ -363,7 +363,7 @@ export default function ProfilePage() {
       "اطلاعات شما با موفقیت ذخیره شد"
     );
 
-  } catch (error: any) {
+  } catch (error: unknown) {
 
     console.error(
       "PROFILE SAVE ERROR:",
@@ -371,9 +371,9 @@ export default function ProfilePage() {
     );
 
     alert(
-      error?.message ||
-      "خطا در ذخیره اطلاعات"
-    );
+	  (error instanceof Error ? error.message : undefined) ||
+	  "خطا در ذخیره اطلاعات"
+	);
 
   } finally {
 
@@ -1338,7 +1338,6 @@ export default function ProfilePage() {
                     <ProfileField
                       title="استان"
                       value={draftUser?.province_name ?? ""}
-                      selectLike
 
                       editableKey="province_id"
 
@@ -1363,7 +1362,6 @@ export default function ProfilePage() {
                     <ProfileField
                       title="شهر"
                       value={draftUser?.city_name ?? ""}
-                      selectLike
 
                       editableKey="city_id"
 
@@ -1666,7 +1664,6 @@ function ProfileField({
   dir = "rtl",
   full = false,
   multiline = false,
-  selectLike = false,
   showEditIcon = true,
   editableKey,
   draftUser,
@@ -1684,7 +1681,6 @@ function ProfileField({
   dir?: "rtl" | "ltr";
   full?: boolean;
   multiline?: boolean;
-  selectLike?: boolean;
   showEditIcon?: boolean;
   provinces?: Province[];
 
@@ -1746,7 +1742,7 @@ function ProfileField({
       ? draftUser?.[editableKey] ?? ""
       : "";
 
-  let editingContent: any = null;
+  let editingContent: ReactNode = null;
 
   function handleChange(
     nextValue: string
@@ -2241,42 +2237,3 @@ function ProfileField({
     </Link>
   );
   }
-
-/* =====================================================
-   PERSIAN DATE
-===================================================== */
-
-function formatPersianDate(
-  value?: string | null
-) {
-
-  if (!value) {
-    return null;
-  }
-
-
-  const date =
-    new Date(value);
-
-
-  if (
-    Number.isNaN(
-      date.getTime()
-    )
-  ) {
-
-    return value;
-
-  }
-
-
-  return new Intl.DateTimeFormat(
-    "fa-IR-u-ca-persian",
-    {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }
-  ).format(date);
-
-}

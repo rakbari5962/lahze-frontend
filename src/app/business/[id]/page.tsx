@@ -11,12 +11,10 @@ import {
 import { getBusinessOpportunities } from "@/services/opportunity.service";
 
 import {
-  ArrowRight,
   BarChart3,
   CalendarDays,
   CheckCircle2,
   Info,
-  MapPin,
   MessageCircle,
   Phone,
   ShieldCheck,

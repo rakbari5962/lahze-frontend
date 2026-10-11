@@ -17,6 +17,7 @@ import {
 
 import {
   FormEvent,
+  useCallback,
   useEffect,
   useState,
 } from "react";
@@ -225,11 +226,6 @@ export default function ManageBusinessPage() {
   const businessId =
     Number(params.id);
 
-
-  const [token, setToken] =
-    useState<string | null>(null);
-
-
   const [business, setBusiness] =
     useState<BusinessResponse | null>(null);
 
@@ -321,10 +317,8 @@ export default function ManageBusinessPage() {
 
 useEffect(() => {
     if (!provinceId) {
-	  setCities([]);
-	  setLoadingCities(false);
 	  return;
-    }
+	}
 
     const selectedProvinceId = provinceId;
     let cancelled = false;
@@ -388,9 +382,15 @@ useEffect(() => {
 
   }, [provinceId]);
 
-  async function loadBusiness(
-    activeToken: string
-  ) {
+  const loadBusiness = useCallback(async (
+	  activeToken: string,
+	  isCancelled: () => boolean,
+	) => {
+	  await Promise.resolve();
+
+	  if (isCancelled()) {
+		return;
+	  }
 
     setLoading(true);
 
@@ -398,41 +398,32 @@ useEffect(() => {
 
 
     try {
+	  const [
+		businessData,
+		completionData,
+		serviceData,
+	  ] = await Promise.all([
+		apiGet<BusinessResponse>(
+		  `/businesses/${businessId}/profile?token=${encodeURIComponent(activeToken)}`
+		),
+		apiGet<BusinessCompletionResponse>(
+		  `/businesses/${businessId}/completion?token=${encodeURIComponent(activeToken)}`
+		),
+		apiGet<BusinessServiceResponse[]>(
+		  `/businesses/${businessId}/services?token=${encodeURIComponent(activeToken)}`
+		),
+	  ]);
 
-      const [
-        businessData,
-        completionData,
-        serviceData,
-      ] = await Promise.all([
+	  // اگر درخواست قبلی لغو شده، اطلاعات قدیمی را اعمال نکن.
+	  if (isCancelled()) {
+		return;
+	  }
 
-        apiGet<BusinessResponse>(
-          `/businesses/${businessId}/profile?token=${encodeURIComponent(activeToken)}`
-        ),
+	  setBusiness(businessData);
 
-        apiGet<BusinessCompletionResponse>(
-          `/businesses/${businessId}/completion?token=${encodeURIComponent(activeToken)}`
-        ),
+	  setCompletion(completionData);
 
-        apiGet<BusinessServiceResponse[]>(
-          `/businesses/${businessId}/services?token=${encodeURIComponent(activeToken)}`
-        ),
-
-      ]);
-
-
-      setBusiness(
-        businessData
-      );
-
-
-      setCompletion(
-        completionData
-      );
-
-
-      setServices(
-        serviceData
-      );
+	  setServices(serviceData);
 
 
       setProfileForm({
@@ -466,20 +457,24 @@ useEffect(() => {
 
       try {
 
-        const provincesData =
-		  await getProvinces();
+        const provincesData = await getProvinces();
 
-		setProvinces(
-		  provincesData
-		);
+		if (isCancelled()) {
+		  return;
+		}
 
-		setProvinceId(
-		  businessData.province_id ?? null
-		);
+		setProvinces(provincesData);
 
-		setCityId(
-		  businessData.city_id ?? null
-		);
+		const nextProvinceId =
+		  businessData.province_id ?? null;
+
+		if (nextProvinceId === null) {
+		  setCities([]);
+		  setLoadingCities(false);
+		}
+
+		setProvinceId(nextProvinceId);
+		setCityId(businessData.city_id ?? null);
 
       } catch (
         locationError
@@ -491,72 +486,56 @@ useEffect(() => {
 
       }
 
-    } catch (
-      requestError
-    ) {
+    } catch (requestError) {
+	  if (!isCancelled()) {
+		console.log("BUSINESS LOAD ERROR:", requestError);
 
-      console.log(
-        requestError
-      );
-
-
-      setError(
-        "دریافت اطلاعات کسب‌وکار با مشکل مواجه شد."
-      );
-
-    } finally {
-
-      setLoading(false);
+		setError(
+		  "دریافت اطلاعات کسب‌وکار با مشکل مواجه شد."
+		);
+	  }
+	} finally {
+	  if (!isCancelled()) {
+		setLoading(false);
+	  }
 
     }
 
-  }
+  }, [businessId]);
 
 
   useEffect(() => {
+  let cancelled = false;
 
-    if (
-      !businessId ||
-      Number.isNaN(businessId)
-    ) {
-
-      setError(
-        "شناسه کسب‌وکار نامعتبر است."
-      );
-
-      setLoading(false);
-
+  void Promise.resolve().then(() => {
+    if (cancelled) {
       return;
-
     }
 
+    if (!businessId || Number.isNaN(businessId)) {
+      setError("شناسه کسب‌وکار نامعتبر است.");
+      setLoading(false);
+      return;
+    }
 
-    const activeToken =
-      getToken();
-
+    const activeToken = getToken();
 
     if (!activeToken) {
-
       router.push("/login");
-
       return;
-
     }
 
+    void loadBusiness(activeToken, () => cancelled);
+  });
 
-    setToken(
-      activeToken
-    );
-
-
-    loadBusiness(
-      activeToken
-    );
-
-  }, [
-    businessId,
-    router,
-  ]);
+  return () => {
+    cancelled = true;
+  };
+}, [
+  businessId,
+  router,
+  loadBusiness,
+]);
 
 
   function clearMessages() {
@@ -574,7 +553,7 @@ useEffect(() => {
 
     event.preventDefault();
 
-
+	const token = getToken();
     if (!token) {
 
       router.push("/login");
@@ -670,7 +649,7 @@ async function handleLocationSubmit(
   event: FormEvent<HTMLFormElement>
 ) {
   event.preventDefault();
-
+  const token = getToken();
   if (!token) {
     router.push("/login");
     return;
@@ -856,7 +835,7 @@ async function handleLocationSubmit(
 
     event.preventDefault();
 
-
+	const token = getToken();
     if (!token) {
 
       router.push("/login");
@@ -1061,7 +1040,7 @@ async function handleLocationSubmit(
   async function handleDeactivateService(
     serviceId: number
   ) {
-
+	const token = getToken();
     if (!token) {
 
       router.push("/login");
@@ -2054,6 +2033,8 @@ async function handleLocationSubmit(
 					   * تغییر استان باید شهر قبلی را
 					   * حتماً reset کند.
 					   */
+					  setCities([]);
+					  setLoadingCities(false);
 					  setCityId(null);
 
 					  setError("");

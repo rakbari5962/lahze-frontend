@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { getToken } from "@/lib/auth";
 import { createBooking } from "@/services/booking.service";
 
@@ -10,11 +11,12 @@ interface BookingButtonProps {
 export default function BookingButton({
   opportunityId,
 }: BookingButtonProps) {
+  const router = useRouter();
   async function handleBooking() {
     const token = getToken();
 
     if (!token) {
-      window.location.href = "/login";
+      router.push("/login");
       return;
     }
 

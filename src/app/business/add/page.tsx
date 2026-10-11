@@ -103,6 +103,7 @@ export default function AddBusinessPage() {
   const loadCategories = useCallback(async () => {
     setCategoriesLoading(true);
     setCategoriesLoadError("");
+
     try {
       const data = await getBusinessCategories();
       setCategories(data.filter((item) => item.is_active));
@@ -110,7 +111,7 @@ export default function AddBusinessPage() {
       setCategoriesLoadError(
         loadError instanceof Error
           ? loadError.message
-          : "دریافت دسته‌بندی‌ها انجام نشد.",
+          : "خطا در دریافت دسته‌بندی‌ها.",
       );
     } finally {
       setCategoriesLoading(false);
@@ -118,8 +119,36 @@ export default function AddBusinessPage() {
   }, []);
 
   useEffect(() => {
-    void loadCategories();
-  }, [loadCategories]);
+    let cancelled = false;
+
+    async function loadInitialCategories() {
+      try {
+        const data = await getBusinessCategories();
+
+        if (!cancelled) {
+          setCategories(data.filter((item) => item.is_active));
+        }
+      } catch (loadError: unknown) {
+        if (!cancelled) {
+          setCategoriesLoadError(
+            loadError instanceof Error
+              ? loadError.message
+              : "خطا در دریافت دسته‌بندی‌ها.",
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setCategoriesLoading(false);
+        }
+      }
+    }
+
+    void loadInitialCategories();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function invalidateSuggestionForChangedInputs() {
     suggestionRequestId.current += 1;
@@ -205,11 +234,8 @@ export default function AddBusinessPage() {
 
   useEffect(() => {
     let cancelled = false;
-    setCityId(null);
-    setCities([]);
 
     if (provinceId === null) {
-      setLoadingCities(false);
       return () => {
         cancelled = true;
       };
@@ -583,10 +609,13 @@ export default function AddBusinessPage() {
                         value={provinceId ?? ""}
                         onChange={(event) => {
                           const value = event.target.value;
+
                           setProvinceId(value ? Number(value) : null);
                           setCityId(null);
+                          setCities([]);
+                          setLoadingCities(false);
                           setError("");
-                        }}
+						}}
                         disabled={submitting || loadingProvinces}
                       >
                         <option value="">{loadingProvinces ? "در حال دریافت استان‌ها..." : "استان را انتخاب کنید"}</option>

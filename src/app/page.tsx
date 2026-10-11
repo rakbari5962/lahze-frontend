@@ -27,7 +27,8 @@ import {
 } from "@/services/auth.service";
 
 import {
-  getCurrentUser
+  getCurrentUser,
+  type CurrentUser,
 } from "@/services/user.service";
 
 import InviteBusinessCard from "@/components/dashboard/InviteBusinessCard";
@@ -42,7 +43,7 @@ import CitySelectorModal from "@/components/dashboard/CitySelectorModal";
 export default function HomePage() {
 
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<CurrentUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [showCityModal, setShowCityModal] = useState(false);
 
@@ -204,7 +205,7 @@ text-right
 
   <DashboardHeader
 
-  name={user?.first_name}
+  name={user?.first_name ?? undefined}
   phone={user?.phone_number}
 
   />
@@ -450,10 +451,12 @@ showCityModal && (
     updatedUser.city_name
   );
 
-  setUser(prev => ({
-  ...prev,
-  ...updatedUser
-}));
+  setUser((prev) =>
+    prev
+      ? { ...prev, ...updatedUser }
+      : updatedUser
+  );
+
 
   setShowCityModal(false);
 
