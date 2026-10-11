@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
 import {
   MapContainer,
   Marker,
@@ -10,8 +12,10 @@ import {
 } from "react-leaflet";
 
 import L from "leaflet";
+import { getCityMapCenter as fetchCityMapCenter } from "../../services/location.service";
 
 interface BusinessLocationMapProps {
+  cityId: number | null;
   latitude: number | null;
   longitude: number | null;
   onLocationChange: (
@@ -20,10 +24,7 @@ interface BusinessLocationMapProps {
   ) => void;
 }
 
-const TEHRAN_AZADI: [number, number] = [
-  35.6997,
-  51.3370,
-];
+const IRAN_OVERVIEW: [number, number] = [32.4279, 53.6880];
 
 const markerIcon = L.divIcon({
   className: "lahze-map-marker-wrapper",
@@ -39,6 +40,67 @@ const markerIcon = L.divIcon({
   iconAnchor: [27, 61],
 });
 
+
+function CityViewportController({
+  cityId,
+  cityCenter,
+  hasSavedLocation,
+}: {
+  cityId: number | null;
+  cityCenter: [number, number] | null;
+  hasSavedLocation: boolean;
+}) {
+  const map = useMap();
+  const previousCityId = useRef<number | null>(cityId);
+  const pendingCityChange = useRef(false);
+  const appliedCenterCityId = useRef<number | null>(
+    cityCenter ? cityId : null
+  );
+
+  useEffect(() => {
+    const cityChanged = previousCityId.current !== cityId;
+
+    if (cityChanged) {
+      previousCityId.current = cityId;
+
+      if (cityCenter) {
+        map.setView(cityCenter, 12, { animate: true });
+        pendingCityChange.current = false;
+        appliedCenterCityId.current = cityId;
+      } else {
+        pendingCityChange.current = cityId !== null;
+        appliedCenterCityId.current = null;
+        map.setView(IRAN_OVERVIEW, 5, { animate: true });
+      }
+
+      return;
+    }
+
+    if (!cityCenter) {
+      return;
+    }
+
+    // A newly selected city's center may arrive asynchronously.
+    if (pendingCityChange.current) {
+      map.setView(cityCenter, 12, { animate: true });
+      pendingCityChange.current = false;
+      appliedCenterCityId.current = cityId;
+      return;
+    }
+
+    // Preserve the current viewport when a business location is saved.
+    // Mark this city as handled even when we intentionally do not recenter.
+    if (appliedCenterCityId.current !== cityId) {
+      if (!hasSavedLocation) {
+        map.setView(cityCenter, 12, { animate: true });
+      }
+
+      appliedCenterCityId.current = cityId;
+    }
+  }, [cityId, cityCenter, hasSavedLocation, map]);
+
+  return null;
+}
 
 function MapClickHandler({
   onLocationChange,
@@ -188,6 +250,7 @@ function CurrentLocationButton({
 
 
 export default function BusinessLocationMap({
+  cityId,
   latitude,
   longitude,
   onLocationChange,
@@ -198,10 +261,65 @@ export default function BusinessLocationMap({
     Number.isFinite(latitude) &&
     Number.isFinite(longitude);
 
-  const position: [number, number] =
+  const savedPosition: [number, number] | null =
     hasSavedLocation
-      ? [latitude, longitude]
-      : TEHRAN_AZADI;
+      ? [latitude as number, longitude as number]
+      : null;
+
+  const [loadedCityCenter, setLoadedCityCenter] = useState<{
+    cityId: number | null;
+    center: [number, number] | null;
+  } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    if (cityId === null) {
+      setLoadedCityCenter({ cityId: null, center: null });
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    setLoadedCityCenter(null);
+
+    fetchCityMapCenter(cityId)
+      .then((result) => {
+        const latitude = result.latitude;
+        const longitude = result.longitude;
+
+        const center: [number, number] | null =
+          typeof latitude === "number" &&
+          Number.isFinite(latitude) &&
+          typeof longitude === "number" &&
+          Number.isFinite(longitude)
+            ? [latitude, longitude]
+            : null;
+
+        if (!cancelled) {
+          setLoadedCityCenter({ cityId, center });
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setLoadedCityCenter({ cityId, center: null });
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [cityId]);
+
+  const cityCenter =
+    loadedCityCenter?.cityId === cityId
+      ? loadedCityCenter.center
+      : null;
+
+  const position: [number, number] =
+    savedPosition ?? cityCenter ?? IRAN_OVERVIEW;
+
+  const initialZoom = savedPosition ? 16 : cityCenter ? 12 : 5;
 
   return (
     <div className="business-location-map-shell">
@@ -215,11 +333,7 @@ export default function BusinessLocationMap({
 
       <MapContainer
         center={position}
-        zoom={
-          hasSavedLocation
-            ? 16
-            : 15
-        }
+        zoom={initialZoom}
         zoomControl={false}
         scrollWheelZoom={true}
         className="business-location-map"
@@ -230,6 +344,8 @@ export default function BusinessLocationMap({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
+
+                <CityViewportController cityId={cityId} cityCenter={cityCenter} hasSavedLocation={hasSavedLocation} />
 
         <ZoomControl
           position="bottomright"
@@ -250,29 +366,24 @@ export default function BusinessLocationMap({
         />
 
 
-        <Marker
-          position={position}
-          icon={markerIcon}
-          draggable={true}
-          eventHandlers={{
-            dragend(event) {
-              const marker =
-                event.target as L.Marker;
+        {savedPosition && (
+          <Marker
+            position={savedPosition}
+            icon={markerIcon}
+            draggable={true}
+            eventHandlers={{
+              dragend(event) {
+                const marker = event.target as L.Marker;
+                const next = marker.getLatLng();
 
-              const next =
-                marker.getLatLng();
-
-              onLocationChange(
-                Number(
-                  next.lat.toFixed(7)
-                ),
-                Number(
-                  next.lng.toFixed(7)
-                )
-              );
-            },
-          }}
-        />
+                onLocationChange(
+                  Number(next.lat.toFixed(7)),
+                  Number(next.lng.toFixed(7))
+                );
+              },
+            }}
+          />
+        )}
 
       </MapContainer>
 

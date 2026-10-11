@@ -255,9 +255,9 @@ export interface BusinessListItem {
 
   category_id?: number | null;
 
-  province_id: number;
+  province_id: number | null;
 
-  city_id: number;
+  city_id: number | null;
 
   latitude: number | null;
 

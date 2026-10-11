@@ -59,3 +59,19 @@ export async function getCitiesByProvince(
 
 
 }
+
+
+export interface CityMapCenterResponse {
+  city_id: number;
+  latitude: number | null;
+  longitude: number | null;
+  coordinate_status: string;
+}
+
+export async function getCityMapCenter(
+  cityId: number
+): Promise<CityMapCenterResponse> {
+  return apiGet<CityMapCenterResponse>(
+    `/locations/cities/${cityId}/map-center`
+  );
+}

@@ -2191,6 +2191,7 @@ async function handleLocationSubmit(
 
 			</div>
 			<BusinessLocationMap
+                    cityId={cityId}
 				latitude={
 				  locationForm.latitude.trim()
 					? Number(locationForm.latitude)

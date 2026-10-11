@@ -284,15 +284,16 @@ async function handleDeleteBusiness(
           );
 
 
-        const uniqueProvinceIds =
-          Array.from(
-            new Set(
-              businessList.map(
-                business =>
-                  business.province_id
-              )
-            )
-          );
+        const uniqueProvinceIds = Array.from(
+		  new Set(
+			businessList
+			  .map((business) => business.province_id)
+			  .filter(
+				(provinceId): provinceId is number =>
+				  provinceId !== null
+			  )
+		  )
+		);
 
 
         const cityResults =
@@ -397,18 +398,17 @@ async function handleDeleteBusiness(
               ...business,
 
               province_name:
-                provinceMap.get(
-                  business.province_id
-                ),
+				  business.province_id === null
+					? undefined
+					: provinceMap.get(business.province_id),
 
               city_name:
-                cityMap
-                  .get(
-                    business.province_id
-                  )
-                  ?.get(
-                    business.city_id
-                  ),
+				  business.province_id === null ||
+				  business.city_id === null
+					? undefined
+					: cityMap
+						.get(business.province_id)
+						?.get(business.city_id),
 
               completion:
                 completionMap.get(
